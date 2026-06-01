@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a2138"/>
+      <stop offset="100%" stop-color="#11162a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="480" fill="url(#bg)"/>
+  <text x="200" y="265" text-anchor="middle"
+        font-family="Space Grotesk, Inter, sans-serif"
+        font-size="160" font-weight="700" fill="#818cf8"
+        letter-spacing="-6">PT</text>
+  <text x="200" y="395" text-anchor="middle"
+        font-family="JetBrains Mono, monospace"
+        font-size="14" fill="#5e6b7a"
+        letter-spacing="2">// replace with your photo</text>
+</svg>

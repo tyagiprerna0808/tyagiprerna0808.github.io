@@ -1,0 +1,1096 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Prerna Tyagi</title>
+<link>https://tyagiprerna0808.github.io/findings.html</link>
+<atom:link href="https://tyagiprerna0808.github.io/findings.xml" rel="self" type="application/rss+xml"/>
+<description>Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.</description>
+<image>
+<url>https://avatars.githubusercontent.com/u/180576667?v=4</url>
+<title>Prerna Tyagi</title>
+<link>https://tyagiprerna0808.github.io/findings.html</link>
+</image>
+<generator>quarto-1.9.38</generator>
+<lastBuildDate>Sun, 14 Jun 2026 18:30:00 GMT</lastBuildDate>
+<item>
+  <title>15 · The whole system</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/15-ml-system-design/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Shipping It · Part 6 of 6] <a href="../../findings.html">Findings</a>
+</p>
+<p><em>Part 6 of <strong>Shipping It — the production ML stack</strong>, and the one that ties the rest together.</em></p>
+<p>Everything in this series so far has been a piece. This post is the blueprint that turns the pieces into a single system.</p>
+<p>It’s where the subtle failures live. The feature you compute one way in training and another way in production — so the model silently sees two different worlds and you spend a week wondering why offline metrics lied. The model nobody can see because it never got a UI. The data jammed into Postgres because that’s what was there. Good ML system design is mostly about making those quiet disagreements impossible — decoupled, scalable, and boring in the best way.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>Design patterns for ML systems</strong> — decoupled, scalable architectures instead of one heroic script</li>
+<li><strong>Feature stores</strong> — <strong>Feast</strong>, and the point of serving the <em>same</em> feature to training and production so they can’t drift apart</li>
+<li><strong>Prototyping</strong> — giving a model a usable internal UI in an afternoon with <strong>Streamlit</strong> or <strong>Gradio</strong> (no React required)</li>
+<li><strong>Choosing the database</strong> — beyond default SQL: NoSQL (<strong>MongoDB</strong>, <strong>Cassandra</strong>) for unstructured data, and <strong>vector databases</strong> (Pinecone, Milvus) once you step into LLMs and generative AI</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>mlops</category>
+  <category>system-design</category>
+  <category>feature-store</category>
+  <guid>https://tyagiprerna0808.github.io/posts/15-ml-system-design/</guid>
+  <pubDate>Sun, 14 Jun 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>14 · When the world moves</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/14-monitoring-drift/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Shipping It · Part 5 of 6] <a href="../../findings.html">Findings</a>
+</p>
+<p><em>Part 5 of <strong>Shipping It — the production ML stack</strong>. Shipping the model is the start of its problems, not the end of them.</em></p>
+<p>A model’s accuracy almost never falls off a cliff. It erodes — slowly, silently — as the world drifts away from the data it once learned on.</p>
+<p>Fraudsters change tactics. A feature pipeline goes stale. A vendor changes a default. None of it throws an error; the service stays green while the predictions quietly rot. This is the post where a statistics background stops being a nice-to-have and becomes the whole job: software engineers watch CPU and memory, but you watch <strong>distributions</strong> — and you build the alarm that goes off when reality stops looking like training data.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>Data drift vs concept drift</strong> — the difference, why it matters, and how to detect each one programmatically before it costs you</li>
+<li><strong>Performance monitoring</strong> — alerting when precision/recall sag in production, not at the next quarterly review</li>
+<li><strong>Data quality gates</strong> — catching the broken input <em>before</em> it reaches the model, with <strong>Great Expectations</strong></li>
+<li><strong>The tooling</strong> — <strong>Evidently AI</strong> for drift, <strong>Prometheus / Grafana</strong> for the metrics and the dashboards</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>mlops</category>
+  <category>monitoring</category>
+  <category>drift</category>
+  <category>observability</category>
+  <guid>https://tyagiprerna0808.github.io/posts/14-monitoring-drift/</guid>
+  <pubDate>Sat, 13 Jun 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>13 · Serving the model</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/13-serving-models/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Shipping It · Part 4 of 6] <a href="../../findings.html">Findings</a>
+</p>
+<p><em>Part 4 of <strong>Shipping It — the production ML stack</strong>. The model is done. Now it has to meet the world — and the world has a latency budget.</em></p>
+<p>In fraud, a model that answers in 200 ms is a useless model. By then the transaction has already cleared; you’re scoring history.</p>
+<p>That’s the thing nobody tells you: <em>how</em> you serve a model is a business decision, not a deployment detail. The same model wants three completely different shapes depending on who’s calling it. This post builds all three — the low-latency API behind a live decision, the batch job that scores millions of rows overnight, and the stream that keeps up with a firehose — and shows when each one is the right answer.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>Wrapping a model in an API</strong> — <strong>FastAPI</strong> (the one worth learning for ML), health/readiness endpoints, and treating the model like a real service</li>
+<li><strong>Real-time / online</strong> — low-latency REST and gRPC, where every millisecond is the product (the fraud case)</li>
+<li><strong>Batch</strong> — scoring millions of rows offline, e.g.&nbsp;nightly risk scoring, where throughput beats latency</li>
+<li><strong>Streaming</strong> — processing events as they arrive with <strong>Kafka</strong> / <strong>Kinesis</strong>, and what changes when the data never stops</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>mlops</category>
+  <category>serving</category>
+  <category>fastapi</category>
+  <category>streaming</category>
+  <guid>https://tyagiprerna0808.github.io/posts/13-serving-models/</guid>
+  <pubDate>Fri, 12 Jun 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>12 · It runs on my machine</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/12-containers-cloud-iac/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Shipping It · Part 3 of 6] <a href="../../findings.html">Findings</a>
+</p>
+<p><em>Part 3 of <strong>Shipping It — the production ML stack</strong>. Full-stack ML engineers don’t just write the code; they own where it runs.</em></p>
+<p>“It runs on my machine” is the most expensive sentence in machine learning. It’s where a week disappears.</p>
+<p>This post is about making that sentence impossible to say — by packing the model, its dependencies, and its entire environment into a box that runs <em>exactly</em> the same on your laptop and on a cloud GPU you brought up by running a file, not by clicking through a console for an hour. Containers, one cloud learned properly, and infrastructure you can describe in code and tear down without fear.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>Docker</strong> (non-negotiable) — packaging code + deps + environment so “works here” means “works everywhere,” plus the Kubernetes concepts you actually need for scaling</li>
+<li><strong>One cloud, properly</strong> — going deep on a single provider’s ML stack (AWS SageMaker / GCP Vertex AI) and the primitives under it: S3/EC2, IAM roles, and why permissions are where things go wrong</li>
+<li><strong>Infrastructure as Code</strong> — spinning up servers and resources with <strong>Terraform</strong> instead of clicking, so your infra is reviewable, repeatable, and disposable</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>mlops</category>
+  <category>docker</category>
+  <category>cloud</category>
+  <category>terraform</category>
+  <guid>https://tyagiprerna0808.github.io/posts/12-containers-cloud-iac/</guid>
+  <pubDate>Thu, 11 Jun 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>11 · Versioning the unversionable</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/11-versioning-registry/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Shipping It · Part 2 of 6] <a href="../../findings.html">Findings</a>
+</p>
+<p><em>Part 2 of <strong>Shipping It — the production ML stack</strong>. If you can’t reproduce it, you can’t roll it back — and one day you’ll need to.</em></p>
+<p>A bad deploy goes out. You roll back, and Git faithfully restores the code.</p>
+<p>Except the thing that just approved a fraudulent transaction wasn’t only code. It was code <em>plus</em> the exact data it trained on, <em>plus</em> the weights that fell out, <em>plus</em> a training run with a random seed and a library version you’ve already upgraded past. Restore the code and you’ve restored one-quarter of the model. This post is about versioning the other three — so “roll back to last Tuesday’s model” is a command, not an archaeology project.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>The reproducibility gap</strong> — why a model is data + code + weights + environment, and what breaks when you version only one</li>
+<li><strong>Data Version Control (DVC)</strong> — versioning datasets and artifacts that are far too big for Git</li>
+<li><strong>Experiment tracking</strong> — <strong>MLflow</strong> and <strong>Weights &amp; Biases</strong>: every run, its params, its metrics, its model, all recoverable</li>
+<li><strong>The model registry</strong> — promoting a model through staging → production, and rolling back when production turns on you</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>mlops</category>
+  <category>versioning</category>
+  <category>reproducibility</category>
+  <guid>https://tyagiprerna0808.github.io/posts/11-versioning-registry/</guid>
+  <pubDate>Wed, 10 Jun 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>10 · CI/CD &amp; orchestration for ML</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/10-cicd-orchestration/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Shipping It · Part 1 of 6] <a href="../../findings.html">Findings</a>
+</p>
+<p><em>Part 1 of <strong>Shipping It — the production ML stack</strong>. The foundation: stop building a model once, start building a system that builds models.</em></p>
+<p>You trained a great model. Then the data quietly shifted, and nobody noticed for three weeks.</p>
+<p>The fix isn’t a smarter model. It’s a system that retrains itself the moment the inputs move — that treats “the data changed” as an event, not a thing someone eventually spots in a dashboard. This post is about the leap from a folder of notebooks you run by hand to a <strong>pipeline</strong>: a directed graph of steps that tests, retrains, and ships on its own, the same way good software already does.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up — with a real pipeline you can run — lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>CI/CD for ML</strong> — what “continuous integration” even means when the artifact is a model, not just code, and the test suite has to check <em>behaviour</em>, not just <code>assert x == y</code></li>
+<li><strong>Pipelines over scripts</strong> — moving from Jupyter and cron to <strong>DAG</strong>-based workflows, and why the graph matters</li>
+<li><strong>Airflow vs Prefect vs Kubeflow</strong> — what each is actually for, and how to pick without cargo-culting</li>
+<li><strong>Triggers</strong> — retraining that fires on <em>data and code changes</em>, not on a human remembering</li>
+<li>A small end-to-end pipeline: ingest → validate → train → test → register → deploy, wired together</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>mlops</category>
+  <category>ci-cd</category>
+  <category>orchestration</category>
+  <guid>https://tyagiprerna0808.github.io/posts/10-cicd-orchestration/</guid>
+  <pubDate>Tue, 09 Jun 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>04 · Attention from scratch</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/04-attention-from-scratch/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 4 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>Part 4 of <strong>Building Blocks of Modern AI</strong>. We’ve turned text into tokens; now we give the tokens a way to talk to each other.</em></p>
+<section id="the-word-that-needs-context" class="level2">
+<h2 class="anchored" data-anchor-id="the-word-that-needs-context">The word that needs context</h2>
+<p>Here’s a sentence: <em>“The river bank was muddy.”</em> And here’s another: <em>“She deposited the cheque at the bank.”</em></p>
+<p>Same four letters — <em>bank</em> — two completely different things. You told them apart without noticing, using the words around each one. That’s the whole problem of language in miniature: meaning isn’t <em>in</em> the word, it’s in the company the word keeps.</p>
+<p>For years, models were bad at this. RNNs read strictly left to right, squeezing everything seen so far into one fixed memory vector — so by the end of a long sentence, the beginning had mostly evaporated.</p>
+<p><strong>Attention</strong> is the idea that threw that out. It’s so central that the paper introducing the transformer just called it <em>all you need</em>. The move looks obvious in hindsight: instead of compressing the past into a single vector, let every token <em>look directly at every other token</em> and decide, for itself, which ones matter.</p>
+<p>So <em>bank</em>, sitting beside <em>river</em> and <em>muddy</em>, leans toward those two — and quietly becomes a different vector than the <em>bank</em> that sits beside <em>cheque</em>.</p>
+<p>That’s the entire intuition. The rest of this post is making it precise.</p>
+</section>
+<section id="q-k-v-a-tiny-game-of-question-and-answer" class="level2">
+<h2 class="anchored" data-anchor-id="q-k-v-a-tiny-game-of-question-and-answer">Q, K, V — a tiny game of question and answer</h2>
+<p>To let tokens “look at each other,” attention gives every token three jobs, by projecting it three different ways:</p>
+<ul>
+<li><strong>Query (<img src="https://latex.codecogs.com/png.latex?Q">)</strong> — <em>what am I looking for?</em></li>
+<li><strong>Key (<img src="https://latex.codecogs.com/png.latex?K">)</strong> — <em>what do I have to offer?</em></li>
+<li><strong>Value (<img src="https://latex.codecogs.com/png.latex?V">)</strong> — <em>and if you pick me, here’s what you actually get.</em></li>
+</ul>
+<p>Picture a room full of people. Each token holds up a <strong>query</strong> (“I’m the word <em>bank</em>, I’m confused, anyone got context?”), compares it against everyone else’s <strong>key</strong> (“I’m <em>river</em>, I’m relevant to you”), and the better two match, the more of that neighbour’s <strong>value</strong> it carries home.</p>
+<p>“How well do a query and a key match?” is just their dot product. Compute it for every pair, squash the scores into weights that sum to 1 (softmax), and use those weights to mix the values. Written out, the whole mechanism is one line:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BAttention%7D(Q,%20K,%20V)%20=%20%5Ctext%7Bsoftmax%7D%5C!%5Cleft(%5Cfrac%7BQK%5ET%7D%7B%5Csqrt%7Bd_k%7D%7D%5Cright)V"></p>
+<p>Don’t let the symbols hide what it is: a <strong>weighted average of values, weighted by how much each query matches each key.</strong> That’s attention, top to bottom.</p>
+</section>
+<section id="the-one-detail-everyone-glosses-over-dₖ" class="level2">
+<h2 class="anchored" data-anchor-id="the-one-detail-everyone-glosses-over-dₖ">The one detail everyone glosses over: √dₖ</h2>
+<p>There’s a small divisor in that formula — <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bd_k%7D"> — that’s easy to wave off as bookkeeping. It isn’t. Drop it, and training quietly falls apart.</p>
+<p>Here’s why. If queries and keys are roughly random with variance 1, their dot product has variance <img src="https://latex.codecogs.com/png.latex?d_k"> — so in a model with a large head dimension, the raw scores swing to big positive and negative numbers. Feed <em>those</em> into softmax and it saturates: one weight goes to ~1, the rest to ~0, and the gradient flatlines. The layer stops learning.</p>
+<p>Dividing by <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bd_k%7D"> pulls the scores back to variance 1, keeps softmax in its sensitive range, and the gradients keep flowing. One square root, standing between you and a model that refuses to train.</p>
+</section>
+<section id="attention-in-fourteen-lines" class="level2">
+<h2 class="anchored" data-anchor-id="attention-in-fourteen-lines">Attention, in fourteen lines</h2>
+<p>None of this is hand-wavy — it’s short enough to write from scratch:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> scaled_dot_product_attention(q, k, v, mask<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>):</span>
+<span id="cb1-4">    d_k <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> q.shape[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb1-5">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1. Scores: how much each query matches each key</span></span>
+<span id="cb1-6">    scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.matmul(q, k.transpose(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> np.sqrt(d_k)</span>
+<span id="cb1-7"></span>
+<span id="cb1-8">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2. Causal mask: forbid looking at future tokens</span></span>
+<span id="cb1-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> mask <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb1-10">        scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> (mask <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e9</span>)</span>
+<span id="cb1-11"></span>
+<span id="cb1-12">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3. Softmax: turn scores into weights that sum to 1</span></span>
+<span id="cb1-13">    weights <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.exp(scores) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> np.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>(np.exp(scores), axis<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, keepdims<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb1-14"></span>
+<span id="cb1-15">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4. Mix the values by those weights</span></span>
+<span id="cb1-16">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> np.matmul(weights, v), weights</span></code></pre></div></div>
+<p>That is the heart of every transformer you’ve ever used. Everything after this is making it <em>faster</em> and <em>cheaper</em> — because the basic version has two expensive habits.</p>
+</section>
+<section id="the-bill-comes-due-the-memory-wall" class="level2">
+<h2 class="anchored" data-anchor-id="the-bill-comes-due-the-memory-wall">The bill comes due: the memory wall</h2>
+<p>The first habit shows up when a model generates text one token at a time. To produce token <img src="https://latex.codecogs.com/png.latex?L+1">, it has to attend to all <img src="https://latex.codecogs.com/png.latex?L"> tokens before it — and recomputing the keys and values for that entire history, every single step, is pure waste.</p>
+<p>So we cache them. The <strong>KV cache</strong> stores each token’s <img src="https://latex.codecogs.com/png.latex?K"> and <img src="https://latex.codecogs.com/png.latex?V"> once and reuses them forever after. Brilliant — except the cache grows with every token and every concurrent request, and it grows <em>fast</em>: for a 70-billion-parameter model with a 128K context, it can swell to <strong>tens of gigabytes</strong> of fast GPU memory. For most people serving LLMs, this cache — not the math — is what runs out first.</p>
+<p>That pressure is exactly why modern models bother with <strong>Grouped-Query Attention</strong>: instead of every query head carrying its own private key/value, several query heads share one set. Llama 3 does this. You lose almost no quality and you shrink the cache dramatically — a direct answer to the memory wall.</p>
+</section>
+<section id="why-your-gpu-was-sitting-idle-flash-attention" class="level2">
+<h2 class="anchored" data-anchor-id="why-your-gpu-was-sitting-idle-flash-attention">Why your GPU was sitting idle: Flash Attention</h2>
+<p>The second expensive habit is the <img src="https://latex.codecogs.com/png.latex?QK%5ET"> matrix itself. For a sequence of length <img src="https://latex.codecogs.com/png.latex?L"> it’s <img src="https://latex.codecogs.com/png.latex?L%20%5Ctimes%20L"> — quadratic — and the surprise is <em>where</em> the cost actually lives. It’s not the multiplications. It’s shuttling that giant matrix back and forth between the GPU’s big-but-slow memory and its tiny-but-fast on-chip memory.</p>
+<p><strong>Flash Attention</strong> fixes it without changing a single number in the result. It tiles the computation — breaks the huge matrix into blocks small enough to live in fast memory, finishes each block there, and never writes the full thing out. Same math, up to ~3× faster, purely by respecting where the data physically sits. (We’ll meet this memory-versus-compute story again and again.)</p>
+<p>We now have a model that can read context. Next: how it actually <em>learns</em> — loss, gradients, and backpropagation, derived from scratch → <a href="../05-loss-optimization-backprop/">Post 05</a>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>transformers</category>
+  <category>attention</category>
+  <category>math</category>
+  <guid>https://tyagiprerna0808.github.io/posts/04-attention-from-scratch/</guid>
+  <pubDate>Sat, 30 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>03 · Tokenization — how text becomes numbers</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/03-tokenization/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 3 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 3 of <strong>Building Blocks of Modern AI</strong>. Before attention, before embeddings, before any gradient is computed—there is tokenization. It is the first operation on your input and the last on your output, yet it is frequently skipped in technical summaries. That is a mistake.</em></p>
+<section id="the-discrete-continuous-gap" class="level2">
+<h2 class="anchored" data-anchor-id="the-discrete-continuous-gap">The Discrete-Continuous Gap</h2>
+<p>Neural networks are continuous machines, processing floating-point numbers in high-dimensional spaces. Human language, however, is discrete. <strong>Tokenization</strong> is the bridge—the lossy, biased, and often brittle process of mapping raw strings into the integers (tokens) that a model can actually “see.”</p>
+<p>If the tokenizer is inefficient, the model is blind to patterns, sequences become unnecessarily long, and inference costs skyrocket. And the choices are stranger than they look: by the end of this post you’ll see why the <em>same sentence</em> can cost a model 4–6× more tokens in Hindi than in English — a tax on meaning that nobody designed on purpose, it just fell out of how the vocabulary was built.</p>
+</section>
+<section id="the-evolution-of-the-unit" class="level2">
+<h2 class="anchored" data-anchor-id="the-evolution-of-the-unit">The evolution of the unit</h2>
+<section id="the-naive-approach-word-level" class="level3">
+<h3 class="anchored" data-anchor-id="the-naive-approach-word-level">The Naive Approach: Word-Level</h3>
+<p>Split on whitespace: <code>"I love ML"</code> <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> <code>["I", "love", "ML"]</code>. - <strong>The OOV Problem</strong>: What happens to <code>"transformerification"</code>? If it’s not in your 50,000-word vocabulary, it becomes <code>[UNK]</code>. You’ve lost all semantic information. - <strong>Vocabulary Explosion</strong>: To cover every morphological variation (<code>run</code>, <code>running</code>, <code>ran</code>), you’d need millions of embedding vectors.</p>
+</section>
+<section id="the-other-extreme-character-level" class="level3">
+<h3 class="anchored" data-anchor-id="the-other-extreme-character-level">The Other Extreme: Character-Level</h3>
+<p>Split every character: <code>"hello"</code> <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> <code>["h", "e", "l", "l", "o"]</code>. - <strong>Sequence Bloat</strong>: A 500-word paragraph becomes 3,000+ tokens. Given the <img src="https://latex.codecogs.com/png.latex?O(L%5E2)"> cost of attention, this is computationally prohibitive. - <strong>The Burden of Spelling</strong>: The model must use its capacity to learn that <code>h-e-l-l-o</code> means “hello” before it can learn what “hello” means in context.</p>
+</section>
+<section id="the-goldilocks-zone-subword-tokenization" class="level3">
+<h3 class="anchored" data-anchor-id="the-goldilocks-zone-subword-tokenization">The Goldilocks Zone: Subword Tokenization</h3>
+<p>The industry standard. Common words stay whole (<code>"the"</code>, <code>"is"</code>), while rare words decompose into meaningful units (<code>"unhappiness"</code> <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> <code>["un", "happi", "ness"]</code>). This ensures a fixed vocabulary size (32K–100K) with zero OOV issues.</p>
+</section>
+</section>
+<section id="implementing-byte-level-bpe" class="level2">
+<h2 class="anchored" data-anchor-id="implementing-byte-level-bpe">Implementing byte-level BPE</h2>
+<p>Modern LLMs (GPT-4, Llama 3) use <strong>Byte-Level Byte-Pair Encoding</strong>.</p>
+<section id="the-utf-8-detour" class="level3">
+<h3 class="anchored" data-anchor-id="the-utf-8-detour">The UTF-8 Detour</h3>
+<p>Characters in Unicode can be anything from emoji to ancient script. Starting with a vocabulary of every possible character is impossible. Instead, BBPE starts with <strong>Bytes</strong> (0-255). Every piece of text in every language is just a sequence of bytes in UTF-8.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Character</th>
+<th>Language</th>
+<th>Bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>h</code></td>
+<td>English</td>
+<td><code>[104]</code></td>
+</tr>
+<tr class="even">
+<td><code>猫</code></td>
+<td>Chinese</td>
+<td><code>[231, 140, 171]</code></td>
+</tr>
+<tr class="odd">
+<td><code>🤖</code></td>
+<td>Emoji</td>
+<td><code>[240, 159, 164, 150]</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-algorithm-from-scratch" class="level3">
+<h3 class="anchored" data-anchor-id="the-algorithm-from-scratch">The Algorithm from Scratch</h3>
+<ol type="1">
+<li><strong>Initialize</strong>: Convert the training corpus into its raw UTF-8 byte sequence.</li>
+<li><strong>Count</strong>: Find the most frequent adjacent pair of tokens (initially bytes).</li>
+<li><strong>Merge</strong>: Create a new token for that pair and replace all occurrences.</li>
+<li><strong>Iterate</strong>: Repeat until your vocabulary size (e.g., 50,257 for GPT-2) is reached.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_stats(ids):</span>
+<span id="cb1-2">    counts <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {}</span>
+<span id="cb1-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> pair <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">zip</span>(ids, ids[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>:]):</span>
+<span id="cb1-4">        counts[pair] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> counts.get(pair, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb1-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> counts</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> merge(ids, pair, idx):</span>
+<span id="cb1-8">    new_ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb1-9">    i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb1-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">while</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(ids):</span>
+<span id="cb1-11">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(ids) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> ids[i] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> pair[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> ids[i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> pair[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]:</span>
+<span id="cb1-12">            new_ids.append(idx)</span>
+<span id="cb1-13">            i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb1-14">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb1-15">            new_ids.append(ids[i])</span>
+<span id="cb1-16">            i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb1-17">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
+</section>
+</section>
+<section id="wordpiece-the-statistical-competitor" class="level2">
+<h2 class="anchored" data-anchor-id="wordpiece-the-statistical-competitor">WordPiece: the statistical competitor</h2>
+<p>Used in <strong>BERT</strong> and <strong>Gemma</strong>, WordPiece differs from BPE in its merge criteria. BPE is greedy about frequency. WordPiece is greedy about <strong>Pointwise Mutual Information (PMI)</strong>.</p>
+<p>Instead of merging the most frequent pair, it merges the pair <img src="https://latex.codecogs.com/png.latex?(a,%20b)"> that maximizes: <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BScore%7D(a,%20b)%20=%20%5Cfrac%7BP(ab)%7D%7BP(a)%20%5Ccdot%20P(b)%7D"></p>
+<ul>
+<li><strong>Intuition</strong>: It asks, “Does this pair appear together more often than we would expect by random chance?”</li>
+<li><strong>Example</strong>: If <code>"t"</code> and <code>"h"</code> are both very common but don’t always appear as <code>"th"</code>, their score might be lower than a rarer but highly correlated pair like <code>"q"</code> and <code>"u"</code>.</li>
+</ul>
+</section>
+<section id="unigram-the-top-down-approach" class="level2">
+<h2 class="anchored" data-anchor-id="unigram-the-top-down-approach">Unigram: the top-down approach</h2>
+<p>Unlike the bottom-up merges of BPE/WordPiece, <strong>Unigram</strong> (used in T5 and SentencePiece) starts with a massive vocabulary and iteratively <strong>removes</strong> tokens.</p>
+<p>At each step, it calculates how much the “loss” (likelihood of the corpus) would increase if a token were removed. It keeps the tokens that are most critical to compressing the training data. This allows for <strong>probabilistic subword segmentation</strong>—the same word can be split in multiple ways during training, which acts as a form of regularization.</p>
+</section>
+<section id="the-silent-inequity-multilingual-fragmentation" class="level2">
+<h2 class="anchored" data-anchor-id="the-silent-inequity-multilingual-fragmentation">The silent inequity: multilingual fragmentation</h2>
+<p>Tokenization is the root of multilingual performance gaps. Because most tokenizers are trained on English-heavy data:</p>
+<ul>
+<li><strong>English</strong>: <code>"hello"</code> <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> 1 token.</li>
+<li><strong>Hindi</strong>: <code>"नमस्ते"</code> <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> 18 bytes <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> <strong>~6 tokens</strong>.</li>
+</ul>
+<p>The same meaning takes 6x more tokens in Hindi. This means the model has a shorter “effective context window” for Hindi, and Hindi users pay 6x more for the same API call. This is not a model flaw; it’s a tokenizer flaw.</p>
+</section>
+<section id="real-world-tooling" class="level2">
+<h2 class="anchored" data-anchor-id="real-world-tooling">Real-world tooling</h2>
+<p>In production, you don’t write your own BPE. You use: - <a href="https://github.com/openai/tiktoken"><strong>tiktoken</strong></a>: OpenAI’s fast Rust-based BPE. - <a href="https://github.com/google/sentencepiece"><strong>SentencePiece</strong></a>: Google’s implementation that treats whitespace as a character (escaping the need for pre-tokenization). - <a href="https://github.com/huggingface/tokenizers"><strong>HuggingFace Tokenizers</strong></a>: The standard for open-source research.</p>
+<p>In the next post, we finally implement the heart of the transformer: <a href="../04-attention-from-scratch/">Post 04: Attention from scratch</a>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>nlp</category>
+  <category>tokenization</category>
+  <category>algorithms</category>
+  <guid>https://tyagiprerna0808.github.io/posts/03-tokenization/</guid>
+  <pubDate>Fri, 29 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>02 · Vector search — ANN from scratch</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/02-vector-search-ann/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 2 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>Part 2 of <strong>Building Blocks of Modern AI</strong>, picking up exactly where Post 01 hit the wall.</em></p>
+<section id="a-bargain-that-sounds-like-cheating" class="level2">
+<h2 class="anchored" data-anchor-id="a-bargain-that-sounds-like-cheating">A bargain that sounds like cheating</h2>
+<p>Post 01 left us staring at a wall. Brute-force search is perfectly accurate and completely doomed: it runs out of our 10 ms budget at around 80,000 documents, and every doubling after that doubles the wait. Wikipedia has six million articles. Real corpora have billions.</p>
+<p>So how does anyone search <em>millions</em> of vectors in single-digit milliseconds?</p>
+<p>The answer, the first time you hear it, sounds like cheating: <strong>stop looking at most of the corpus.</strong></p>
+<p>Give up on always finding the <em>exact</em> nearest neighbour. Settle for <em>almost always</em> finding it — and in exchange, skip 99% of the comparisons. That trade has a name, <strong>Approximate Nearest Neighbour</strong> (ANN) search, and it comes down to a single dial: how much accuracy (<strong>recall</strong>) will you trade for how much speed (<strong>latency</strong>)?</p>
+<p>The whole craft is giving up as little recall as possible. Three ideas do most of the heavy lifting, and the satisfying part is that they attack from three different angles — <em>where</em> to look, <em>how cheaply</em> to compare, and <em>how to navigate</em>. We’ll build all three.</p>
+</section>
+<section id="idea-1-dont-search-everywhere-ivf" class="level2">
+<h2 class="anchored" data-anchor-id="idea-1-dont-search-everywhere-ivf">Idea 1 — Don’t search everywhere: IVF</h2>
+<p>Start with the most intuitive move. Hunting for a coffee shop, you don’t scan the planet — you scan your neighbourhood. <strong>IVF</strong> (inverted file index) does exactly that to the vector space.</p>
+<p>Before any query arrives, we carve the space into regions. Run k-means over the corpus to find <img src="https://latex.codecogs.com/png.latex?k"> representative centres (centroids); file every document under its nearest centre. Geometrically, this tiles the space into <img src="https://latex.codecogs.com/png.latex?k"> patches — a <em>Voronoi</em> partition.</p>
+<p>Now a query comes in. Instead of scanning all <img src="https://latex.codecogs.com/png.latex?N"> documents, we find the handful of centroids nearest the query and only search inside <em>those</em> tiles.</p>
+<p>The single knob is <code>nprobe</code> — how many tiles you open.</p>
+<p>With <img src="https://latex.codecogs.com/png.latex?k%20=%201%7B,%7D000"> and <code>nprobe = 1</code>, you look at roughly <strong>0.1%</strong> of the corpus. Blistering — but risky: if the query lands near a tile’s edge, its true nearest neighbour might be sitting just across the border, and you’ll never see it. Turn <code>nprobe</code> up and you open more neighbouring tiles — latency climbs roughly linearly, recall climbs fast. That tension <em>is</em> the tradeoff, exposed as a number you can tune.</p>
+</section>
+<section id="idea-2-dont-store-everything-pq" class="level2">
+<h2 class="anchored" data-anchor-id="idea-2-dont-store-everything-pq">Idea 2 — Don’t store everything: PQ</h2>
+<p>IVF prunes <em>where</em> you search. But a second problem hides underneath: the vectors themselves are fat. Millions of 1,536-dimensional float vectors won’t fit in RAM — and RAM is where speed lives.</p>
+<p><strong>Product Quantization</strong> is a gorgeous bit of compression. The trick: stop storing vectors, start storing <em>recipes</em>.</p>
+<p>Chop each vector into <img src="https://latex.codecogs.com/png.latex?m"> short sub-vectors. (A 128-dim vector with <img src="https://latex.codecogs.com/png.latex?m%20=%208"> becomes eight 16-dim chunks.) Now run k-means <em>within each chunk’s slot</em> across the whole corpus, and keep just 256 representative chunks per slot — a little codebook. Every sub-vector is then replaced by the single byte that names its closest codebook entry.</p>
+<p>Do the arithmetic and it’s almost rude: a 128-float vector — 512 bytes — collapses to an 8-byte code. <strong>64× smaller.</strong></p>
+<p>The clever part is search: you never decompress. When a query arrives you precompute its distance to all 256 entries in each slot’s codebook, drop them in a lookup table, and then every document’s distance is just a few table lookups added together — addition, the thing CPUs do faster than anything else.</p>
+</section>
+<section id="idea-3-navigate-dont-scan-hnsw" class="level2">
+<h2 class="anchored" data-anchor-id="idea-3-navigate-dont-scan-hnsw">Idea 3 — Navigate, don’t scan: HNSW</h2>
+<p>IVF and PQ are about pruning and shrinking. The last idea is about <em>movement</em> — and it’s the one most production vector databases actually reach for.</p>
+<p><strong>HNSW</strong> (hierarchical navigable small worlds) treats the corpus as a graph and turns search into a walk.</p>
+<p>The intuition is “six degrees of separation.” In a small-world graph, hardly anyone is your direct neighbour, yet anyone is reachable in a few hops. HNSW stacks that idea into layers, like a skip-list:</p>
+<ul>
+<li><strong>Top layers</strong> — sparse, with long-range edges, for crossing the whole space in a few big jumps.</li>
+<li><strong>Bottom layers</strong> — dense, with short edges, for pinning down the exact neighbourhood.</li>
+</ul>
+<p>Search drops in at the top, greedily hops toward the query along the long edges, then “falls” a layer and repeats with shorter ones — coarse to fine — until it’s doing a careful local search at the very bottom. You <em>navigate</em> to the answer instead of scanning for it.</p>
+</section>
+<section id="the-race" class="level2">
+<h2 class="anchored" data-anchor-id="the-race">The race</h2>
+<p>So which one wins? On the same 5,000-passage corpus from Post 01:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Algorithm</th>
+<th style="text-align: right;">Recall@10</th>
+<th style="text-align: right;">Latency</th>
+<th style="text-align: right;">Speed-up</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Brute force</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.605 ms</td>
+<td style="text-align: right;">1×</td>
+</tr>
+<tr class="even">
+<td>IVF (k=100, nprobe=5)</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">0.082 ms</td>
+<td style="text-align: right;">7.3×</td>
+</tr>
+<tr class="odd">
+<td>HNSW (M=16)</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0.045 ms</td>
+<td style="text-align: right;">13.4×</td>
+</tr>
+</tbody>
+</table>
+<p>Read that bottom row slowly. HNSW returned the right neighbours <strong>98%</strong> of the time while running <strong>13× faster</strong> than exact search — and the gap only widens as the corpus grows, which is the entire point. That’s why Pinecone, Qdrant, and most vector databases you’ve heard of default to HNSW. The catch, as always, gets paid in memory: all those graph edges have to live somewhere.</p>
+<p>We began Post 01 unable to push past 80,000 documents. We can now, in principle, reach for the millions — having given up almost no accuracy at all.</p>
+<p>Next we leave retrieval behind and step inside the model itself, starting with the very first thing that happens to your text → <a href="../03-tokenization/">Post 03: Tokenization</a>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>retrieval</category>
+  <category>ann</category>
+  <category>algorithms</category>
+  <guid>https://tyagiprerna0808.github.io/posts/02-vector-search-ann/</guid>
+  <pubDate>Thu, 28 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>01 · Embeddings &amp; vector search</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/01-embeddings-vector-search/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 1 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>Part 1 of <strong>Building Blocks of Modern AI</strong> — each post takes one piece of a modern AI system and rebuilds it from scratch, with code you can run and numbers you can check.</em></p>
+<section id="the-search-box-that-reads-your-mind" class="level2">
+<h2 class="anchored" data-anchor-id="the-search-box-that-reads-your-mind">The search box that reads your mind</h2>
+<p>Type a few words into a search box that <em>actually understands you</em> — not one that keyword-matches you — and something quietly strange happens underneath.</p>
+<p>Your words become a list of numbers. So does every document in the index. Then the machine does <strong>geometry</strong>: it measures which points sit closest together, and the nearest ones win.</p>
+<p>That’s the whole trick behind semantic search, RAG, recommendations — most of what we now wave at and call “AI.”</p>
+<p>The idea is easy. The hard part hides inside two small words: <em>closest</em>, and <em>fast</em>.</p>
+<p>So here’s the sentence this entire post is trying to earn:</p>
+<blockquote class="blockquote">
+<p>Given millions of documents and a query, return the nearest neighbours in <strong>under 10 ms</strong> — on a laptop.</p>
+</blockquote>
+<p>To get there, we have to take two questions seriously that “just use vector search” usually skips right over. What does “close” actually <em>mean</em>, mathematically? And what happens to that 10 ms the moment your corpus stops being a toy?</p>
+<p>Let’s start with the first one, because that’s where the magic lives.</p>
+</section>
+<section id="what-close-actually-means" class="level2">
+<h2 class="anchored" data-anchor-id="what-close-actually-means">What “close” actually means</h2>
+<p>Old-school search — BM25, Lucene, the thing inside most databases — matches keywords. Search for <em>sports</em>, and a document that only ever says <em>tennis</em> simply doesn’t come back. The words don’t overlap, so as far as the index is concerned, the two are strangers.</p>
+<p>Embeddings refuse to accept that. They map every piece of text to a point in a high-dimensional space where <em>sports</em> and <em>tennis</em> land right next to each other — because the model never really sees the word. It sees the <strong>concept</strong>.</p>
+<p>That’s a nice story. Let me turn it into a number.</p>
+<p>Take four sentences — two about gardening, two about finance — and hand them to a small embedding model (<code>all-MiniLM-L6-v2</code>), <em>without ever telling it the topics</em>. Then measure the cosine similarity of every possible pair:</p>
+<pre><code>  0.622   'I love plants'              vs  'Gardening is fun'             ← gardening
+  0.149   'The stock market crashed'   vs  'Bonds and treasury yields'    ← finance
+  0.021   'I love plants'              vs  'The stock market crashed'
+  0.016   'I love plants'              vs  'Bonds and treasury yields'
+  0.015   'Gardening is fun'           vs  'The stock market crashed'
+  0.005   'Gardening is fun'           vs  'Bonds and treasury yields'</code></pre>
+<p>Look at the gap. Same-topic pairs sit <strong>30 to 120 times higher</strong> than cross-topic ones. Nobody handed the model a label. It drew the border between gardening and finance on its own — purely from having read enough text to know those words live in different neighbourhoods.</p>
+<p>But the detail I keep coming back to is subtler than that.</p>
+<p>The gardening pair scores <strong>0.62</strong>. The finance pair — also “same topic” — scores only <strong>0.15</strong>. Why the gap? Because <em>“I love plants”</em> and <em>“Gardening is fun”</em> don’t just share a subject, they share a <em>mood</em>: warm, casual, fond. Whereas <em>“the stock market crashed”</em> (panic) and <em>“bonds and treasury yields”</em> (a dry instrument) share a topic and almost nothing else.</p>
+<p>The embedding isn’t matching keywords. It isn’t even really matching topics. It’s matching <strong>meaning</strong> — and you can read it straight off a single number.</p>
+</section>
+<section id="three-ways-to-measure-closeness" class="level2">
+<h2 class="anchored" data-anchor-id="three-ways-to-measure-closeness">Three ways to measure closeness</h2>
+<p>So “close” is the whole game. How do we actually measure it?</p>
+<p>An embedding is just a vector <img src="https://latex.codecogs.com/png.latex?v%20%5Cin%20%5Cmathbb%7BR%7D%5Ed"> — a point in <img src="https://latex.codecogs.com/png.latex?d">-dimensional space. “Similar meaning” becomes “nearby point,” and there are three ways people usually measure <em>nearby</em>. They’re worth keeping straight, because the choice quietly shows up everywhere downstream.</p>
+<p><strong>Dot product</strong> — raw alignment: <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BDot%7D(A,%20B)%20=%20A%20%5Ccdot%20B%20=%20%5Csum_%7Bi=1%7D%5E%7Bn%7D%20A_i%20B_i%20=%20%5C%7CA%5C%7C%5C,%5C%7CB%5C%7C%5Ccos(%5Ctheta)"> It folds together <em>both</em> how aligned two vectors are and how long they are. Sometimes that length carries real signal; often it’s noise you’d rather ignore.</p>
+<p><strong>Cosine similarity</strong> — alignment with the length divided out: <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BCosine%7D(A,%20B)%20=%20%5Cfrac%7BA%20%5Ccdot%20B%7D%7B%5C%7CA%5C%7C%5C,%5C%7CB%5C%7C%7D"> This is the default for text. A long document and a short one about the same thing should point the same <em>direction</em>, even if one vector is “bigger” — and cosine measures direction only.</p>
+<p><strong>Euclidean (L2) distance</strong> — plain straight-line distance: <img src="https://latex.codecogs.com/png.latex?d(A,%20B)%20=%20%5Csqrt%7B%5Csum_%7Bi=1%7D%5E%7Bn%7D%20(A_i%20-%20B_i)%5E2%7D"> And here’s a small fact that saves a lot of confusion: once your vectors are normalised to length 1, L2 and cosine produce the <em>same ranking</em> in disguise — <img src="https://latex.codecogs.com/png.latex?%5C%7CA-B%5C%7C%5E2%20=%202%20-%202%5Ccos(%5Ctheta)">. Pick whichever your hardware prefers; the order of results won’t budge.</p>
+<p>That last identity is also a quiet gift: it means the entire search can be done with one fast matrix multiply. Which raises the obvious question — how fast, exactly?</p>
+</section>
+<section id="the-simplest-thing-that-works-until-it-doesnt" class="level2">
+<h2 class="anchored" data-anchor-id="the-simplest-thing-that-works-until-it-doesnt">The simplest thing that works — until it doesn’t</h2>
+<p>There’s a temptation in this field to reach for the clever data structure first. Resist it. The honest baseline is almost embarrassingly plain: embed everything once, and at query time compare the query against <em>every</em> document. No index, no tricks. <strong>Exact search.</strong></p>
+<p>I ran it on 5,000 real news passages (<code>fancyzhx/ag_news</code>), each a 384-dimensional vector, with the search done as a single normalised matrix multiply.</p>
+<p>First — does it even work? Query: <strong>“tennis player wins grand slam.”</strong> The top result is a passage about Roddick and Federer at the Olympics. The phrase “grand slam” appears <em>nowhere</em> in it. A keyword index would have returned nothing; the embedding walked straight there, because <em>Roddick + Federer + Olympics + gold</em> sits in exactly the right corner of tennis-space.</p>
+<p>Then I went looking for where it breaks. You learn more from the misses.</p>
+<p>Query: <strong>“earnings report from a tech company.”</strong> The third result was <em>Limited Brands</em> — a clothing retailer. It has earnings reports, sure, but a tech company it is not. Here’s what happened: the query smuggled in <em>two</em> concepts, and when you average two ideas into one vector, the louder one wins. “Earnings report” simply drowned out “tech company.”</p>
+<p>That single wrong answer is the reason production retrieval is never just one matrix multiply. Reranking, query rewriting, hybrid keyword-plus-vector search — every one of those exists to patch the exact failure you just watched happen on result number three.</p>
+<p>And the speed? At 5,000 documents, each query took about <strong>0.6 ms</strong>. Instant. Which is precisely the trap.</p>
+<p>Brute force compares against <em>everything</em>, so the real question was never “is it fast at 5K” — it’s <em>what’s the slope?</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Corpus size (<img src="https://latex.codecogs.com/png.latex?N">)</th>
+<th style="text-align: right;">Mean latency</th>
+<th style="text-align: right;">p95 latency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">0.052 ms</td>
+<td style="text-align: right;">0.067 ms</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5,000</td>
+<td style="text-align: right;">0.605 ms</td>
+<td style="text-align: right;">0.857 ms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10,000</td>
+<td style="text-align: right;">1.210 ms</td>
+<td style="text-align: right;">1.520 ms</td>
+</tr>
+</tbody>
+</table>
+<p>The line is dead straight: about <strong>121 nanoseconds per document</strong>, every time. Double the corpus, double the wait — forever.</p>
+<p>Put that against our 10 ms budget and it hardens into a ceiling: roughly <strong>83,000 documents</strong>, and not one more. English Wikipedia has six million articles. The “instant” search has quietly become a one-second search — and one second is a lifetime.</p>
+<p>So brute force isn’t <em>slow</em>. It’s <em>honest</em> — it always finds the true nearest neighbour. It just doesn’t scale. And it’s worth understanding exactly why before we go fixing it.</p>
+</section>
+<section id="why-a-bigger-machine-wont-save-you" class="level2">
+<h2 class="anchored" data-anchor-id="why-a-bigger-machine-wont-save-you">Why a bigger machine won’t save you</h2>
+<p>The natural instinct is to throw hardware at the wall. It won’t be enough, for two reasons worth keeping.</p>
+<p>The first is geometry. As the number of dimensions <img src="https://latex.codecogs.com/png.latex?d"> grows, space gets strange. Almost all the volume of a high-dimensional sphere bunches into a thin shell near its surface — which means that for a random spread of points, <em>everything ends up roughly the same distance from everything else</em>. The very notion of “nearest” goes faint. This is the <strong>curse of dimensionality</strong>, and it’s the deep reason exact search is the only thing guaranteed to be exactly right — and the reason that guarantee costs so much.</p>
+<p>The second is more mundane and, in practice, more decisive: <strong>memory bandwidth</strong>. The bottleneck in vector search usually isn’t the arithmetic — it’s <em>moving the vectors</em> from main memory to the chip that does the math. The distance calculation is cheap; the journey is not. So the algorithms that win are the ones that either move less data, or refuse to look at most of it.</p>
+<p>Which is the entire plot of the next post: how to find the nearest neighbours <em>without</em> comparing against everything — IVF, PQ, and HNSW, built from scratch — and claw back two orders of magnitude while barely losing any accuracy.</p>
+<p>→ <a href="../02-vector-search-ann/">Post 02: ANN from scratch</a></p>
+
+
+</section>
+
+ ]]></description>
+  <category>embeddings</category>
+  <category>retrieval</category>
+  <category>math</category>
+  <guid>https://tyagiprerna0808.github.io/posts/01-embeddings-vector-search/</guid>
+  <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>05 · Loss, optimization, backpropagation</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/05-loss-optimization-backprop/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 5 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 5 of <strong>Building Blocks of Modern AI</strong>. We’ve built the pieces; now we ask how any of them actually learn.</em></p>
+<p>Every model in this series learns the same way: make a guess, measure how wrong it is, nudge each weight a little in the direction that’s <em>less</em> wrong, and repeat a few million times. That’s the entire loop. “Loss decreases over optimized iterations” isn’t a slogan — it’s the literal algorithm, and backpropagation is just how each individual weight learns its own share of the blame. This post derives backprop end to end on a 2-layer MLP — by hand, then in code with no autograd hiding the chain rule — and then explains what Adam actually fixes that plain SGD doesn’t, instead of treating the optimizer as a magic word you import.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full write-up — from-scratch NumPy, then PyTorch — lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li>The loss function family — MSE, cross-entropy, contrastive — when each is right</li>
+<li><strong>Gradient descent</strong> — vanilla, SGD, mini-batch</li>
+<li><strong>Backpropagation</strong> — chain rule, derived end-to-end on a 2-layer MLP</li>
+<li><strong>Adam, AdamW, momentum</strong> — what each fixes vs vanilla SGD</li>
+<li>Learning rate schedules — warmup, cosine; the production defaults</li>
+<li>Vanishing / exploding gradients — why they happen, what fixes them</li>
+<li>From-scratch implementation in NumPy, then PyTorch</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>planned</category>
+  <category>training</category>
+  <category>backprop</category>
+  <category>optimization</category>
+  <guid>https://tyagiprerna0808.github.io/posts/05-loss-optimization-backprop/</guid>
+  <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>06 · Fine-tuning fundamentals — LoRA</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/06-fine-tuning-lora/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 6 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 6 of <strong>Building Blocks of Modern AI</strong>, and the first application post — it builds directly on attention (<a href="../04-attention-from-scratch/">Part 4</a>) and optimization (<a href="../05-loss-optimization-backprop/">Part 5</a>).</em></p>
+<p>The honest first question almost nobody asks: should you fine-tune at all, or is a good prompt cheaper <em>and</em> better? Often it’s the prompt. This post is about the cases where it genuinely isn’t — and how to fine-tune without renting a cluster. LoRA’s trick is almost suspicious: freeze the entire giant model, then train two tiny matrices whose product is the only thing allowed to move. QLoRA pushes further, quantizing the frozen weights to 4-bit so the whole job fits on a single consumer GPU. We run it end to end on a small open model and let the evals — not a vibe — decide when to stop.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the full end-to-end run lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li>The fine-tuning question — when does it beat a well-engineered prompt</li>
+<li><strong>Full fine-tuning</strong> — what it costs (compute, memory, dataset, eval discipline)</li>
+<li><strong>LoRA</strong> — the low-rank decomposition math, why r=8 is a workable default</li>
+<li><strong>QLoRA</strong> — what 4-bit quantization buys you in memory</li>
+<li>Practical workflow on a small open model (TinyLlama or similar) — end to end</li>
+<li>Eval-driven iteration — picking when to stop training</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>planned</category>
+  <category>fine-tuning</category>
+  <category>lora</category>
+  <guid>https://tyagiprerna0808.github.io/posts/06-fine-tuning-lora/</guid>
+  <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>07 · Retrieval &amp; RAG</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/07-retrieval-rag/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 7 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 7 of <strong>Building Blocks of Modern AI</strong>, building on embeddings (<a href="../01-embeddings-vector-search/">Part 1</a>) and ANN (<a href="../02-vector-search-ann/">Part 2</a>).</em></p>
+<p>RAG demos always work. RAG in production is where retrieval goes to break — the right document is sitting <em>right there</em> in the index and the system still doesn’t surface it, or surfaces it and buries it in the middle of the context window where the model quietly ignores it. This post refuses to pretend retrieval is solved. We build the keyword baseline (BM25 — which beats dense retrieval more often than embedding fans like to admit), the dense side from Part 1’s embeddings, the hybrid fusion that combines them, and a cross-encoder reranker on top — then assemble the full pipeline and measure exactly where it falls over.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the measured pipeline lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li><strong>BM25 from scratch</strong> — the keyword baseline that still wins more than people admit</li>
+<li><strong>Dense retrieval</strong> — extending post 01’s embeddings to a real corpus</li>
+<li><strong>Hybrid scoring</strong> — reciprocal rank fusion, weighted combination</li>
+<li><strong>Cross-encoder reranking</strong> — when it helps, when it hurts</li>
+<li>RAG end-to-end on a real corpus, measured</li>
+<li>Failure modes — query rewriting, multi-hop, lost-in-the-middle, citation faithfulness</li>
+<li>The gap between “RAG works on a demo” and “RAG works in production”</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>planned</category>
+  <category>retrieval</category>
+  <category>rag</category>
+  <category>bm25</category>
+  <guid>https://tyagiprerna0808.github.io/posts/07-retrieval-rag/</guid>
+  <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>08 · Evals for generative systems</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/08-evals/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 8 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 8 of <strong>Building Blocks of Modern AI</strong>.</em></p>
+<p>You can’t improve a generative system you can’t measure — and the metrics everyone reaches for first, BLEU and ROUGE, measure <em>word overlap</em>, which is almost unrelated to whether an answer is actually any good. So how do you put a number on quality when there’s no single correct answer to diff against? This post builds the eval discipline that catches what dashboards miss: golden sets you curate by hand, LLM-as-judge calibrated against real human ratings (because an uncalibrated judge is just a confident stranger), and a regression harness that fails CI the day quality silently drops — before your users find it first.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; the drop-in harness lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li>Why classical metrics (BLEU, ROUGE) fail for generative tasks</li>
+<li><strong>Golden sets</strong> — building, curating, versioning</li>
+<li><strong>LLM-as-judge</strong> — pairwise vs pointwise, calibration against humans</li>
+<li><strong>Rubric design</strong> — what to measure beyond “is it good”</li>
+<li>A regression harness you can drop into CI</li>
+<li>Cost vs signal — cheaper judges, bigger judges, when each makes sense</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>planned</category>
+  <category>evals</category>
+  <category>llm-as-judge</category>
+  <guid>https://tyagiprerna0808.github.io/posts/08-evals/</guid>
+  <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+</item>
+<item>
+  <title>09 · Agent loops &amp; tool use</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/09-agents/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p class="breadcrumb-mono">
+[Part 9 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 9 of <strong>Building Blocks of Modern AI</strong> — the finale, which pulls the earlier blocks together into a working loop.</em></p>
+<p>A language model generates text. An <em>agent</em> uses that text to <strong>do things</strong> — call a tool, read the result, decide what to do next, and loop until the job is done. The gap between the two is a control flow you can write in about forty lines, no framework required. This post builds ReAct from scratch — observe, think, act, repeat — without LangChain, so nothing important hides behind an abstraction. Then it spends most of its time on the part the demos skip: what happens when a tool call fails, how <em>often</em> that is, and the long, unglamorous distance between an agent that works on stage and one that survives production.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Coming soon.</strong> Outline below; ReAct from scratch lands here next.</p>
+</div>
+</div>
+</div>
+<section id="whats-coming" class="level2">
+<h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
+<ul>
+<li>The basic loop — observe, think, act, observe, repeat</li>
+<li><strong>ReAct from scratch</strong> — without LangChain</li>
+<li><strong>Tool calling</strong> — function-calling APIs and what the JSON schema actually gives you</li>
+<li>Planning vs reacting — when each pattern is right</li>
+<li><strong>Error recovery</strong> — what happens when the tool fails (and how often it does)</li>
+<li>Short-term context vs long-term memory</li>
+<li>The gap between “works in a demo” and “works in production”</li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>planned</category>
+  <category>agents</category>
+  <category>react</category>
+  <category>tool-use</category>
+  <guid>https://tyagiprerna0808.github.io/posts/09-agents/</guid>
+  <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

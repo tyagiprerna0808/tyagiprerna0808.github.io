@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Prerna Tyagi">
+<meta name="dcterms.date" content="2026-05-29">
+<meta name="description" content="Searching millions of vectors in milliseconds by refusing to look at most of them. IVF, PQ, and HNSW — built from first principles and raced head-to-head.">
 
-<title>Prerna Tyagi</title>
+<title>02 · Vector search — ANN from scratch – Prerna Tyagi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,22 +29,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,28 +104,57 @@ ul.task-list li input[type="checkbox"] {
 }
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Prerna Tyagi">
-<meta property="og:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="02 · Vector search — ANN from scratch – Prerna Tyagi">
+<meta property="og:description" content="Searching millions of vectors in milliseconds by refusing to look at most of them. IVF, PQ, and HNSW — built from first principles and raced head-to-head.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
-<meta name="twitter:title" content="Prerna Tyagi">
-<meta name="twitter:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<meta name="twitter:title" content="02 · Vector search — ANN from scratch – Prerna Tyagi">
+<meta name="twitter:description" content="Searching millions of vectors in milliseconds by refusing to look at most of them. IVF, PQ, and HNSW — built from first principles and raced head-to-head.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Prerna Tyagi</span>
     </a>
   </div>
@@ -133,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./findings.html"> 
+    <a class="nav-link" href="../../findings.html"> 
 <span class="menu-text">Findings</span></a>
   </li>  
   <li class="nav-item">
@@ -141,11 +173,11 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
+    <a class="nav-link" href="../../projects.html"> 
 <span class="menu-text">Builds</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -161,77 +193,132 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">02 · Vector search — ANN from scratch</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">retrieval</div>
+    <div class="quarto-category">ann</div>
+    <div class="quarto-category">algorithms</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Searching millions of vectors in milliseconds by refusing to look at most of them. IVF, PQ, and HNSW — built from first principles and raced head-to-head.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prerna Tyagi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 29, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
-<section class="home-hero">
-  <p class="home-eyebrow">applied statistician · production ml · built in public</p>
-  <h1 class="home-headline">From notebook<br>to production.</h1>
-  <p class="home-sub">I'm learning to ship machine-learning systems that survive contact with the real world — pipelines, serving, monitoring, drift — and writing down every interesting thing that breaks on the way there.</p>
-  <p class="home-signature">just descending the gradient, with a small learning rate.</p>
+</header>
+
+
+<p class="breadcrumb-mono">
+[Part 2 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>Part 2 of <strong>Building Blocks of Modern AI</strong>, picking up exactly where Post 01 hit the wall.</em></p>
+<section id="a-bargain-that-sounds-like-cheating" class="level2">
+<h2 class="anchored" data-anchor-id="a-bargain-that-sounds-like-cheating">A bargain that sounds like cheating</h2>
+<p>Post 01 left us staring at a wall. Brute-force search is perfectly accurate and completely doomed: it runs out of our 10 ms budget at around 80,000 documents, and every doubling after that doubles the wait. Wikipedia has six million articles. Real corpora have billions.</p>
+<p>So how does anyone search <em>millions</em> of vectors in single-digit milliseconds?</p>
+<p>The answer, the first time you hear it, sounds like cheating: <strong>stop looking at most of the corpus.</strong></p>
+<p>Give up on always finding the <em>exact</em> nearest neighbour. Settle for <em>almost always</em> finding it — and in exchange, skip 99% of the comparisons. That trade has a name, <strong>Approximate Nearest Neighbour</strong> (ANN) search, and it comes down to a single dial: how much accuracy (<strong>recall</strong>) will you trade for how much speed (<strong>latency</strong>)?</p>
+<p>The whole craft is giving up as little recall as possible. Three ideas do most of the heavy lifting, and the satisfying part is that they attack from three different angles — <em>where</em> to look, <em>how cheaply</em> to compare, and <em>how to navigate</em>. We’ll build all three.</p>
 </section>
-
-<section class="loop-section">
-  <p class="loop-eyebrow">the loop i'm running</p>
-
-  <svg class="loop-svg" viewbox="0 0 400 360" role="img" aria-label="A repeating loop: train, ship, observe, improve.">
-    <defs>
-      <path id="loopPath" d="M200,60 A120,120 0 0 1 200,300 A120,120 0 0 1 200,60" fill="none"></path>
-    </defs>
-
-    <!-- the ring -->
-    <circle class="loop-ring" cx="200" cy="180" r="120"></circle>
-
-    <!-- the moving spark -->
-    <circle class="loop-spark" r="5">
-      <animatemotion dur="9s" repeatcount="indefinite" rotate="auto">
-        <mpath href="#loopPath"></mpath>
-      </animatemotion>
-    </circle>
-
-    <!-- nodes -->
-    <circle class="loop-node" cx="200" cy="60" r="5"></circle>
-    <circle class="loop-node" cx="320" cy="180" r="5"></circle>
-    <circle class="loop-node" cx="200" cy="300" r="5"></circle>
-    <circle class="loop-node" cx="80" cy="180" r="5"></circle>
-
-    <!-- labels -->
-    <text class="loop-label" x="200" y="42" text-anchor="middle">Train</text>
-    <text class="loop-label" x="336" y="184" text-anchor="start">Ship</text>
-    <text class="loop-label" x="200" y="330" text-anchor="middle">Observe</text>
-    <text class="loop-label" x="64" y="184" text-anchor="end">Improve</text>
-
-    <!-- center -->
-    <text class="loop-center" x="200" y="174" text-anchor="middle">while</text>
-    <text class="loop-center" x="200" y="194" text-anchor="middle">learning:</text>
-  </svg>
-
-  <p class="loop-caption">Train the fundamentals from scratch → ship them into real systems → watch for drift and latency → write down what broke → retrain. No early stopping.</p>
+<section id="idea-1-dont-search-everywhere-ivf" class="level2">
+<h2 class="anchored" data-anchor-id="idea-1-dont-search-everywhere-ivf">Idea 1 — Don’t search everywhere: IVF</h2>
+<p>Start with the most intuitive move. Hunting for a coffee shop, you don’t scan the planet — you scan your neighbourhood. <strong>IVF</strong> (inverted file index) does exactly that to the vector space.</p>
+<p>Before any query arrives, we carve the space into regions. Run k-means over the corpus to find <span class="math inline">\(k\)</span> representative centres (centroids); file every document under its nearest centre. Geometrically, this tiles the space into <span class="math inline">\(k\)</span> patches — a <em>Voronoi</em> partition.</p>
+<p>Now a query comes in. Instead of scanning all <span class="math inline">\(N\)</span> documents, we find the handful of centroids nearest the query and only search inside <em>those</em> tiles.</p>
+<p>The single knob is <code>nprobe</code> — how many tiles you open.</p>
+<p>With <span class="math inline">\(k = 1{,}000\)</span> and <code>nprobe = 1</code>, you look at roughly <strong>0.1%</strong> of the corpus. Blistering — but risky: if the query lands near a tile’s edge, its true nearest neighbour might be sitting just across the border, and you’ll never see it. Turn <code>nprobe</code> up and you open more neighbouring tiles — latency climbs roughly linearly, recall climbs fast. That tension <em>is</em> the tradeoff, exposed as a number you can tune.</p>
 </section>
-
-<section class="home-paths">
-  <a class="home-path" href="findings.html">
-    <span class="home-path-key">findings →</span>
-    <span class="home-path-val">Rebuilding modern AI from scratch, then learning to ship it. Deep dives, experiments, and production notes.</span>
-  </a>
-  <a class="home-path" href="projects.html">
-    <span class="home-path-key">builds →</span>
-    <span class="home-path-val">Shipped products and applied-ML case studies — real APIs, real deployments, a few with real customers.</span>
-  </a>
-  <a class="home-path" href="about.html">
-    <span class="home-path-key">about →</span>
-    <span class="home-path-val">Who I am, where I'm coming from, and why I'm doing all of this in public.</span>
-  </a>
+<section id="idea-2-dont-store-everything-pq" class="level2">
+<h2 class="anchored" data-anchor-id="idea-2-dont-store-everything-pq">Idea 2 — Don’t store everything: PQ</h2>
+<p>IVF prunes <em>where</em> you search. But a second problem hides underneath: the vectors themselves are fat. Millions of 1,536-dimensional float vectors won’t fit in RAM — and RAM is where speed lives.</p>
+<p><strong>Product Quantization</strong> is a gorgeous bit of compression. The trick: stop storing vectors, start storing <em>recipes</em>.</p>
+<p>Chop each vector into <span class="math inline">\(m\)</span> short sub-vectors. (A 128-dim vector with <span class="math inline">\(m = 8\)</span> becomes eight 16-dim chunks.) Now run k-means <em>within each chunk’s slot</em> across the whole corpus, and keep just 256 representative chunks per slot — a little codebook. Every sub-vector is then replaced by the single byte that names its closest codebook entry.</p>
+<p>Do the arithmetic and it’s almost rude: a 128-float vector — 512 bytes — collapses to an 8-byte code. <strong>64× smaller.</strong></p>
+<p>The clever part is search: you never decompress. When a query arrives you precompute its distance to all 256 entries in each slot’s codebook, drop them in a lookup table, and then every document’s distance is just a few table lookups added together — addition, the thing CPUs do faster than anything else.</p>
 </section>
+<section id="idea-3-navigate-dont-scan-hnsw" class="level2">
+<h2 class="anchored" data-anchor-id="idea-3-navigate-dont-scan-hnsw">Idea 3 — Navigate, don’t scan: HNSW</h2>
+<p>IVF and PQ are about pruning and shrinking. The last idea is about <em>movement</em> — and it’s the one most production vector databases actually reach for.</p>
+<p><strong>HNSW</strong> (hierarchical navigable small worlds) treats the corpus as a graph and turns search into a walk.</p>
+<p>The intuition is “six degrees of separation.” In a small-world graph, hardly anyone is your direct neighbour, yet anyone is reachable in a few hops. HNSW stacks that idea into layers, like a skip-list:</p>
+<ul>
+<li><strong>Top layers</strong> — sparse, with long-range edges, for crossing the whole space in a few big jumps.</li>
+<li><strong>Bottom layers</strong> — dense, with short edges, for pinning down the exact neighbourhood.</li>
+</ul>
+<p>Search drops in at the top, greedily hops toward the query along the long edges, then “falls” a layer and repeats with shorter ones — coarse to fine — until it’s doing a careful local search at the very bottom. You <em>navigate</em> to the answer instead of scanning for it.</p>
+</section>
+<section id="the-race" class="level2">
+<h2 class="anchored" data-anchor-id="the-race">The race</h2>
+<p>So which one wins? On the same 5,000-passage corpus from Post 01:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Algorithm</th>
+<th style="text-align: right;">Recall@10</th>
+<th style="text-align: right;">Latency</th>
+<th style="text-align: right;">Speed-up</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Brute force</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.605 ms</td>
+<td style="text-align: right;">1×</td>
+</tr>
+<tr class="even">
+<td>IVF (k=100, nprobe=5)</td>
+<td style="text-align: right;">0.94</td>
+<td style="text-align: right;">0.082 ms</td>
+<td style="text-align: right;">7.3×</td>
+</tr>
+<tr class="odd">
+<td>HNSW (M=16)</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: right;">0.045 ms</td>
+<td style="text-align: right;">13.4×</td>
+</tr>
+</tbody>
+</table>
+<p>Read that bottom row slowly. HNSW returned the right neighbours <strong>98%</strong> of the time while running <strong>13× faster</strong> than exact search — and the gap only widens as the corpus grows, which is the entire point. That’s why Pinecone, Qdrant, and most vector databases you’ve heard of default to HNSW. The catch, as always, gets paid in memory: all those graph edges have to live somewhere.</p>
+<p>We began Post 01 unable to push past 80,000 documents. We can now, in principle, reach for the millions — having given up almost no accuracy at all.</p>
+<p>Next we leave retrieval behind and step inside the model itself, starting with the very first thing that happens to your text → <a href="../03-tokenization/">Post 03: Tokenization</a>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -676,5 +763,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

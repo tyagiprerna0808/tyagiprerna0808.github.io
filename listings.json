@@ -1,0 +1,22 @@
+[
+  {
+    "listing": "/findings.html",
+    "items": [
+      "/posts/01-embeddings-vector-search/index.html",
+      "/posts/02-vector-search-ann/index.html",
+      "/posts/03-tokenization/index.html",
+      "/posts/04-attention-from-scratch/index.html",
+      "/posts/05-loss-optimization-backprop/index.html",
+      "/posts/06-fine-tuning-lora/index.html",
+      "/posts/07-retrieval-rag/index.html",
+      "/posts/08-evals/index.html",
+      "/posts/09-agents/index.html",
+      "/posts/10-cicd-orchestration/index.html",
+      "/posts/11-versioning-registry/index.html",
+      "/posts/12-containers-cloud-iac/index.html",
+      "/posts/13-serving-models/index.html",
+      "/posts/14-monitoring-drift/index.html",
+      "/posts/15-ml-system-design/index.html"
+    ]
+  }
+]

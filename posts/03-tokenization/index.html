@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Prerna Tyagi">
+<meta name="dcterms.date" content="2026-05-30">
+<meta name="description" content="Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.">
 
-<title>Prerna Tyagi</title>
+<title>03 · Tokenization — how text becomes numbers – Prerna Tyagi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,25 +26,60 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,28 +139,57 @@ ul.task-list li input[type="checkbox"] {
 }
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Prerna Tyagi">
-<meta property="og:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="03 · Tokenization — how text becomes numbers – Prerna Tyagi">
+<meta property="og:description" content="Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
-<meta name="twitter:title" content="Prerna Tyagi">
-<meta name="twitter:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<meta name="twitter:title" content="03 · Tokenization — how text becomes numbers – Prerna Tyagi">
+<meta name="twitter:description" content="Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Prerna Tyagi</span>
     </a>
   </div>
@@ -133,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./findings.html"> 
+    <a class="nav-link" href="../../findings.html"> 
 <span class="menu-text">Findings</span></a>
   </li>  
   <li class="nav-item">
@@ -141,11 +208,11 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
+    <a class="nav-link" href="../../projects.html"> 
 <span class="menu-text">Builds</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -161,77 +228,168 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">03 · Tokenization — how text becomes numbers</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">nlp</div>
+    <div class="quarto-category">tokenization</div>
+    <div class="quarto-category">algorithms</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prerna Tyagi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 30, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
-<section class="home-hero">
-  <p class="home-eyebrow">applied statistician · production ml · built in public</p>
-  <h1 class="home-headline">From notebook<br>to production.</h1>
-  <p class="home-sub">I'm learning to ship machine-learning systems that survive contact with the real world — pipelines, serving, monitoring, drift — and writing down every interesting thing that breaks on the way there.</p>
-  <p class="home-signature">just descending the gradient, with a small learning rate.</p>
+</header>
+
+
+<p class="breadcrumb-mono">
+[Part 3 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>This is Part 3 of <strong>Building Blocks of Modern AI</strong>. Before attention, before embeddings, before any gradient is computed—there is tokenization. It is the first operation on your input and the last on your output, yet it is frequently skipped in technical summaries. That is a mistake.</em></p>
+<section id="the-discrete-continuous-gap" class="level2">
+<h2 class="anchored" data-anchor-id="the-discrete-continuous-gap">The Discrete-Continuous Gap</h2>
+<p>Neural networks are continuous machines, processing floating-point numbers in high-dimensional spaces. Human language, however, is discrete. <strong>Tokenization</strong> is the bridge—the lossy, biased, and often brittle process of mapping raw strings into the integers (tokens) that a model can actually “see.”</p>
+<p>If the tokenizer is inefficient, the model is blind to patterns, sequences become unnecessarily long, and inference costs skyrocket. And the choices are stranger than they look: by the end of this post you’ll see why the <em>same sentence</em> can cost a model 4–6× more tokens in Hindi than in English — a tax on meaning that nobody designed on purpose, it just fell out of how the vocabulary was built.</p>
 </section>
-
-<section class="loop-section">
-  <p class="loop-eyebrow">the loop i'm running</p>
-
-  <svg class="loop-svg" viewbox="0 0 400 360" role="img" aria-label="A repeating loop: train, ship, observe, improve.">
-    <defs>
-      <path id="loopPath" d="M200,60 A120,120 0 0 1 200,300 A120,120 0 0 1 200,60" fill="none"></path>
-    </defs>
-
-    <!-- the ring -->
-    <circle class="loop-ring" cx="200" cy="180" r="120"></circle>
-
-    <!-- the moving spark -->
-    <circle class="loop-spark" r="5">
-      <animatemotion dur="9s" repeatcount="indefinite" rotate="auto">
-        <mpath href="#loopPath"></mpath>
-      </animatemotion>
-    </circle>
-
-    <!-- nodes -->
-    <circle class="loop-node" cx="200" cy="60" r="5"></circle>
-    <circle class="loop-node" cx="320" cy="180" r="5"></circle>
-    <circle class="loop-node" cx="200" cy="300" r="5"></circle>
-    <circle class="loop-node" cx="80" cy="180" r="5"></circle>
-
-    <!-- labels -->
-    <text class="loop-label" x="200" y="42" text-anchor="middle">Train</text>
-    <text class="loop-label" x="336" y="184" text-anchor="start">Ship</text>
-    <text class="loop-label" x="200" y="330" text-anchor="middle">Observe</text>
-    <text class="loop-label" x="64" y="184" text-anchor="end">Improve</text>
-
-    <!-- center -->
-    <text class="loop-center" x="200" y="174" text-anchor="middle">while</text>
-    <text class="loop-center" x="200" y="194" text-anchor="middle">learning:</text>
-  </svg>
-
-  <p class="loop-caption">Train the fundamentals from scratch → ship them into real systems → watch for drift and latency → write down what broke → retrain. No early stopping.</p>
+<section id="the-evolution-of-the-unit" class="level2">
+<h2 class="anchored" data-anchor-id="the-evolution-of-the-unit">The evolution of the unit</h2>
+<section id="the-naive-approach-word-level" class="level3">
+<h3 class="anchored" data-anchor-id="the-naive-approach-word-level">The Naive Approach: Word-Level</h3>
+<p>Split on whitespace: <code>"I love ML"</code> <span class="math inline">\(\rightarrow\)</span> <code>["I", "love", "ML"]</code>. - <strong>The OOV Problem</strong>: What happens to <code>"transformerification"</code>? If it’s not in your 50,000-word vocabulary, it becomes <code>[UNK]</code>. You’ve lost all semantic information. - <strong>Vocabulary Explosion</strong>: To cover every morphological variation (<code>run</code>, <code>running</code>, <code>ran</code>), you’d need millions of embedding vectors.</p>
 </section>
-
-<section class="home-paths">
-  <a class="home-path" href="findings.html">
-    <span class="home-path-key">findings →</span>
-    <span class="home-path-val">Rebuilding modern AI from scratch, then learning to ship it. Deep dives, experiments, and production notes.</span>
-  </a>
-  <a class="home-path" href="projects.html">
-    <span class="home-path-key">builds →</span>
-    <span class="home-path-val">Shipped products and applied-ML case studies — real APIs, real deployments, a few with real customers.</span>
-  </a>
-  <a class="home-path" href="about.html">
-    <span class="home-path-key">about →</span>
-    <span class="home-path-val">Who I am, where I'm coming from, and why I'm doing all of this in public.</span>
-  </a>
+<section id="the-other-extreme-character-level" class="level3">
+<h3 class="anchored" data-anchor-id="the-other-extreme-character-level">The Other Extreme: Character-Level</h3>
+<p>Split every character: <code>"hello"</code> <span class="math inline">\(\rightarrow\)</span> <code>["h", "e", "l", "l", "o"]</code>. - <strong>Sequence Bloat</strong>: A 500-word paragraph becomes 3,000+ tokens. Given the <span class="math inline">\(O(L^2)\)</span> cost of attention, this is computationally prohibitive. - <strong>The Burden of Spelling</strong>: The model must use its capacity to learn that <code>h-e-l-l-o</code> means “hello” before it can learn what “hello” means in context.</p>
 </section>
+<section id="the-goldilocks-zone-subword-tokenization" class="level3">
+<h3 class="anchored" data-anchor-id="the-goldilocks-zone-subword-tokenization">The Goldilocks Zone: Subword Tokenization</h3>
+<p>The industry standard. Common words stay whole (<code>"the"</code>, <code>"is"</code>), while rare words decompose into meaningful units (<code>"unhappiness"</code> <span class="math inline">\(\rightarrow\)</span> <code>["un", "happi", "ness"]</code>). This ensures a fixed vocabulary size (32K–100K) with zero OOV issues.</p>
+</section>
+</section>
+<section id="implementing-byte-level-bpe" class="level2">
+<h2 class="anchored" data-anchor-id="implementing-byte-level-bpe">Implementing byte-level BPE</h2>
+<p>Modern LLMs (GPT-4, Llama 3) use <strong>Byte-Level Byte-Pair Encoding</strong>.</p>
+<section id="the-utf-8-detour" class="level3">
+<h3 class="anchored" data-anchor-id="the-utf-8-detour">The UTF-8 Detour</h3>
+<p>Characters in Unicode can be anything from emoji to ancient script. Starting with a vocabulary of every possible character is impossible. Instead, BBPE starts with <strong>Bytes</strong> (0-255). Every piece of text in every language is just a sequence of bytes in UTF-8.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Character</th>
+<th>Language</th>
+<th>Bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>h</code></td>
+<td>English</td>
+<td><code>[104]</code></td>
+</tr>
+<tr class="even">
+<td><code>猫</code></td>
+<td>Chinese</td>
+<td><code>[231, 140, 171]</code></td>
+</tr>
+<tr class="odd">
+<td><code>🤖</code></td>
+<td>Emoji</td>
+<td><code>[240, 159, 164, 150]</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-algorithm-from-scratch" class="level3">
+<h3 class="anchored" data-anchor-id="the-algorithm-from-scratch">The Algorithm from Scratch</h3>
+<ol type="1">
+<li><strong>Initialize</strong>: Convert the training corpus into its raw UTF-8 byte sequence.</li>
+<li><strong>Count</strong>: Find the most frequent adjacent pair of tokens (initially bytes).</li>
+<li><strong>Merge</strong>: Create a new token for that pair and replace all occurrences.</li>
+<li><strong>Iterate</strong>: Repeat until your vocabulary size (e.g., 50,257 for GPT-2) is reached.</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_stats(ids):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> {}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pair <span class="kw">in</span> <span class="bu">zip</span>(ids, ids[<span class="dv">1</span>:]):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        counts[pair] <span class="op">=</span> counts.get(pair, <span class="dv">0</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> counts</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> merge(ids, pair, idx):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    new_ids <span class="op">=</span> []</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> i <span class="op">&lt;</span> <span class="bu">len</span>(ids):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">&lt;</span> <span class="bu">len</span>(ids) <span class="op">-</span> <span class="dv">1</span> <span class="kw">and</span> ids[i] <span class="op">==</span> pair[<span class="dv">0</span>] <span class="kw">and</span> ids[i<span class="op">+</span><span class="dv">1</span>] <span class="op">==</span> pair[<span class="dv">1</span>]:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>            new_ids.append(idx)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            i <span class="op">+=</span> <span class="dv">2</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            new_ids.append(ids[i])</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> new_ids</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="wordpiece-the-statistical-competitor" class="level2">
+<h2 class="anchored" data-anchor-id="wordpiece-the-statistical-competitor">WordPiece: the statistical competitor</h2>
+<p>Used in <strong>BERT</strong> and <strong>Gemma</strong>, WordPiece differs from BPE in its merge criteria. BPE is greedy about frequency. WordPiece is greedy about <strong>Pointwise Mutual Information (PMI)</strong>.</p>
+<p>Instead of merging the most frequent pair, it merges the pair <span class="math inline">\((a, b)\)</span> that maximizes: <span class="math display">\[\text{Score}(a, b) = \frac{P(ab)}{P(a) \cdot P(b)}\]</span></p>
+<ul>
+<li><strong>Intuition</strong>: It asks, “Does this pair appear together more often than we would expect by random chance?”</li>
+<li><strong>Example</strong>: If <code>"t"</code> and <code>"h"</code> are both very common but don’t always appear as <code>"th"</code>, their score might be lower than a rarer but highly correlated pair like <code>"q"</code> and <code>"u"</code>.</li>
+</ul>
+</section>
+<section id="unigram-the-top-down-approach" class="level2">
+<h2 class="anchored" data-anchor-id="unigram-the-top-down-approach">Unigram: the top-down approach</h2>
+<p>Unlike the bottom-up merges of BPE/WordPiece, <strong>Unigram</strong> (used in T5 and SentencePiece) starts with a massive vocabulary and iteratively <strong>removes</strong> tokens.</p>
+<p>At each step, it calculates how much the “loss” (likelihood of the corpus) would increase if a token were removed. It keeps the tokens that are most critical to compressing the training data. This allows for <strong>probabilistic subword segmentation</strong>—the same word can be split in multiple ways during training, which acts as a form of regularization.</p>
+</section>
+<section id="the-silent-inequity-multilingual-fragmentation" class="level2">
+<h2 class="anchored" data-anchor-id="the-silent-inequity-multilingual-fragmentation">The silent inequity: multilingual fragmentation</h2>
+<p>Tokenization is the root of multilingual performance gaps. Because most tokenizers are trained on English-heavy data:</p>
+<ul>
+<li><strong>English</strong>: <code>"hello"</code> <span class="math inline">\(\rightarrow\)</span> 1 token.</li>
+<li><strong>Hindi</strong>: <code>"नमस्ते"</code> <span class="math inline">\(\rightarrow\)</span> 18 bytes <span class="math inline">\(\rightarrow\)</span> <strong>~6 tokens</strong>.</li>
+</ul>
+<p>The same meaning takes 6x more tokens in Hindi. This means the model has a shorter “effective context window” for Hindi, and Hindi users pay 6x more for the same API call. This is not a model flaw; it’s a tokenizer flaw.</p>
+</section>
+<section id="real-world-tooling" class="level2">
+<h2 class="anchored" data-anchor-id="real-world-tooling">Real-world tooling</h2>
+<p>In production, you don’t write your own BPE. You use: - <a href="https://github.com/openai/tiktoken"><strong>tiktoken</strong></a>: OpenAI’s fast Rust-based BPE. - <a href="https://github.com/google/sentencepiece"><strong>SentencePiece</strong></a>: Google’s implementation that treats whitespace as a character (escaping the need for pre-tokenization). - <a href="https://github.com/huggingface/tokenizers"><strong>HuggingFace Tokenizers</strong></a>: The standard for open-source research.</p>
+<p>In the next post, we finally implement the heart of the transformer: <a href="../04-attention-from-scratch/">Post 04: Attention from scratch</a>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -676,5 +834,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

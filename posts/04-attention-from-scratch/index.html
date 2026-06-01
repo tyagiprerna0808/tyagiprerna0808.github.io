@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Prerna Tyagi">
+<meta name="dcterms.date" content="2026-05-31">
+<meta name="description" content="The one operation that lets tokens talk to each other — derived line by line, written in fourteen lines of NumPy, and traced all the way to the memory wall that shapes how LLMs are served.">
 
-<title>Prerna Tyagi</title>
+<title>04 · Attention from scratch – Prerna Tyagi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,25 +26,60 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,28 +139,57 @@ ul.task-list li input[type="checkbox"] {
 }
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Prerna Tyagi">
-<meta property="og:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="04 · Attention from scratch – Prerna Tyagi">
+<meta property="og:description" content="The one operation that lets tokens talk to each other — derived line by line, written in fourteen lines of NumPy, and traced all the way to the memory wall that shapes how LLMs are served.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
-<meta name="twitter:title" content="Prerna Tyagi">
-<meta name="twitter:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<meta name="twitter:title" content="04 · Attention from scratch – Prerna Tyagi">
+<meta name="twitter:description" content="The one operation that lets tokens talk to each other — derived line by line, written in fourteen lines of NumPy, and traced all the way to the memory wall that shapes how LLMs are served.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Prerna Tyagi</span>
     </a>
   </div>
@@ -133,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./findings.html"> 
+    <a class="nav-link" href="../../findings.html"> 
 <span class="menu-text">Findings</span></a>
   </li>  
   <li class="nav-item">
@@ -141,11 +208,11 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
+    <a class="nav-link" href="../../projects.html"> 
 <span class="menu-text">Builds</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -161,77 +228,121 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">04 · Attention from scratch</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">transformers</div>
+    <div class="quarto-category">attention</div>
+    <div class="quarto-category">math</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    The one operation that lets tokens talk to each other — derived line by line, written in fourteen lines of NumPy, and traced all the way to the memory wall that shapes how LLMs are served.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prerna Tyagi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 31, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
-<section class="home-hero">
-  <p class="home-eyebrow">applied statistician · production ml · built in public</p>
-  <h1 class="home-headline">From notebook<br>to production.</h1>
-  <p class="home-sub">I'm learning to ship machine-learning systems that survive contact with the real world — pipelines, serving, monitoring, drift — and writing down every interesting thing that breaks on the way there.</p>
-  <p class="home-signature">just descending the gradient, with a small learning rate.</p>
+</header>
+
+
+<p class="breadcrumb-mono">
+[Part 4 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>Part 4 of <strong>Building Blocks of Modern AI</strong>. We’ve turned text into tokens; now we give the tokens a way to talk to each other.</em></p>
+<section id="the-word-that-needs-context" class="level2">
+<h2 class="anchored" data-anchor-id="the-word-that-needs-context">The word that needs context</h2>
+<p>Here’s a sentence: <em>“The river bank was muddy.”</em> And here’s another: <em>“She deposited the cheque at the bank.”</em></p>
+<p>Same four letters — <em>bank</em> — two completely different things. You told them apart without noticing, using the words around each one. That’s the whole problem of language in miniature: meaning isn’t <em>in</em> the word, it’s in the company the word keeps.</p>
+<p>For years, models were bad at this. RNNs read strictly left to right, squeezing everything seen so far into one fixed memory vector — so by the end of a long sentence, the beginning had mostly evaporated.</p>
+<p><strong>Attention</strong> is the idea that threw that out. It’s so central that the paper introducing the transformer just called it <em>all you need</em>. The move looks obvious in hindsight: instead of compressing the past into a single vector, let every token <em>look directly at every other token</em> and decide, for itself, which ones matter.</p>
+<p>So <em>bank</em>, sitting beside <em>river</em> and <em>muddy</em>, leans toward those two — and quietly becomes a different vector than the <em>bank</em> that sits beside <em>cheque</em>.</p>
+<p>That’s the entire intuition. The rest of this post is making it precise.</p>
 </section>
-
-<section class="loop-section">
-  <p class="loop-eyebrow">the loop i'm running</p>
-
-  <svg class="loop-svg" viewbox="0 0 400 360" role="img" aria-label="A repeating loop: train, ship, observe, improve.">
-    <defs>
-      <path id="loopPath" d="M200,60 A120,120 0 0 1 200,300 A120,120 0 0 1 200,60" fill="none"></path>
-    </defs>
-
-    <!-- the ring -->
-    <circle class="loop-ring" cx="200" cy="180" r="120"></circle>
-
-    <!-- the moving spark -->
-    <circle class="loop-spark" r="5">
-      <animatemotion dur="9s" repeatcount="indefinite" rotate="auto">
-        <mpath href="#loopPath"></mpath>
-      </animatemotion>
-    </circle>
-
-    <!-- nodes -->
-    <circle class="loop-node" cx="200" cy="60" r="5"></circle>
-    <circle class="loop-node" cx="320" cy="180" r="5"></circle>
-    <circle class="loop-node" cx="200" cy="300" r="5"></circle>
-    <circle class="loop-node" cx="80" cy="180" r="5"></circle>
-
-    <!-- labels -->
-    <text class="loop-label" x="200" y="42" text-anchor="middle">Train</text>
-    <text class="loop-label" x="336" y="184" text-anchor="start">Ship</text>
-    <text class="loop-label" x="200" y="330" text-anchor="middle">Observe</text>
-    <text class="loop-label" x="64" y="184" text-anchor="end">Improve</text>
-
-    <!-- center -->
-    <text class="loop-center" x="200" y="174" text-anchor="middle">while</text>
-    <text class="loop-center" x="200" y="194" text-anchor="middle">learning:</text>
-  </svg>
-
-  <p class="loop-caption">Train the fundamentals from scratch → ship them into real systems → watch for drift and latency → write down what broke → retrain. No early stopping.</p>
+<section id="q-k-v-a-tiny-game-of-question-and-answer" class="level2">
+<h2 class="anchored" data-anchor-id="q-k-v-a-tiny-game-of-question-and-answer">Q, K, V — a tiny game of question and answer</h2>
+<p>To let tokens “look at each other,” attention gives every token three jobs, by projecting it three different ways:</p>
+<ul>
+<li><strong>Query (<span class="math inline">\(Q\)</span>)</strong> — <em>what am I looking for?</em></li>
+<li><strong>Key (<span class="math inline">\(K\)</span>)</strong> — <em>what do I have to offer?</em></li>
+<li><strong>Value (<span class="math inline">\(V\)</span>)</strong> — <em>and if you pick me, here’s what you actually get.</em></li>
+</ul>
+<p>Picture a room full of people. Each token holds up a <strong>query</strong> (“I’m the word <em>bank</em>, I’m confused, anyone got context?”), compares it against everyone else’s <strong>key</strong> (“I’m <em>river</em>, I’m relevant to you”), and the better two match, the more of that neighbour’s <strong>value</strong> it carries home.</p>
+<p>“How well do a query and a key match?” is just their dot product. Compute it for every pair, squash the scores into weights that sum to 1 (softmax), and use those weights to mix the values. Written out, the whole mechanism is one line:</p>
+<p><span class="math display">\[\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right)V\]</span></p>
+<p>Don’t let the symbols hide what it is: a <strong>weighted average of values, weighted by how much each query matches each key.</strong> That’s attention, top to bottom.</p>
 </section>
-
-<section class="home-paths">
-  <a class="home-path" href="findings.html">
-    <span class="home-path-key">findings →</span>
-    <span class="home-path-val">Rebuilding modern AI from scratch, then learning to ship it. Deep dives, experiments, and production notes.</span>
-  </a>
-  <a class="home-path" href="projects.html">
-    <span class="home-path-key">builds →</span>
-    <span class="home-path-val">Shipped products and applied-ML case studies — real APIs, real deployments, a few with real customers.</span>
-  </a>
-  <a class="home-path" href="about.html">
-    <span class="home-path-key">about →</span>
-    <span class="home-path-val">Who I am, where I'm coming from, and why I'm doing all of this in public.</span>
-  </a>
+<section id="the-one-detail-everyone-glosses-over-dₖ" class="level2">
+<h2 class="anchored" data-anchor-id="the-one-detail-everyone-glosses-over-dₖ">The one detail everyone glosses over: √dₖ</h2>
+<p>There’s a small divisor in that formula — <span class="math inline">\(\sqrt{d_k}\)</span> — that’s easy to wave off as bookkeeping. It isn’t. Drop it, and training quietly falls apart.</p>
+<p>Here’s why. If queries and keys are roughly random with variance 1, their dot product has variance <span class="math inline">\(d_k\)</span> — so in a model with a large head dimension, the raw scores swing to big positive and negative numbers. Feed <em>those</em> into softmax and it saturates: one weight goes to ~1, the rest to ~0, and the gradient flatlines. The layer stops learning.</p>
+<p>Dividing by <span class="math inline">\(\sqrt{d_k}\)</span> pulls the scores back to variance 1, keeps softmax in its sensitive range, and the gradients keep flowing. One square root, standing between you and a model that refuses to train.</p>
 </section>
+<section id="attention-in-fourteen-lines" class="level2">
+<h2 class="anchored" data-anchor-id="attention-in-fourteen-lines">Attention, in fourteen lines</h2>
+<p>None of this is hand-wavy — it’s short enough to write from scratch:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scaled_dot_product_attention(q, k, v, mask<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    d_k <span class="op">=</span> q.shape[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Scores: how much each query matches each key</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> np.matmul(q, k.transpose(<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>)) <span class="op">/</span> np.sqrt(d_k)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Causal mask: forbid looking at future tokens</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> mask <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">+=</span> (mask <span class="op">*</span> <span class="op">-</span><span class="fl">1e9</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Softmax: turn scores into weights that sum to 1</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> np.exp(scores) <span class="op">/</span> np.<span class="bu">sum</span>(np.exp(scores), axis<span class="op">=-</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Mix the values by those weights</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.matmul(weights, v), weights</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That is the heart of every transformer you’ve ever used. Everything after this is making it <em>faster</em> and <em>cheaper</em> — because the basic version has two expensive habits.</p>
+</section>
+<section id="the-bill-comes-due-the-memory-wall" class="level2">
+<h2 class="anchored" data-anchor-id="the-bill-comes-due-the-memory-wall">The bill comes due: the memory wall</h2>
+<p>The first habit shows up when a model generates text one token at a time. To produce token <span class="math inline">\(L+1\)</span>, it has to attend to all <span class="math inline">\(L\)</span> tokens before it — and recomputing the keys and values for that entire history, every single step, is pure waste.</p>
+<p>So we cache them. The <strong>KV cache</strong> stores each token’s <span class="math inline">\(K\)</span> and <span class="math inline">\(V\)</span> once and reuses them forever after. Brilliant — except the cache grows with every token and every concurrent request, and it grows <em>fast</em>: for a 70-billion-parameter model with a 128K context, it can swell to <strong>tens of gigabytes</strong> of fast GPU memory. For most people serving LLMs, this cache — not the math — is what runs out first.</p>
+<p>That pressure is exactly why modern models bother with <strong>Grouped-Query Attention</strong>: instead of every query head carrying its own private key/value, several query heads share one set. Llama 3 does this. You lose almost no quality and you shrink the cache dramatically — a direct answer to the memory wall.</p>
+</section>
+<section id="why-your-gpu-was-sitting-idle-flash-attention" class="level2">
+<h2 class="anchored" data-anchor-id="why-your-gpu-was-sitting-idle-flash-attention">Why your GPU was sitting idle: Flash Attention</h2>
+<p>The second expensive habit is the <span class="math inline">\(QK^T\)</span> matrix itself. For a sequence of length <span class="math inline">\(L\)</span> it’s <span class="math inline">\(L \times L\)</span> — quadratic — and the surprise is <em>where</em> the cost actually lives. It’s not the multiplications. It’s shuttling that giant matrix back and forth between the GPU’s big-but-slow memory and its tiny-but-fast on-chip memory.</p>
+<p><strong>Flash Attention</strong> fixes it without changing a single number in the result. It tiles the computation — breaks the huge matrix into blocks small enough to live in fast memory, finishes each block there, and never writes the full thing out. Same math, up to ~3× faster, purely by respecting where the data physically sits. (We’ll meet this memory-versus-compute story again and again.)</p>
+<p>We now have a model that can read context. Next: how it actually <em>learns</em> — loss, gradients, and backpropagation, derived from scratch → <a href="../05-loss-optimization-backprop/">Post 05</a>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -676,5 +787,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

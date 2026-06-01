@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Prerna Tyagi">
+<meta name="dcterms.date" content="2026-05-28">
+<meta name="description" content="How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
 
-<title>Prerna Tyagi</title>
+<title>01 · Embeddings &amp; vector search – Prerna Tyagi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,22 +29,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,28 +104,57 @@ ul.task-list li input[type="checkbox"] {
 }
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Prerna Tyagi">
-<meta property="og:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="01 · Embeddings &amp; vector search – Prerna Tyagi">
+<meta property="og:description" content="How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
-<meta name="twitter:title" content="Prerna Tyagi">
-<meta name="twitter:description" content="Applied statistician shipping production ML in public — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them.">
+<meta name="twitter:title" content="01 · Embeddings &amp; vector search – Prerna Tyagi">
+<meta name="twitter:description" content="How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
 <meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Prerna Tyagi</span>
     </a>
   </div>
@@ -133,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./findings.html"> 
+    <a class="nav-link" href="../../findings.html"> 
 <span class="menu-text">Findings</span></a>
   </li>  
   <li class="nav-item">
@@ -141,11 +173,11 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
+    <a class="nav-link" href="../../projects.html"> 
 <span class="menu-text">Builds</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -161,77 +193,147 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">01 · Embeddings &amp; vector search</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">embeddings</div>
+    <div class="quarto-category">retrieval</div>
+    <div class="quarto-category">math</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prerna Tyagi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 28, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
-<section class="home-hero">
-  <p class="home-eyebrow">applied statistician · production ml · built in public</p>
-  <h1 class="home-headline">From notebook<br>to production.</h1>
-  <p class="home-sub">I'm learning to ship machine-learning systems that survive contact with the real world — pipelines, serving, monitoring, drift — and writing down every interesting thing that breaks on the way there.</p>
-  <p class="home-signature">just descending the gradient, with a small learning rate.</p>
+</header>
+
+
+<p class="breadcrumb-mono">
+[Part 1 of 9] <a href="../../">Building Blocks of Modern AI</a>
+</p>
+<p><em>Part 1 of <strong>Building Blocks of Modern AI</strong> — each post takes one piece of a modern AI system and rebuilds it from scratch, with code you can run and numbers you can check.</em></p>
+<section id="the-search-box-that-reads-your-mind" class="level2">
+<h2 class="anchored" data-anchor-id="the-search-box-that-reads-your-mind">The search box that reads your mind</h2>
+<p>Type a few words into a search box that <em>actually understands you</em> — not one that keyword-matches you — and something quietly strange happens underneath.</p>
+<p>Your words become a list of numbers. So does every document in the index. Then the machine does <strong>geometry</strong>: it measures which points sit closest together, and the nearest ones win.</p>
+<p>That’s the whole trick behind semantic search, RAG, recommendations — most of what we now wave at and call “AI.”</p>
+<p>The idea is easy. The hard part hides inside two small words: <em>closest</em>, and <em>fast</em>.</p>
+<p>So here’s the sentence this entire post is trying to earn:</p>
+<blockquote class="blockquote">
+<p>Given millions of documents and a query, return the nearest neighbours in <strong>under 10 ms</strong> — on a laptop.</p>
+</blockquote>
+<p>To get there, we have to take two questions seriously that “just use vector search” usually skips right over. What does “close” actually <em>mean</em>, mathematically? And what happens to that 10 ms the moment your corpus stops being a toy?</p>
+<p>Let’s start with the first one, because that’s where the magic lives.</p>
 </section>
-
-<section class="loop-section">
-  <p class="loop-eyebrow">the loop i'm running</p>
-
-  <svg class="loop-svg" viewbox="0 0 400 360" role="img" aria-label="A repeating loop: train, ship, observe, improve.">
-    <defs>
-      <path id="loopPath" d="M200,60 A120,120 0 0 1 200,300 A120,120 0 0 1 200,60" fill="none"></path>
-    </defs>
-
-    <!-- the ring -->
-    <circle class="loop-ring" cx="200" cy="180" r="120"></circle>
-
-    <!-- the moving spark -->
-    <circle class="loop-spark" r="5">
-      <animatemotion dur="9s" repeatcount="indefinite" rotate="auto">
-        <mpath href="#loopPath"></mpath>
-      </animatemotion>
-    </circle>
-
-    <!-- nodes -->
-    <circle class="loop-node" cx="200" cy="60" r="5"></circle>
-    <circle class="loop-node" cx="320" cy="180" r="5"></circle>
-    <circle class="loop-node" cx="200" cy="300" r="5"></circle>
-    <circle class="loop-node" cx="80" cy="180" r="5"></circle>
-
-    <!-- labels -->
-    <text class="loop-label" x="200" y="42" text-anchor="middle">Train</text>
-    <text class="loop-label" x="336" y="184" text-anchor="start">Ship</text>
-    <text class="loop-label" x="200" y="330" text-anchor="middle">Observe</text>
-    <text class="loop-label" x="64" y="184" text-anchor="end">Improve</text>
-
-    <!-- center -->
-    <text class="loop-center" x="200" y="174" text-anchor="middle">while</text>
-    <text class="loop-center" x="200" y="194" text-anchor="middle">learning:</text>
-  </svg>
-
-  <p class="loop-caption">Train the fundamentals from scratch → ship them into real systems → watch for drift and latency → write down what broke → retrain. No early stopping.</p>
+<section id="what-close-actually-means" class="level2">
+<h2 class="anchored" data-anchor-id="what-close-actually-means">What “close” actually means</h2>
+<p>Old-school search — BM25, Lucene, the thing inside most databases — matches keywords. Search for <em>sports</em>, and a document that only ever says <em>tennis</em> simply doesn’t come back. The words don’t overlap, so as far as the index is concerned, the two are strangers.</p>
+<p>Embeddings refuse to accept that. They map every piece of text to a point in a high-dimensional space where <em>sports</em> and <em>tennis</em> land right next to each other — because the model never really sees the word. It sees the <strong>concept</strong>.</p>
+<p>That’s a nice story. Let me turn it into a number.</p>
+<p>Take four sentences — two about gardening, two about finance — and hand them to a small embedding model (<code>all-MiniLM-L6-v2</code>), <em>without ever telling it the topics</em>. Then measure the cosine similarity of every possible pair:</p>
+<pre><code>  0.622   'I love plants'              vs  'Gardening is fun'             ← gardening
+  0.149   'The stock market crashed'   vs  'Bonds and treasury yields'    ← finance
+  0.021   'I love plants'              vs  'The stock market crashed'
+  0.016   'I love plants'              vs  'Bonds and treasury yields'
+  0.015   'Gardening is fun'           vs  'The stock market crashed'
+  0.005   'Gardening is fun'           vs  'Bonds and treasury yields'</code></pre>
+<p>Look at the gap. Same-topic pairs sit <strong>30 to 120 times higher</strong> than cross-topic ones. Nobody handed the model a label. It drew the border between gardening and finance on its own — purely from having read enough text to know those words live in different neighbourhoods.</p>
+<p>But the detail I keep coming back to is subtler than that.</p>
+<p>The gardening pair scores <strong>0.62</strong>. The finance pair — also “same topic” — scores only <strong>0.15</strong>. Why the gap? Because <em>“I love plants”</em> and <em>“Gardening is fun”</em> don’t just share a subject, they share a <em>mood</em>: warm, casual, fond. Whereas <em>“the stock market crashed”</em> (panic) and <em>“bonds and treasury yields”</em> (a dry instrument) share a topic and almost nothing else.</p>
+<p>The embedding isn’t matching keywords. It isn’t even really matching topics. It’s matching <strong>meaning</strong> — and you can read it straight off a single number.</p>
 </section>
-
-<section class="home-paths">
-  <a class="home-path" href="findings.html">
-    <span class="home-path-key">findings →</span>
-    <span class="home-path-val">Rebuilding modern AI from scratch, then learning to ship it. Deep dives, experiments, and production notes.</span>
-  </a>
-  <a class="home-path" href="projects.html">
-    <span class="home-path-key">builds →</span>
-    <span class="home-path-val">Shipped products and applied-ML case studies — real APIs, real deployments, a few with real customers.</span>
-  </a>
-  <a class="home-path" href="about.html">
-    <span class="home-path-key">about →</span>
-    <span class="home-path-val">Who I am, where I'm coming from, and why I'm doing all of this in public.</span>
-  </a>
+<section id="three-ways-to-measure-closeness" class="level2">
+<h2 class="anchored" data-anchor-id="three-ways-to-measure-closeness">Three ways to measure closeness</h2>
+<p>So “close” is the whole game. How do we actually measure it?</p>
+<p>An embedding is just a vector <span class="math inline">\(v \in \mathbb{R}^d\)</span> — a point in <span class="math inline">\(d\)</span>-dimensional space. “Similar meaning” becomes “nearby point,” and there are three ways people usually measure <em>nearby</em>. They’re worth keeping straight, because the choice quietly shows up everywhere downstream.</p>
+<p><strong>Dot product</strong> — raw alignment: <span class="math display">\[\text{Dot}(A, B) = A \cdot B = \sum_{i=1}^{n} A_i B_i = \|A\|\,\|B\|\cos(\theta)\]</span> It folds together <em>both</em> how aligned two vectors are and how long they are. Sometimes that length carries real signal; often it’s noise you’d rather ignore.</p>
+<p><strong>Cosine similarity</strong> — alignment with the length divided out: <span class="math display">\[\text{Cosine}(A, B) = \frac{A \cdot B}{\|A\|\,\|B\|}\]</span> This is the default for text. A long document and a short one about the same thing should point the same <em>direction</em>, even if one vector is “bigger” — and cosine measures direction only.</p>
+<p><strong>Euclidean (L2) distance</strong> — plain straight-line distance: <span class="math display">\[d(A, B) = \sqrt{\sum_{i=1}^{n} (A_i - B_i)^2}\]</span> And here’s a small fact that saves a lot of confusion: once your vectors are normalised to length 1, L2 and cosine produce the <em>same ranking</em> in disguise — <span class="math inline">\(\|A-B\|^2 = 2 - 2\cos(\theta)\)</span>. Pick whichever your hardware prefers; the order of results won’t budge.</p>
+<p>That last identity is also a quiet gift: it means the entire search can be done with one fast matrix multiply. Which raises the obvious question — how fast, exactly?</p>
 </section>
+<section id="the-simplest-thing-that-works-until-it-doesnt" class="level2">
+<h2 class="anchored" data-anchor-id="the-simplest-thing-that-works-until-it-doesnt">The simplest thing that works — until it doesn’t</h2>
+<p>There’s a temptation in this field to reach for the clever data structure first. Resist it. The honest baseline is almost embarrassingly plain: embed everything once, and at query time compare the query against <em>every</em> document. No index, no tricks. <strong>Exact search.</strong></p>
+<p>I ran it on 5,000 real news passages (<code>fancyzhx/ag_news</code>), each a 384-dimensional vector, with the search done as a single normalised matrix multiply.</p>
+<p>First — does it even work? Query: <strong>“tennis player wins grand slam.”</strong> The top result is a passage about Roddick and Federer at the Olympics. The phrase “grand slam” appears <em>nowhere</em> in it. A keyword index would have returned nothing; the embedding walked straight there, because <em>Roddick + Federer + Olympics + gold</em> sits in exactly the right corner of tennis-space.</p>
+<p>Then I went looking for where it breaks. You learn more from the misses.</p>
+<p>Query: <strong>“earnings report from a tech company.”</strong> The third result was <em>Limited Brands</em> — a clothing retailer. It has earnings reports, sure, but a tech company it is not. Here’s what happened: the query smuggled in <em>two</em> concepts, and when you average two ideas into one vector, the louder one wins. “Earnings report” simply drowned out “tech company.”</p>
+<p>That single wrong answer is the reason production retrieval is never just one matrix multiply. Reranking, query rewriting, hybrid keyword-plus-vector search — every one of those exists to patch the exact failure you just watched happen on result number three.</p>
+<p>And the speed? At 5,000 documents, each query took about <strong>0.6 ms</strong>. Instant. Which is precisely the trap.</p>
+<p>Brute force compares against <em>everything</em>, so the real question was never “is it fast at 5K” — it’s <em>what’s the slope?</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Corpus size (<span class="math inline">\(N\)</span>)</th>
+<th style="text-align: right;">Mean latency</th>
+<th style="text-align: right;">p95 latency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">0.052 ms</td>
+<td style="text-align: right;">0.067 ms</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5,000</td>
+<td style="text-align: right;">0.605 ms</td>
+<td style="text-align: right;">0.857 ms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10,000</td>
+<td style="text-align: right;">1.210 ms</td>
+<td style="text-align: right;">1.520 ms</td>
+</tr>
+</tbody>
+</table>
+<p>The line is dead straight: about <strong>121 nanoseconds per document</strong>, every time. Double the corpus, double the wait — forever.</p>
+<p>Put that against our 10 ms budget and it hardens into a ceiling: roughly <strong>83,000 documents</strong>, and not one more. English Wikipedia has six million articles. The “instant” search has quietly become a one-second search — and one second is a lifetime.</p>
+<p>So brute force isn’t <em>slow</em>. It’s <em>honest</em> — it always finds the true nearest neighbour. It just doesn’t scale. And it’s worth understanding exactly why before we go fixing it.</p>
+</section>
+<section id="why-a-bigger-machine-wont-save-you" class="level2">
+<h2 class="anchored" data-anchor-id="why-a-bigger-machine-wont-save-you">Why a bigger machine won’t save you</h2>
+<p>The natural instinct is to throw hardware at the wall. It won’t be enough, for two reasons worth keeping.</p>
+<p>The first is geometry. As the number of dimensions <span class="math inline">\(d\)</span> grows, space gets strange. Almost all the volume of a high-dimensional sphere bunches into a thin shell near its surface — which means that for a random spread of points, <em>everything ends up roughly the same distance from everything else</em>. The very notion of “nearest” goes faint. This is the <strong>curse of dimensionality</strong>, and it’s the deep reason exact search is the only thing guaranteed to be exactly right — and the reason that guarantee costs so much.</p>
+<p>The second is more mundane and, in practice, more decisive: <strong>memory bandwidth</strong>. The bottleneck in vector search usually isn’t the arithmetic — it’s <em>moving the vectors</em> from main memory to the chip that does the math. The distance calculation is cheap; the journey is not. So the algorithms that win are the ones that either move less data, or refuse to look at most of it.</p>
+<p>Which is the entire plot of the next post: how to find the nearest neighbours <em>without</em> comparing against everything — IVF, PQ, and HNSW, built from scratch — and claw back two orders of magnitude while barely losing any accuracy.</p>
+<p>→ <a href="../02-vector-search-ann/">Post 02: ANN from scratch</a></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -676,5 +778,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
