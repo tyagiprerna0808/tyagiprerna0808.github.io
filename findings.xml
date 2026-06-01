@@ -25,6 +25,7 @@
 
 
 
+
 <p class="breadcrumb-mono">
 [Shipping It · Part 6 of 6] <a href="../../findings.html">Findings</a>
 </p>
@@ -65,6 +66,7 @@
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/14-monitoring-drift/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -114,6 +116,7 @@
 
 
 
+
 <p class="breadcrumb-mono">
 [Shipping It · Part 4 of 6] <a href="../../findings.html">Findings</a>
 </p>
@@ -155,6 +158,7 @@
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/12-containers-cloud-iac/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -203,6 +207,7 @@
 
 
 
+
 <p class="breadcrumb-mono">
 [Shipping It · Part 2 of 6] <a href="../../findings.html">Findings</a>
 </p>
@@ -243,6 +248,7 @@
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/10-cicd-orchestration/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -288,6 +294,7 @@
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/04-attention-from-scratch/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -445,6 +452,7 @@ font-style: inherit;">return</span> np.matmul(weights, v), weights</span></code>
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/03-tokenization/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -665,6 +673,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
 
 
 
+
 <p class="breadcrumb-mono">
 [Part 2 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
@@ -756,6 +765,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/01-embeddings-vector-search/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -870,6 +880,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
 
 
 
+
 <p class="breadcrumb-mono">
 [Part 5 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
@@ -917,6 +928,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
 
 
 
+
 <p class="breadcrumb-mono">
 [Part 6 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
@@ -958,6 +970,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/07-retrieval-rag/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1009,6 +1022,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
 
 
 
+
 <p class="breadcrumb-mono">
 [Part 8 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
@@ -1050,6 +1064,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <dc:creator>Prerna Tyagi</dc:creator>
   <link>https://tyagiprerna0808.github.io/posts/09-agents/</link>
   <description><![CDATA[ 
+
 
 
 

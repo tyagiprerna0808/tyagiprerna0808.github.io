@@ -175,13 +175,6 @@
     "text": "applied statistician · production ml · built in public\n  From notebookto production.\n  I'm learning to ship machine-learning systems that survive contact with the real world — pipelines, serving, monitoring, drift — and writing down every interesting thing that breaks on the way there.\n  just descending the gradient, with a small learning rate.\n\n\n\n  the loop i'm running\n\n  \n    \n      \n    \n\n    \n    \n\n    \n    \n      \n        \n      \n    \n\n    \n    \n    \n    \n    \n\n    \n    Train\n    Ship\n    Observe\n    Improve\n\n    \n    while\n    learning:\n  \n\n  Train the fundamentals from scratch → ship them into real systems → watch for drift and latency → write down what broke → retrain. No early stopping.\n\n\n\n  \n    findings →\n    Rebuilding modern AI from scratch, then learning to ship it. Deep dives, experiments, and production notes.\n  \n  \n    builds →\n    Shipped products and applied-ML case studies — real APIs, real deployments, a few with real customers.\n  \n  \n    about →\n    Who I am, where I'm coming from, and why I'm doing all of this in public."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Prerna Tyagi",
-    "section": "",
-    "text": "~/about/\n\njust descending the gradient, with a small learning rate\nApplied statistician, training into the chaotic core of optimization. I start shipping real production, treating my career like a backpropagation loop, writing about the weird and interesting findings as I go"
-  },
-  {
     "objectID": "about.html#the-work",
     "href": "about.html#the-work",
     "title": "Prerna Tyagi",
@@ -201,13 +194,6 @@
     "title": "Prerna Tyagi",
     "section": "Reach out",
     "text": "Reach out\nEmail best for substantive things. DMs open on X and LinkedIn for short threads. GitHub for code."
-  },
-  {
-    "objectID": "findings.html",
-    "href": "findings.html",
-    "title": "Findings",
-    "section": "",
-    "text": "~/findings/\n\n\n\nWhat I’m learning as I rebuild modern AI from scratch and then try to ship it — the deep dives, the experiments, and the things that broke."
   },
   {
     "objectID": "findings.html#building-blocks-of-modern-ai",

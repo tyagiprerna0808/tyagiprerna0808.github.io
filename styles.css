@@ -49,7 +49,9 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg) !important;
+  background:
+    radial-gradient(125% 120% at 50% -12%, #0d1530 0%, #0a0e1a 46%, #06080f 100%) !important;
+  background-attachment: fixed !important;
   color: var(--text) !important;
   font-family: var(--font-sans) !important;
   font-size: 1rem;
@@ -58,51 +60,117 @@ body {
   position: relative;
 }
 
-/* Engineering blueprint grid — fixed background */
-body::before {
-  content: "";
+/* ===== Cosmos — layered galaxy + mathematical blueprint background ===== */
+.cosmos {
   position: fixed;
   inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cosmos > div {
+  position: absolute;
+  inset: 0;
+}
+
+/* Nebula — soft galaxy colour wash (indigo / violet / amber / teal) */
+.cosmos-nebula {
+  inset: -25%;
+  background:
+    radial-gradient(38% 48% at 18% 22%, rgba(129, 140, 248, 0.18), transparent 70%),
+    radial-gradient(34% 42% at 82% 18%, rgba(167, 139, 250, 0.15), transparent 70%),
+    radial-gradient(46% 42% at 78% 82%, rgba(251, 191, 36, 0.09), transparent 72%),
+    radial-gradient(42% 46% at 22% 86%, rgba(45, 212, 191, 0.10), transparent 72%);
+  filter: blur(40px);
+  opacity: 0.9;
+  animation: nebulaDrift 110s ease-in-out infinite alternate;
+}
+
+/* Starfields — two parallax layers of fine dust that drift + twinkle */
+.cosmos-stars { background-repeat: repeat; will-change: transform, opacity; }
+.cosmos-stars--far {
+  background-image:
+    radial-gradient(circle 1px at 24px 32px,    rgba(230,235,244,0.65), transparent 2px),
+    radial-gradient(circle 1px at 96px 140px,   rgba(230,235,244,0.50), transparent 2px),
+    radial-gradient(circle 1.4px at 168px 78px, rgba(165,180,252,0.60), transparent 2px),
+    radial-gradient(circle 1px at 232px 198px,  rgba(230,235,244,0.50), transparent 2px),
+    radial-gradient(circle 1px at 286px 54px,   rgba(251,191,36,0.45),  transparent 2px),
+    radial-gradient(circle 1px at 52px 248px,   rgba(230,235,244,0.50), transparent 2px),
+    radial-gradient(circle 1.3px at 134px 292px,rgba(134,239,172,0.40), transparent 2px),
+    radial-gradient(circle 1px at 308px 322px,  rgba(230,235,244,0.45), transparent 2px);
+  background-size: 340px 340px;
+  opacity: 0.55;
+  animation: starDriftFar 240s linear infinite, starTwinkle 7s ease-in-out infinite alternate;
+}
+.cosmos-stars--near {
+  background-image:
+    radial-gradient(circle 1.6px at 60px 90px,  rgba(230,235,244,0.85), transparent 2.5px),
+    radial-gradient(circle 1.4px at 180px 40px, rgba(165,180,252,0.80), transparent 2.5px),
+    radial-gradient(circle 1.8px at 120px 200px,rgba(230,235,244,0.80), transparent 3px),
+    radial-gradient(circle 1.4px at 30px 170px, rgba(251,191,36,0.55),  transparent 2.5px),
+    radial-gradient(circle 1.6px at 210px 150px,rgba(230,235,244,0.70), transparent 2.5px);
+  background-size: 240px 240px;
+  opacity: 0.7;
+  animation: starDriftNear 165s linear infinite, starTwinkle 5s ease-in-out infinite alternate-reverse;
+}
+
+/* Mathematical blueprint grid — major + fine, vignetted toward the centre */
+.cosmos-grid {
   background-image:
     linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 64px 64px;
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(rgba(99, 112, 150, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 112, 150, 0.10) 1px, transparent 1px);
+  background-size: 64px 64px, 64px 64px, 16px 16px, 16px 16px;
   background-position: 32px 32px;
-  pointer-events: none;
-  z-index: 0;
+  opacity: 0.6;
+  animation: gridDrift 90s linear infinite;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 42%, #000 22%, transparent 88%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 42%, #000 22%, transparent 88%);
+}
+
+/* Glowing accent nodes — the "AI" lattice points */
+.cosmos-nodes {
+  background-image:
+    radial-gradient(circle 2px at 12% 22%,  rgba(129,140,248,0.70), transparent 5px),
+    radial-gradient(circle 1.5px at 28% 70%,rgba(251,191,36,0.55),  transparent 4px),
+    radial-gradient(circle 2px at 78% 15%,  rgba(167,139,250,0.60), transparent 5px),
+    radial-gradient(circle 1.5px at 88% 55%,rgba(251,191,36,0.50),  transparent 4px),
+    radial-gradient(circle 2px at 45% 88%,  rgba(129,140,248,0.50), transparent 5px),
+    radial-gradient(circle 1.5px at 65% 35%,rgba(45,212,191,0.45),  transparent 4px),
+    radial-gradient(circle 2px at 6% 56%,   rgba(251,191,36,0.50),  transparent 5px),
+    radial-gradient(circle 1.5px at 93% 86%,rgba(129,140,248,0.55), transparent 4px);
   opacity: 0.85;
-  animation: gridDrift 80s linear infinite;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
-  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 90%);
+  animation: nodesPulse 9s ease-in-out infinite alternate;
 }
 
 @keyframes gridDrift {
-  from { background-position: 32px 32px; }
-  to   { background-position: 96px 96px; }
+  from { background-position: 32px 32px, 32px 32px, 0 0, 0 0; }
+  to   { background-position: 96px 96px, 96px 96px, 64px 64px, 64px 64px; }
+}
+@keyframes nebulaDrift {
+  from { transform: translate3d(-1.5%, -1%, 0) scale(1.02) rotate(-0.4deg); }
+  to   { transform: translate3d(1.5%, 1.5%, 0) scale(1.08) rotate(0.4deg); }
+}
+@keyframes starTwinkle {
+  from { opacity: 0.30; }
+  to   { opacity: 0.80; }
+}
+@keyframes starDriftFar {
+  from { background-position: 0 0; }
+  to   { background-position: 340px 680px; }
+}
+@keyframes starDriftNear {
+  from { background-position: 0 0; }
+  to   { background-position: -240px 480px; }
+}
+@keyframes nodesPulse {
+  from { opacity: 0.55; }
+  to   { opacity: 0.95; }
 }
 
-/* Sparse indigo + amber accent dots overlay */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(circle 1.5px at 12% 22%, rgba(129, 140, 248, 0.55), transparent 4px),
-    radial-gradient(circle 1px at 28% 70%, rgba(251, 191, 36, 0.45), transparent 3px),
-    radial-gradient(circle 1.5px at 78% 15%, rgba(129, 140, 248, 0.45), transparent 4px),
-    radial-gradient(circle 1px at 88% 55%, rgba(251, 191, 36, 0.4), transparent 3px),
-    radial-gradient(circle 1.5px at 45% 85%, rgba(129, 140, 248, 0.4), transparent 4px),
-    radial-gradient(circle 1px at 65% 35%, rgba(134, 239, 172, 0.35), transparent 3px),
-    radial-gradient(circle 1.5px at 5% 55%, rgba(251, 191, 36, 0.4), transparent 4px),
-    radial-gradient(circle 1px at 92% 88%, rgba(129, 140, 248, 0.45), transparent 3px);
-  pointer-events: none;
-  z-index: 0;
-  animation: dotsPulse 8s ease-in-out infinite alternate;
-}
-
-@keyframes dotsPulse {
-  from { opacity: 0.7; }
-  to   { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .cosmos-nebula, .cosmos-stars, .cosmos-grid, .cosmos-nodes { animation: none !important; }
 }
 
 /* Keep content above bg layers */
