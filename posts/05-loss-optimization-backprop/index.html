@@ -224,26 +224,26 @@ ul.task-list li input[type="checkbox"] {
 [Part 5 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
 <p><em>This is Part 5 of <strong>Building Blocks of Modern AI</strong>. We’ve built the pieces; now we ask how any of them actually learn.</em></p>
-<p>Every model in this series learns the same way: make a guess, measure how wrong it is, nudge each weight a little in the direction that’s <em>less</em> wrong, and repeat a few million times. That’s the entire loop. “Loss decreases over optimized iterations” isn’t a slogan — it’s the literal algorithm, and backpropagation is just how each individual weight learns its own share of the blame. This post derives backprop end to end on a 2-layer MLP — by hand, then in code with no autograd hiding the chain rule — and then explains what Adam actually fixes that plain SGD doesn’t, instead of treating the optimizer as a magic word you import.</p>
+<p>Every model in this series learns the same way: make a guess, measure how wrong it is, nudge each weight a little in the direction that’s <em>less</em> wrong, and repeat a few million times. That’s the entire loop. “Loss decreases over optimized iterations” isn’t a slogan. It’s the literal algorithm, and backpropagation is just how each individual weight learns its own share of the blame. This post derives backprop end to end on a 2-layer MLP, by hand first, then in code with no autograd hiding the chain rule, and then explains what Adam actually fixes that plain SGD doesn’t, instead of treating the optimizer as a magic word you import.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Coming soon.</strong> Outline below; the full write-up — from-scratch NumPy, then PyTorch — lands here next.</p>
+<p><strong>Coming soon.</strong> Outline below; the full write-up, from-scratch NumPy then PyTorch, lands here next.</p>
 </div>
 </div>
 </div>
 <section id="whats-coming" class="level2">
 <h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
 <ul>
-<li>The loss function family — MSE, cross-entropy, contrastive — when each is right</li>
-<li><strong>Gradient descent</strong> — vanilla, SGD, mini-batch</li>
-<li><strong>Backpropagation</strong> — chain rule, derived end-to-end on a 2-layer MLP</li>
-<li><strong>Adam, AdamW, momentum</strong> — what each fixes vs vanilla SGD</li>
-<li>Learning rate schedules — warmup, cosine; the production defaults</li>
-<li>Vanishing / exploding gradients — why they happen, what fixes them</li>
+<li>The loss function family: MSE, cross-entropy, contrastive, and when each is right</li>
+<li><strong>Gradient descent</strong>: vanilla, SGD, mini-batch</li>
+<li><strong>Backpropagation</strong>: chain rule, derived end-to-end on a 2-layer MLP</li>
+<li><strong>Adam, AdamW, momentum</strong>: what each fixes vs vanilla SGD</li>
+<li>Learning rate schedules: warmup, cosine, the production defaults</li>
+<li>Vanishing / exploding gradients: why they happen, what fixes them</li>
 <li>From-scratch implementation in NumPy, then PyTorch</li>
 </ul>
 

@@ -223,7 +223,7 @@ ul.task-list li input[type="checkbox"] {
 [Part 8 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
 <p><em>This is Part 8 of <strong>Building Blocks of Modern AI</strong>.</em></p>
-<p>You can’t improve a generative system you can’t measure — and the metrics everyone reaches for first, BLEU and ROUGE, measure <em>word overlap</em>, which is almost unrelated to whether an answer is actually any good. So how do you put a number on quality when there’s no single correct answer to diff against? This post builds the eval discipline that catches what dashboards miss: golden sets you curate by hand, LLM-as-judge calibrated against real human ratings (because an uncalibrated judge is just a confident stranger), and a regression harness that fails CI the day quality silently drops — before your users find it first.</p>
+<p>You can’t improve a generative system you can’t measure, and the metrics everyone reaches for first, BLEU and ROUGE, measure <em>word overlap</em>, which is almost unrelated to whether an answer is actually any good. So how do you put a number on quality when there’s no single correct answer to diff against? This post builds the eval discipline that catches what dashboards miss: golden sets you curate by hand, LLM-as-judge calibrated against real human ratings (because an uncalibrated judge is just a confident stranger), and a regression harness that fails CI the day quality silently drops, before your users find it first.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -238,11 +238,11 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
 <ul>
 <li>Why classical metrics (BLEU, ROUGE) fail for generative tasks</li>
-<li><strong>Golden sets</strong> — building, curating, versioning</li>
-<li><strong>LLM-as-judge</strong> — pairwise vs pointwise, calibration against humans</li>
-<li><strong>Rubric design</strong> — what to measure beyond “is it good”</li>
+<li><strong>Golden sets</strong>: building, curating, versioning</li>
+<li><strong>LLM-as-judge</strong>: pairwise vs pointwise, calibration against humans</li>
+<li><strong>Rubric design</strong>: what to measure beyond “is it good”</li>
 <li>A regression harness you can drop into CI</li>
-<li>Cost vs signal — cheaper judges, bigger judges, when each makes sense</li>
+<li>Cost vs signal: cheaper judges, bigger judges, when each makes sense</li>
 </ul>
 
 

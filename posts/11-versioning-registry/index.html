@@ -8,7 +8,7 @@
 
 <meta name="author" content="Prerna Tyagi">
 <meta name="dcterms.date" content="2026-06-11">
-<meta name="description" content="Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets — so you can actually roll back.">
+<meta name="description" content="Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets, so you can actually roll back.">
 
 <title>11 · Versioning the unversionable – Prerna Tyagi</title>
 <style>
@@ -107,11 +107,11 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="11 · Versioning the unversionable – Prerna Tyagi">
-<meta property="og:description" content="Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets — so you can actually roll back.">
+<meta property="og:description" content="Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets, so you can actually roll back.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
 <meta name="twitter:title" content="11 · Versioning the unversionable – Prerna Tyagi">
-<meta name="twitter:description" content="Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets — so you can actually roll back.">
+<meta name="twitter:description" content="Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets, so you can actually roll back.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
@@ -190,7 +190,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets — so you can actually roll back.
+    Git restores your code. It can’t restore the data, the weights, or the training run that produced a model. Versioning the three things Git forgets, so you can actually roll back.
   </div>
 </div>
 
@@ -222,9 +222,9 @@ ul.task-list li input[type="checkbox"] {
 <p class="breadcrumb-mono">
 [Shipping It · Part 2 of 6] <a href="../../findings.html">Findings</a>
 </p>
-<p><em>Part 2 of <strong>Shipping It — the production ML stack</strong>. If you can’t reproduce it, you can’t roll it back — and one day you’ll need to.</em></p>
+<p><em>Part 2 of <strong>Shipping It: the production ML stack</strong>. If you can’t reproduce it, you can’t roll it back, and one day you’ll need to.</em></p>
 <p>A bad deploy goes out. You roll back, and Git faithfully restores the code.</p>
-<p>Except the thing that just approved a fraudulent transaction wasn’t only code. It was code <em>plus</em> the exact data it trained on, <em>plus</em> the weights that fell out, <em>plus</em> a training run with a random seed and a library version you’ve already upgraded past. Restore the code and you’ve restored one-quarter of the model. This post is about versioning the other three — so “roll back to last Tuesday’s model” is a command, not an archaeology project.</p>
+<p>Except the thing that just approved a fraudulent transaction wasn’t only code. It was code <em>plus</em> the exact data it trained on, <em>plus</em> the weights that fell out, <em>plus</em> a training run with a random seed and a library version you’ve already upgraded past. Restore the code and you’ve restored one-quarter of the model. This post is about versioning the other three, so that “roll back to last Tuesday’s model” is a command, not an archaeology project.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -238,10 +238,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="whats-coming" class="level2">
 <h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
 <ul>
-<li><strong>The reproducibility gap</strong> — why a model is data + code + weights + environment, and what breaks when you version only one</li>
-<li><strong>Data Version Control (DVC)</strong> — versioning datasets and artifacts that are far too big for Git</li>
-<li><strong>Experiment tracking</strong> — <strong>MLflow</strong> and <strong>Weights &amp; Biases</strong>: every run, its params, its metrics, its model, all recoverable</li>
-<li><strong>The model registry</strong> — promoting a model through staging → production, and rolling back when production turns on you</li>
+<li><strong>The reproducibility gap</strong>: why a model is data + code + weights + environment, and what breaks when you version only one</li>
+<li><strong>Data Version Control (DVC)</strong>: versioning datasets and artifacts that are far too big for Git</li>
+<li><strong>Experiment tracking</strong> with <strong>MLflow</strong> and <strong>Weights &amp; Biases</strong>: every run, its params, its metrics, its model, all recoverable</li>
+<li><strong>The model registry</strong>: promoting a model through staging → production, and rolling back when production turns on you</li>
 </ul>
 
 

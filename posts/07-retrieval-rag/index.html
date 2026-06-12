@@ -224,7 +224,7 @@ ul.task-list li input[type="checkbox"] {
 [Part 7 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
 <p><em>This is Part 7 of <strong>Building Blocks of Modern AI</strong>, building on embeddings (<a href="../01-embeddings-vector-search/">Part 1</a>) and ANN (<a href="../02-vector-search-ann/">Part 2</a>).</em></p>
-<p>RAG demos always work. RAG in production is where retrieval goes to break — the right document is sitting <em>right there</em> in the index and the system still doesn’t surface it, or surfaces it and buries it in the middle of the context window where the model quietly ignores it. This post refuses to pretend retrieval is solved. We build the keyword baseline (BM25 — which beats dense retrieval more often than embedding fans like to admit), the dense side from Part 1’s embeddings, the hybrid fusion that combines them, and a cross-encoder reranker on top — then assemble the full pipeline and measure exactly where it falls over.</p>
+<p>RAG demos always work. RAG in production is where retrieval goes to break: the right document is sitting <em>right there</em> in the index and the system still doesn’t surface it, or surfaces it and buries it in the middle of the context window where the model quietly ignores it. This post refuses to pretend retrieval is solved. We build the keyword baseline (BM25, which beats dense retrieval more often than embedding fans like to admit), the dense side from Part 1’s embeddings, the hybrid fusion that combines them, and a cross-encoder reranker on top. Then we assemble the full pipeline and measure exactly where it falls over.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -238,12 +238,12 @@ ul.task-list li input[type="checkbox"] {
 <section id="whats-coming" class="level2">
 <h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
 <ul>
-<li><strong>BM25 from scratch</strong> — the keyword baseline that still wins more than people admit</li>
-<li><strong>Dense retrieval</strong> — extending post 01’s embeddings to a real corpus</li>
-<li><strong>Hybrid scoring</strong> — reciprocal rank fusion, weighted combination</li>
-<li><strong>Cross-encoder reranking</strong> — when it helps, when it hurts</li>
+<li><strong>BM25 from scratch</strong>: the keyword baseline that still wins more than people admit</li>
+<li><strong>Dense retrieval</strong>: extending post 01’s embeddings to a real corpus</li>
+<li><strong>Hybrid scoring</strong>: reciprocal rank fusion, weighted combination</li>
+<li><strong>Cross-encoder reranking</strong>: when it helps, when it hurts</li>
 <li>RAG end-to-end on a real corpus, measured</li>
-<li>Failure modes — query rewriting, multi-hop, lost-in-the-middle, citation faithfulness</li>
+<li>Failure modes: query rewriting, multi-hop, lost-in-the-middle, citation faithfulness</li>
 <li>The gap between “RAG works on a demo” and “RAG works in production”</li>
 </ul>
 

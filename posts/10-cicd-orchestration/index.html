@@ -8,7 +8,7 @@
 
 <meta name="author" content="Prerna Tyagi">
 <meta name="dcterms.date" content="2026-06-10">
-<meta name="description" content="The day the data shifts, the model should retrain itself — not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.">
+<meta name="description" content="The day the data shifts, the model should retrain itself, not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.">
 
 <title>10 · CI/CD &amp; orchestration for ML – Prerna Tyagi</title>
 <style>
@@ -107,11 +107,11 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="10 · CI/CD &amp; orchestration for ML – Prerna Tyagi">
-<meta property="og:description" content="The day the data shifts, the model should retrain itself — not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.">
+<meta property="og:description" content="The day the data shifts, the model should retrain itself, not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
 <meta name="twitter:title" content="10 · CI/CD &amp; orchestration for ML – Prerna Tyagi">
-<meta name="twitter:description" content="The day the data shifts, the model should retrain itself — not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.">
+<meta name="twitter:description" content="The day the data shifts, the model should retrain itself, not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
@@ -190,7 +190,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    The day the data shifts, the model should retrain itself — not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.
+    The day the data shifts, the model should retrain itself, not wait for a human to notice. Turning a folder of notebooks into a pipeline that tests and ships on its own.
   </div>
 </div>
 
@@ -222,26 +222,26 @@ ul.task-list li input[type="checkbox"] {
 <p class="breadcrumb-mono">
 [Shipping It · Part 1 of 6] <a href="../../findings.html">Findings</a>
 </p>
-<p><em>Part 1 of <strong>Shipping It — the production ML stack</strong>. The foundation: stop building a model once, start building a system that builds models.</em></p>
+<p><em>Part 1 of <strong>Shipping It: the production ML stack</strong>. The foundation: stop building a model once, start building a system that builds models.</em></p>
 <p>You trained a great model. Then the data quietly shifted, and nobody noticed for three weeks.</p>
-<p>The fix isn’t a smarter model. It’s a system that retrains itself the moment the inputs move — that treats “the data changed” as an event, not a thing someone eventually spots in a dashboard. This post is about the leap from a folder of notebooks you run by hand to a <strong>pipeline</strong>: a directed graph of steps that tests, retrains, and ships on its own, the same way good software already does.</p>
+<p>The fix isn’t a smarter model. It’s a system that retrains itself the moment the inputs move, one that treats “the data changed” as an event, not a thing someone eventually spots in a dashboard. This post is about the leap from a folder of notebooks you run by hand to a <strong>pipeline</strong>: a directed graph of steps that tests, retrains, and ships on its own, the same way good software already does.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Coming soon.</strong> Outline below; the full write-up — with a real pipeline you can run — lands here next.</p>
+<p><strong>Coming soon.</strong> Outline below; the full write-up, with a real pipeline you can run, lands here next.</p>
 </div>
 </div>
 </div>
 <section id="whats-coming" class="level2">
 <h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
 <ul>
-<li><strong>CI/CD for ML</strong> — what “continuous integration” even means when the artifact is a model, not just code, and the test suite has to check <em>behaviour</em>, not just <code>assert x == y</code></li>
-<li><strong>Pipelines over scripts</strong> — moving from Jupyter and cron to <strong>DAG</strong>-based workflows, and why the graph matters</li>
-<li><strong>Airflow vs Prefect vs Kubeflow</strong> — what each is actually for, and how to pick without cargo-culting</li>
-<li><strong>Triggers</strong> — retraining that fires on <em>data and code changes</em>, not on a human remembering</li>
+<li><strong>CI/CD for ML</strong>: what “continuous integration” even means when the artifact is a model, not just code, and the test suite has to check <em>behaviour</em>, not just <code>assert x == y</code></li>
+<li><strong>Pipelines over scripts</strong>: moving from Jupyter and cron to <strong>DAG</strong>-based workflows, and why the graph matters</li>
+<li><strong>Airflow vs Prefect vs Kubeflow</strong>: what each is actually for, and how to pick without cargo-culting</li>
+<li><strong>Triggers</strong>: retraining that fires on <em>data and code changes</em>, not on a human remembering</li>
 <li>A small end-to-end pipeline: ingest → validate → train → test → register → deploy, wired together</li>
 </ul>
 

@@ -8,9 +8,9 @@
 
 <meta name="author" content="Prerna Tyagi">
 <meta name="dcterms.date" content="2026-05-30">
-<meta name="description" content="Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.">
+<meta name="description" content="Why a model literally cannot see characters, and how the choice of tokenizer quietly decides what it’s good at and who pays more to use it. Byte-level BPE, built from scratch.">
 
-<title>03 · Tokenization — how text becomes numbers – Prerna Tyagi</title>
+<title>03 · Tokenization: how text becomes numbers – Prerna Tyagi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -170,12 +170,12 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="03 · Tokenization — how text becomes numbers – Prerna Tyagi">
-<meta property="og:description" content="Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.">
+<meta property="og:title" content="03 · Tokenization: how text becomes numbers – Prerna Tyagi">
+<meta property="og:description" content="Why a model literally cannot see characters, and how the choice of tokenizer quietly decides what it’s good at and who pays more to use it. Byte-level BPE, built from scratch.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
-<meta name="twitter:title" content="03 · Tokenization — how text becomes numbers – Prerna Tyagi">
-<meta name="twitter:description" content="Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.">
+<meta name="twitter:title" content="03 · Tokenization: how text becomes numbers – Prerna Tyagi">
+<meta name="twitter:description" content="Why a model literally cannot see characters, and how the choice of tokenizer quietly decides what it’s good at and who pays more to use it. Byte-level BPE, built from scratch.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
@@ -244,7 +244,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">03 · Tokenization — how text becomes numbers</h1>
+<h1 class="title">03 · Tokenization: how text becomes numbers</h1>
   <div class="quarto-categories">
     <div class="quarto-category">nlp</div>
     <div class="quarto-category">tokenization</div>
@@ -254,7 +254,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Why a model literally cannot see characters — and how the choice of tokenizer quietly decides what it’s good at, and who pays more to use it. Byte-level BPE, built from scratch.
+    Why a model literally cannot see characters, and how the choice of tokenizer quietly decides what it’s good at and who pays more to use it. Byte-level BPE, built from scratch.
   </div>
 </div>
 
@@ -286,11 +286,11 @@ window.Quarto = {
 <p class="breadcrumb-mono">
 [Part 3 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
-<p><em>This is Part 3 of <strong>Building Blocks of Modern AI</strong>. Before attention, before embeddings, before any gradient is computed—there is tokenization. It is the first operation on your input and the last on your output, yet it is frequently skipped in technical summaries. That is a mistake.</em></p>
+<p><em>This is Part 3 of <strong>Building Blocks of Modern AI</strong>. Before attention, before embeddings, before any gradient is computed, there is tokenization. It’s the first operation on your input and the last one on your output, and it still gets skipped in most write-ups. That’s a mistake.</em></p>
 <section id="the-discrete-continuous-gap" class="level2">
 <h2 class="anchored" data-anchor-id="the-discrete-continuous-gap">The Discrete-Continuous Gap</h2>
-<p>Neural networks are continuous machines, processing floating-point numbers in high-dimensional spaces. Human language, however, is discrete. <strong>Tokenization</strong> is the bridge—the lossy, biased, and often brittle process of mapping raw strings into the integers (tokens) that a model can actually “see.”</p>
-<p>If the tokenizer is inefficient, the model is blind to patterns, sequences become unnecessarily long, and inference costs skyrocket. And the choices are stranger than they look: by the end of this post you’ll see why the <em>same sentence</em> can cost a model 4–6× more tokens in Hindi than in English — a tax on meaning that nobody designed on purpose, it just fell out of how the vocabulary was built.</p>
+<p>Neural networks are continuous machines, processing floating-point numbers in high-dimensional spaces. Human language, however, is discrete. <strong>Tokenization</strong> is the bridge: the lossy, biased, and often brittle process of mapping raw strings into the integers (tokens) that a model can actually “see.”</p>
+<p>If the tokenizer is inefficient, the model is blind to patterns, sequences become unnecessarily long, and inference costs skyrocket. And the choices are stranger than they look: by the end of this post you’ll see why the <em>same sentence</em> can cost a model 4–6× more tokens in Hindi than in English, a tax on meaning that nobody designed on purpose. It just fell out of how the vocabulary was built.</p>
 </section>
 <section id="the-evolution-of-the-unit" class="level2">
 <h2 class="anchored" data-anchor-id="the-evolution-of-the-unit">The evolution of the unit</h2>
@@ -379,7 +379,7 @@ window.Quarto = {
 <section id="unigram-the-top-down-approach" class="level2">
 <h2 class="anchored" data-anchor-id="unigram-the-top-down-approach">Unigram: the top-down approach</h2>
 <p>Unlike the bottom-up merges of BPE/WordPiece, <strong>Unigram</strong> (used in T5 and SentencePiece) starts with a massive vocabulary and iteratively <strong>removes</strong> tokens.</p>
-<p>At each step, it calculates how much the “loss” (likelihood of the corpus) would increase if a token were removed. It keeps the tokens that are most critical to compressing the training data. This allows for <strong>probabilistic subword segmentation</strong>—the same word can be split in multiple ways during training, which acts as a form of regularization.</p>
+<p>At each step, it calculates how much the “loss” (likelihood of the corpus) would increase if a token were removed. It keeps the tokens that are most critical to compressing the training data. This allows for <strong>probabilistic subword segmentation</strong>: the same word can be split in multiple ways during training, which acts as a form of regularization.</p>
 </section>
 <section id="the-silent-inequity-multilingual-fragmentation" class="level2">
 <h2 class="anchored" data-anchor-id="the-silent-inequity-multilingual-fragmentation">The silent inequity: multilingual fragmentation</h2>

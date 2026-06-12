@@ -104,9 +104,11 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Prerna Tyagi">
+<meta property="og:description" content="IIT Bombay statistician building agentic AI and ML against financial crime at Standard Chartered. Rebuilding the building blocks of modern AI from scratch, in public.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
 <meta name="twitter:title" content="Prerna Tyagi">
+<meta name="twitter:description" content="IIT Bombay statistician building agentic AI and ML against financial crime at Standard Chartered. Rebuilding the building blocks of modern AI from scratch, in public.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
@@ -183,28 +185,30 @@ ul.task-list li input[type="checkbox"] {
 <section id="builds" class="level1">
 <h1>Builds</h1>
 <p class="section-subtitle">
-Shipped products and applied-ML case studies. Each one optimises for engineering discipline — APIs, deployment, evaluation, monitoring — alongside the model work.
+Things I’ve shipped on my own, and the work I do inside banks. Each one optimises for engineering discipline alongside the model work: APIs, deployment, evaluation, monitoring.
 </p>
 </section>
 </div>
+<section id="shipped-on-my-own" class="level2">
+<h2 class="anchored" data-anchor-id="shipped-on-my-own">Shipped on my own</h2>
 <div class="project-list">
+
+<a class="project-card" href="https://tyagiprerna0808-readme-paper-assistant.hf.space" target="_blank" rel="noopener">
+<div class="project-card-head">
+<div class="project-tags"><span class="project-tag">rag</span><span class="project-tag">langgraph</span><span class="project-tag">langchain</span><span class="project-tag">hf spaces</span></div>
+<span class="status-badge status-shipped">live</span>
+</div>
+<h3 class="project-title anchored">ReadMe, an AI paper reading assistant</h3>
+<p class="project-description">A live app for staying current with AI research without reading every paper in full. Add an arXiv link or PDF, then Discover new work, get a weekly Digest, Summarize the dense parts, and Chat with the paper. Built from scratch with LangChain, LangGraph and RAG; deployed on Hugging Face Spaces. <strong>Open the live app →</strong></p>
+</a>
 
 <a class="project-card" href="https://github.com/tyagiprerna0808/pragya-nursery" target="_blank" rel="noopener">
 <div class="project-card-head">
 <div class="project-tags"><span class="project-tag">e-commerce</span><span class="project-tag">capacitor</span><span class="project-tag">paytm</span><span class="project-tag">vercel + render</span></div>
 <span class="status-badge status-shipped">shipped</span>
 </div>
-<h3 class="project-title anchored">Pragya Nursery — live ordering platform</h3>
+<h3 class="project-title anchored">Pragya Nursery, a live ordering platform</h3>
 <p class="project-description">A real ordering platform for my father's plant nursery in Greater Noida. Vercel website, Render API, Capacitor Android app, Paytm payments, geofenced delivery within 15 km, persistent order storage, CI-deployed on every push to master. Live customers, real revenue.</p>
-</a>
-
-<a class="project-card" href="https://tyagiprerna0808-readme-paper-assistant.hf.space" target="_blank" rel="noopener">
-<div class="project-card-head">
-<div class="project-tags"><span class="project-tag">rag</span><span class="project-tag">langgraph</span><span class="project-tag">streamlit</span></div>
-<span class="status-badge status-shipped">live</span>
-</div>
-<h3 class="project-title anchored">ReadMe — AI paper reading assistant</h3>
-<p class="project-description">A live app for staying current with AI research without reading every paper in full. Add an arXiv link or PDF, then Discover new work, get a weekly Digest, Summarize the dense parts, and Chat with the paper. Built from scratch with LangChain, LangGraph, and RAG; deployed on Hugging Face Spaces. <strong>Open the live app →</strong></p>
 </a>
 
 <a class="project-card" href="https://github.com/tyagiprerna0808/ml-applied-depth" target="_blank" rel="noopener">
@@ -212,13 +216,72 @@ Shipped products and applied-ML case studies. Each one optimises for engineering
 <div class="project-tags"><span class="project-tag">embeddings</span><span class="project-tag">retrieval</span><span class="project-tag">quarto</span></div>
 <span class="status-badge status-wip">wip</span>
 </div>
-<h3 class="project-title anchored">ml-applied-depth — companion code for this blog</h3>
-<p class="project-description">From-scratch implementations of the building blocks of modern AI, paired with every post. Notebooks + experiments + assignment scaffolds so readers build each component themselves before reading the worked version.</p>
+<h3 class="project-title anchored">ml-applied-depth, companion code for this blog</h3>
+<p class="project-description">From-scratch implementations of the building blocks of modern AI, paired with every post in Findings. Notebooks, experiments and assignment scaffolds so readers build each component themselves before reading the worked version.</p>
 </a>
+
+</div>
+</section>
+<section id="at-work-applied-case-studies" class="level2">
+<h2 class="anchored" data-anchor-id="at-work-applied-case-studies">At work: applied case studies</h2>
+<p class="work-note">The code for these stays inside the bank. The problems, the approach, and the numbers are the ones on my resume, and the ones I'm accountable for.</p>
+
+<div class="project-list">
+
+<div class="project-card">
+<div class="project-card-head">
+<div class="project-tags"><span class="project-tag">langgraph</span><span class="project-tag">autogen</span><span class="project-tag">rag</span><span class="project-tag">governance</span></div>
+<span class="status-badge status-shipped">in production</span>
+</div>
+<p class="project-org">standard chartered · 2025</p>
+<h3 class="project-title anchored">Agentic AI reporting platform</h3>
+<p class="project-description">An end-to-end agentic reporting system across <strong>10+ heterogeneous source systems</strong>, built on LangGraph and AutoGen with RAG over internal documentation. Every pipeline it produces is auditable, compliant and version-controlled, because in a bank an unexplainable report is worse than a slow one. Cut ad-hoc reporting turnaround <strong>from 7 days to under 4 hours</strong>.</p>
+</div>
+
+<div class="project-card">
+<div class="project-card-head">
+<div class="project-tags"><span class="project-tag">isolation forest</span><span class="project-tag">graph analytics</span><span class="project-tag">unsupervised</span></div>
+<span class="status-badge status-shipped">in production</span>
+</div>
+<p class="project-org">standard chartered · 2025</p>
+<h3 class="project-title anchored">Unsupervised mule detection engine</h3>
+<p class="project-description">Mule accounts rarely come with labels, so this one had to find them without. A risk scoring engine combining Isolation Forest, graph analytics and <strong>500+ behavioral features</strong> built on transaction velocity and anomaly signals. Improved suspicious cluster detection by <strong>15%</strong> and contributed to roughly <strong>$5M in annual loss mitigation</strong>.</p>
+</div>
+
+<div class="project-card">
+<div class="project-card-head">
+<div class="project-tags"><span class="project-tag">fraud strategy</span><span class="project-tag">threshold tuning</span><span class="project-tag">anti-scam</span></div>
+<span class="status-badge status-shipped">in production</span>
+</div>
+<p class="project-org">standard chartered · 2025</p>
+<h3 class="project-title anchored">Scam detection rules, Singapore digital portfolio</h3>
+<p class="project-description">Detection strategy for a digital scam portfolio where every false positive is a legitimate customer blocked mid-payment. Tuned to <strong>82% true positive rate at 0.5% false positive rate</strong>, cutting fraud loss while keeping the checkout experience intact. The interesting work was entirely in the trade-off curve, not the rules themselves.</p>
+</div>
+
+<div class="project-card">
+<div class="project-card-head">
+<div class="project-tags"><span class="project-tag">aml</span><span class="project-tag">real-time</span><span class="project-tag">transaction monitoring</span></div>
+<span class="status-badge status-shipped">deployed</span>
+</div>
+<p class="project-org">yes bank · 2023–2025</p>
+<h3 class="project-title anchored">Real-time transaction monitoring model</h3>
+<p class="project-description">End-to-end monitoring model trained on I4C and cyber-cell complaint data, reaching <strong>60% precision at 90% recall</strong>. Recall mattered more than precision here: a missed mule moves money for weeks, while a flagged account gets reviewed in hours. Automated real-time risk mitigation and proactive mule identification.</p>
+</div>
+
+<div class="project-card">
+<div class="project-card-head">
+<div class="project-tags"><span class="project-tag">credit risk</span><span class="project-tag">pd / lgd</span><span class="project-tag">ifrs 9</span></div>
+<span class="status-badge status-shipped">regulatory</span>
+</div>
+<p class="project-org">yes bank · 2023–2025</p>
+<h3 class="project-title anchored">Expected Credit Loss under Basel / IFRS 9</h3>
+<p class="project-description">Derived Probability of Default and Loss Given Default for retail assets and credit cards, then computed <strong>Expected Credit Loss for unrated assets in FY'23</strong>. Statistics with legal consequences: every assumption documented, every number defensible in front of a regulator. The work that made me go get FRM Level 1.</p>
+</div>
 
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -222,9 +222,9 @@ ul.task-list li input[type="checkbox"] {
 <p class="breadcrumb-mono">
 [Shipping It · Part 6 of 6] <a href="../../findings.html">Findings</a>
 </p>
-<p><em>Part 6 of <strong>Shipping It — the production ML stack</strong>, and the one that ties the rest together.</em></p>
+<p><em>Part 6 of <strong>Shipping It: the production ML stack</strong>, and the one that ties the rest together.</em></p>
 <p>Everything in this series so far has been a piece. This post is the blueprint that turns the pieces into a single system.</p>
-<p>It’s where the subtle failures live. The feature you compute one way in training and another way in production — so the model silently sees two different worlds and you spend a week wondering why offline metrics lied. The model nobody can see because it never got a UI. The data jammed into Postgres because that’s what was there. Good ML system design is mostly about making those quiet disagreements impossible — decoupled, scalable, and boring in the best way.</p>
+<p>It’s where the subtle failures live. The feature you compute one way in training and another way in production, so the model silently sees two different worlds and you spend a week wondering why offline metrics lied. The model nobody can see because it never got a UI. The data jammed into Postgres because that’s what was there. Good ML system design is mostly about making those quiet disagreements impossible: decoupled, scalable, and boring in the best way.</p>
 <div class="callout callout-style-simple callout-tip">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -238,10 +238,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="whats-coming" class="level2">
 <h2 class="anchored" data-anchor-id="whats-coming">What’s coming</h2>
 <ul>
-<li><strong>Design patterns for ML systems</strong> — decoupled, scalable architectures instead of one heroic script</li>
-<li><strong>Feature stores</strong> — <strong>Feast</strong>, and the point of serving the <em>same</em> feature to training and production so they can’t drift apart</li>
-<li><strong>Prototyping</strong> — giving a model a usable internal UI in an afternoon with <strong>Streamlit</strong> or <strong>Gradio</strong> (no React required)</li>
-<li><strong>Choosing the database</strong> — beyond default SQL: NoSQL (<strong>MongoDB</strong>, <strong>Cassandra</strong>) for unstructured data, and <strong>vector databases</strong> (Pinecone, Milvus) once you step into LLMs and generative AI</li>
+<li><strong>Design patterns for ML systems</strong>: decoupled, scalable architectures instead of one heroic script</li>
+<li><strong>Feature stores</strong>: <strong>Feast</strong>, and the point of serving the <em>same</em> feature to training and production so they can’t drift apart</li>
+<li><strong>Prototyping</strong>: giving a model a usable internal UI in an afternoon with <strong>Streamlit</strong> or <strong>Gradio</strong> (no React required)</li>
+<li><strong>Choosing the database</strong>: beyond default SQL, NoSQL (<strong>MongoDB</strong>, <strong>Cassandra</strong>) for unstructured data, and <strong>vector databases</strong> (Pinecone, Milvus) once you step into LLMs and generative AI</li>
 </ul>
 
 

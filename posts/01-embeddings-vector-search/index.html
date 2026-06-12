@@ -8,7 +8,7 @@
 
 <meta name="author" content="Prerna Tyagi">
 <meta name="dcterms.date" content="2026-05-28">
-<meta name="description" content="How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
+<meta name="description" content="How a model knows two sentences mean the same thing without sharing a single word, and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
 
 <title>01 · Embeddings &amp; vector search – Prerna Tyagi</title>
 <style>
@@ -136,11 +136,11 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="01 · Embeddings &amp; vector search – Prerna Tyagi">
-<meta property="og:description" content="How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
+<meta property="og:description" content="How a model knows two sentences mean the same thing without sharing a single word, and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta property="og:site_name" content="Prerna Tyagi">
 <meta name="twitter:title" content="01 · Embeddings &amp; vector search – Prerna Tyagi">
-<meta name="twitter:description" content="How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
+<meta name="twitter:description" content="How a model knows two sentences mean the same thing without sharing a single word, and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.">
 <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/180576667?v=4">
 <meta name="twitter:creator" content="@prernaaa0808">
 <meta name="twitter:site" content="@prernaaa0808">
@@ -219,7 +219,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    How a model knows two sentences mean the same thing without sharing a single word — and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.
+    How a model knows two sentences mean the same thing without sharing a single word, and how to find the closest of millions of vectors in under 10 ms. Built from scratch, every number measured.
   </div>
 </div>
 
@@ -251,56 +251,56 @@ window.Quarto = {
 <p class="breadcrumb-mono">
 [Part 1 of 9] <a href="../../">Building Blocks of Modern AI</a>
 </p>
-<p><em>Part 1 of <strong>Building Blocks of Modern AI</strong> — each post takes one piece of a modern AI system and rebuilds it from scratch, with code you can run and numbers you can check.</em></p>
+<p><em>Part 1 of <strong>Building Blocks of Modern AI</strong>. Each post takes one piece of a modern AI system and rebuilds it from scratch, with code you can run and numbers you can check.</em></p>
 <section id="the-search-box-that-reads-your-mind" class="level2">
 <h2 class="anchored" data-anchor-id="the-search-box-that-reads-your-mind">The search box that reads your mind</h2>
-<p>Type a few words into a search box that <em>actually understands you</em> — not one that keyword-matches you — and something quietly strange happens underneath.</p>
+<p>Type a few words into a search box that <em>actually understands you</em>, not one that keyword-matches you, and something quietly strange happens underneath.</p>
 <p>Your words become a list of numbers. So does every document in the index. Then the machine does <strong>geometry</strong>: it measures which points sit closest together, and the nearest ones win.</p>
-<p>That’s the whole trick behind semantic search, RAG, recommendations — most of what we now wave at and call “AI.”</p>
+<p>That’s the whole trick behind semantic search, RAG, recommendations, and most of what we now wave at and call “AI.”</p>
 <p>The idea is easy. The hard part hides inside two small words: <em>closest</em>, and <em>fast</em>.</p>
 <p>So here’s the sentence this entire post is trying to earn:</p>
 <blockquote class="blockquote">
-<p>Given millions of documents and a query, return the nearest neighbours in <strong>under 10 ms</strong> — on a laptop.</p>
+<p>Given millions of documents and a query, return the nearest neighbours in <strong>under 10 ms</strong>, on a laptop.</p>
 </blockquote>
 <p>To get there, we have to take two questions seriously that “just use vector search” usually skips right over. What does “close” actually <em>mean</em>, mathematically? And what happens to that 10 ms the moment your corpus stops being a toy?</p>
 <p>Let’s start with the first one, because that’s where the magic lives.</p>
 </section>
 <section id="what-close-actually-means" class="level2">
 <h2 class="anchored" data-anchor-id="what-close-actually-means">What “close” actually means</h2>
-<p>Old-school search — BM25, Lucene, the thing inside most databases — matches keywords. Search for <em>sports</em>, and a document that only ever says <em>tennis</em> simply doesn’t come back. The words don’t overlap, so as far as the index is concerned, the two are strangers.</p>
-<p>Embeddings refuse to accept that. They map every piece of text to a point in a high-dimensional space where <em>sports</em> and <em>tennis</em> land right next to each other — because the model never really sees the word. It sees the <strong>concept</strong>.</p>
+<p>Old-school search (BM25, Lucene, the thing inside most databases) matches keywords. Search for <em>sports</em>, and a document that only ever says <em>tennis</em> simply doesn’t come back. The words don’t overlap, so as far as the index is concerned, the two are strangers.</p>
+<p>Embeddings refuse to accept that. They map every piece of text to a point in a high-dimensional space where <em>sports</em> and <em>tennis</em> land right next to each other, because the model never really sees the word. It sees the <strong>concept</strong>.</p>
 <p>That’s a nice story. Let me turn it into a number.</p>
-<p>Take four sentences — two about gardening, two about finance — and hand them to a small embedding model (<code>all-MiniLM-L6-v2</code>), <em>without ever telling it the topics</em>. Then measure the cosine similarity of every possible pair:</p>
+<p>Take four sentences, two about gardening and two about finance, and hand them to a small embedding model (<code>all-MiniLM-L6-v2</code>), <em>without ever telling it the topics</em>. Then measure the cosine similarity of every possible pair:</p>
 <pre><code>  0.622   'I love plants'              vs  'Gardening is fun'             ← gardening
   0.149   'The stock market crashed'   vs  'Bonds and treasury yields'    ← finance
   0.021   'I love plants'              vs  'The stock market crashed'
   0.016   'I love plants'              vs  'Bonds and treasury yields'
   0.015   'Gardening is fun'           vs  'The stock market crashed'
   0.005   'Gardening is fun'           vs  'Bonds and treasury yields'</code></pre>
-<p>Look at the gap. Same-topic pairs sit <strong>30 to 120 times higher</strong> than cross-topic ones. Nobody handed the model a label. It drew the border between gardening and finance on its own — purely from having read enough text to know those words live in different neighbourhoods.</p>
+<p>Look at the gap. Same-topic pairs sit <strong>30 to 120 times higher</strong> than cross-topic ones. Nobody handed the model a label. It drew the border between gardening and finance on its own, purely from having read enough text to know those words live in different neighbourhoods.</p>
 <p>But the detail I keep coming back to is subtler than that.</p>
-<p>The gardening pair scores <strong>0.62</strong>. The finance pair — also “same topic” — scores only <strong>0.15</strong>. Why the gap? Because <em>“I love plants”</em> and <em>“Gardening is fun”</em> don’t just share a subject, they share a <em>mood</em>: warm, casual, fond. Whereas <em>“the stock market crashed”</em> (panic) and <em>“bonds and treasury yields”</em> (a dry instrument) share a topic and almost nothing else.</p>
-<p>The embedding isn’t matching keywords. It isn’t even really matching topics. It’s matching <strong>meaning</strong> — and you can read it straight off a single number.</p>
+<p>The gardening pair scores <strong>0.62</strong>. The finance pair, also “same topic,” scores only <strong>0.15</strong>. Why the gap? Because <em>“I love plants”</em> and <em>“Gardening is fun”</em> don’t just share a subject, they share a <em>mood</em>: warm, casual, fond. Whereas <em>“the stock market crashed”</em> (panic) and <em>“bonds and treasury yields”</em> (a dry instrument) share a topic and almost nothing else.</p>
+<p>The embedding isn’t matching keywords. It isn’t even really matching topics. It’s matching <strong>meaning</strong>, and you can read it straight off a single number.</p>
 </section>
 <section id="three-ways-to-measure-closeness" class="level2">
 <h2 class="anchored" data-anchor-id="three-ways-to-measure-closeness">Three ways to measure closeness</h2>
 <p>So “close” is the whole game. How do we actually measure it?</p>
-<p>An embedding is just a vector <span class="math inline">\(v \in \mathbb{R}^d\)</span> — a point in <span class="math inline">\(d\)</span>-dimensional space. “Similar meaning” becomes “nearby point,” and there are three ways people usually measure <em>nearby</em>. They’re worth keeping straight, because the choice quietly shows up everywhere downstream.</p>
-<p><strong>Dot product</strong> — raw alignment: <span class="math display">\[\text{Dot}(A, B) = A \cdot B = \sum_{i=1}^{n} A_i B_i = \|A\|\,\|B\|\cos(\theta)\]</span> It folds together <em>both</em> how aligned two vectors are and how long they are. Sometimes that length carries real signal; often it’s noise you’d rather ignore.</p>
-<p><strong>Cosine similarity</strong> — alignment with the length divided out: <span class="math display">\[\text{Cosine}(A, B) = \frac{A \cdot B}{\|A\|\,\|B\|}\]</span> This is the default for text. A long document and a short one about the same thing should point the same <em>direction</em>, even if one vector is “bigger” — and cosine measures direction only.</p>
-<p><strong>Euclidean (L2) distance</strong> — plain straight-line distance: <span class="math display">\[d(A, B) = \sqrt{\sum_{i=1}^{n} (A_i - B_i)^2}\]</span> And here’s a small fact that saves a lot of confusion: once your vectors are normalised to length 1, L2 and cosine produce the <em>same ranking</em> in disguise — <span class="math inline">\(\|A-B\|^2 = 2 - 2\cos(\theta)\)</span>. Pick whichever your hardware prefers; the order of results won’t budge.</p>
-<p>That last identity is also a quiet gift: it means the entire search can be done with one fast matrix multiply. Which raises the obvious question — how fast, exactly?</p>
+<p>An embedding is just a vector <span class="math inline">\(v \in \mathbb{R}^d\)</span>, a point in <span class="math inline">\(d\)</span>-dimensional space. “Similar meaning” becomes “nearby point,” and there are three ways people usually measure <em>nearby</em>. They’re worth keeping straight, because the choice quietly shows up everywhere downstream.</p>
+<p><strong>Dot product</strong> is raw alignment: <span class="math display">\[\text{Dot}(A, B) = A \cdot B = \sum_{i=1}^{n} A_i B_i = \|A\|\,\|B\|\cos(\theta)\]</span> It folds together <em>both</em> how aligned two vectors are and how long they are. Sometimes that length carries real signal; often it’s noise you’d rather ignore.</p>
+<p><strong>Cosine similarity</strong> is alignment with the length divided out: <span class="math display">\[\text{Cosine}(A, B) = \frac{A \cdot B}{\|A\|\,\|B\|}\]</span> This is the default for text. A long document and a short one about the same thing should point the same <em>direction</em>, even if one vector is “bigger.” Cosine measures direction only.</p>
+<p><strong>Euclidean (L2) distance</strong> is plain straight-line distance: <span class="math display">\[d(A, B) = \sqrt{\sum_{i=1}^{n} (A_i - B_i)^2}\]</span> And here’s a small fact that saves a lot of confusion: once your vectors are normalised to length 1, L2 and cosine produce the <em>same ranking</em> in disguise, because <span class="math inline">\(\|A-B\|^2 = 2 - 2\cos(\theta)\)</span>. Pick whichever your hardware prefers; the order of results won’t budge.</p>
+<p>That last identity is also a quiet gift: it means the entire search can be done with one fast matrix multiply. Which raises the obvious question: how fast, exactly?</p>
 </section>
 <section id="the-simplest-thing-that-works-until-it-doesnt" class="level2">
-<h2 class="anchored" data-anchor-id="the-simplest-thing-that-works-until-it-doesnt">The simplest thing that works — until it doesn’t</h2>
+<h2 class="anchored" data-anchor-id="the-simplest-thing-that-works-until-it-doesnt">The simplest thing that works, until it doesn’t</h2>
 <p>There’s a temptation in this field to reach for the clever data structure first. Resist it. The honest baseline is almost embarrassingly plain: embed everything once, and at query time compare the query against <em>every</em> document. No index, no tricks. <strong>Exact search.</strong></p>
 <p>I ran it on 5,000 real news passages (<code>fancyzhx/ag_news</code>), each a 384-dimensional vector, with the search done as a single normalised matrix multiply.</p>
-<p>First — does it even work? Query: <strong>“tennis player wins grand slam.”</strong> The top result is a passage about Roddick and Federer at the Olympics. The phrase “grand slam” appears <em>nowhere</em> in it. A keyword index would have returned nothing; the embedding walked straight there, because <em>Roddick + Federer + Olympics + gold</em> sits in exactly the right corner of tennis-space.</p>
+<p>First, does it even work? Query: <strong>“tennis player wins grand slam.”</strong> The top result is a passage about Roddick and Federer at the Olympics. The phrase “grand slam” appears <em>nowhere</em> in it. A keyword index would have returned nothing; the embedding walked straight there, because <em>Roddick + Federer + Olympics + gold</em> sits in exactly the right corner of tennis-space.</p>
 <p>Then I went looking for where it breaks. You learn more from the misses.</p>
-<p>Query: <strong>“earnings report from a tech company.”</strong> The third result was <em>Limited Brands</em> — a clothing retailer. It has earnings reports, sure, but a tech company it is not. Here’s what happened: the query smuggled in <em>two</em> concepts, and when you average two ideas into one vector, the louder one wins. “Earnings report” simply drowned out “tech company.”</p>
-<p>That single wrong answer is the reason production retrieval is never just one matrix multiply. Reranking, query rewriting, hybrid keyword-plus-vector search — every one of those exists to patch the exact failure you just watched happen on result number three.</p>
+<p>Query: <strong>“earnings report from a tech company.”</strong> The third result was <em>Limited Brands</em>, a clothing retailer. It has earnings reports, sure, but a tech company it is not. Here’s what happened: the query smuggled in <em>two</em> concepts, and when you average two ideas into one vector, the louder one wins. “Earnings report” simply drowned out “tech company.”</p>
+<p>That single wrong answer is the reason production retrieval is never just one matrix multiply. Reranking, query rewriting, hybrid keyword-plus-vector search: every one of those exists to patch the exact failure you just watched happen on result number three.</p>
 <p>And the speed? At 5,000 documents, each query took about <strong>0.6 ms</strong>. Instant. Which is precisely the trap.</p>
-<p>Brute force compares against <em>everything</em>, so the real question was never “is it fast at 5K” — it’s <em>what’s the slope?</em></p>
+<p>Brute force compares against <em>everything</em>, so the real question was never “is it fast at 5K.” It’s <em>what’s the slope?</em></p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -327,16 +327,16 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>The line is dead straight: about <strong>121 nanoseconds per document</strong>, every time. Double the corpus, double the wait — forever.</p>
-<p>Put that against our 10 ms budget and it hardens into a ceiling: roughly <strong>83,000 documents</strong>, and not one more. English Wikipedia has six million articles. The “instant” search has quietly become a one-second search — and one second is a lifetime.</p>
-<p>So brute force isn’t <em>slow</em>. It’s <em>honest</em> — it always finds the true nearest neighbour. It just doesn’t scale. And it’s worth understanding exactly why before we go fixing it.</p>
+<p>The line is dead straight: about <strong>121 nanoseconds per document</strong>, every time. Double the corpus, double the wait, forever.</p>
+<p>Put that against our 10 ms budget and it hardens into a ceiling: roughly <strong>83,000 documents</strong>, and not one more. English Wikipedia has six million articles. The “instant” search has quietly become a one-second search, and one second is a lifetime.</p>
+<p>So brute force isn’t <em>slow</em>. It’s <em>honest</em>: it always finds the true nearest neighbour. It just doesn’t scale. And it’s worth understanding exactly why before we go fixing it.</p>
 </section>
 <section id="why-a-bigger-machine-wont-save-you" class="level2">
 <h2 class="anchored" data-anchor-id="why-a-bigger-machine-wont-save-you">Why a bigger machine won’t save you</h2>
 <p>The natural instinct is to throw hardware at the wall. It won’t be enough, for two reasons worth keeping.</p>
-<p>The first is geometry. As the number of dimensions <span class="math inline">\(d\)</span> grows, space gets strange. Almost all the volume of a high-dimensional sphere bunches into a thin shell near its surface — which means that for a random spread of points, <em>everything ends up roughly the same distance from everything else</em>. The very notion of “nearest” goes faint. This is the <strong>curse of dimensionality</strong>, and it’s the deep reason exact search is the only thing guaranteed to be exactly right — and the reason that guarantee costs so much.</p>
-<p>The second is more mundane and, in practice, more decisive: <strong>memory bandwidth</strong>. The bottleneck in vector search usually isn’t the arithmetic — it’s <em>moving the vectors</em> from main memory to the chip that does the math. The distance calculation is cheap; the journey is not. So the algorithms that win are the ones that either move less data, or refuse to look at most of it.</p>
-<p>Which is the entire plot of the next post: how to find the nearest neighbours <em>without</em> comparing against everything — IVF, PQ, and HNSW, built from scratch — and claw back two orders of magnitude while barely losing any accuracy.</p>
+<p>The first is geometry. As the number of dimensions <span class="math inline">\(d\)</span> grows, space gets strange. Almost all the volume of a high-dimensional sphere bunches into a thin shell near its surface, which means that for a random spread of points, <em>everything ends up roughly the same distance from everything else</em>. The very notion of “nearest” goes faint. This is the <strong>curse of dimensionality</strong>, and it’s the deep reason exact search is the only thing guaranteed to be exactly right, and the reason that guarantee costs so much.</p>
+<p>The second is more mundane and, in practice, more decisive: <strong>memory bandwidth</strong>. The bottleneck in vector search usually isn’t the arithmetic. It’s <em>moving the vectors</em> from main memory to the chip that does the math. The distance calculation is cheap; the journey is not. So the algorithms that win are the ones that either move less data, or refuse to look at most of it.</p>
+<p>Which is the entire plot of the next post: how to find the nearest neighbours <em>without</em> comparing against everything (IVF, PQ and HNSW, built from scratch) and claw back two orders of magnitude while barely losing any accuracy.</p>
 <p>→ <a href="../02-vector-search-ann/">Post 02: ANN from scratch</a></p>
 
 
