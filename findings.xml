@@ -8,7 +8,7 @@
 <title>Prerna Tyagi</title>
 <link>https://tyagiprerna0808.github.io/findings.html</link>
 <atom:link href="https://tyagiprerna0808.github.io/findings.xml" rel="self" type="application/rss+xml"/>
-<description>IIT Bombay statistician building agentic AI and ML against financial crime at Standard Chartered. Rebuilding the building blocks of modern AI from scratch, in public.</description>
+<description>IIT Bombay applied statistician building GenAI, agentic systems, and ML in high-stakes domains. Rebuilding the building blocks of modern AI from scratch, in public.</description>
 <image>
 <url>https://avatars.githubusercontent.com/u/180576667?v=4</url>
 <title>Prerna Tyagi</title>
@@ -27,7 +27,7 @@
 
 
 <p class="breadcrumb-mono">
-[Shipping It · Part 6 of 6] <a href="../../findings.html">Findings</a>
+[Shipping It · Part 6 of 6] <a href="../../findings.html">ReadMe</a>
 </p>
 <p><em>Part 6 of <strong>Shipping It: the production ML stack</strong>, and the one that ties the rest together.</em></p>
 <p>Everything in this series so far has been a piece. This post is the blueprint that turns the pieces into a single system.</p>
@@ -60,6 +60,7 @@
   <category>feature-store</category>
   <guid>https://tyagiprerna0808.github.io/posts/15-ml-system-design/</guid>
   <pubDate>Sun, 14 Jun 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/15-ml-system-design/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>14 · When the world moves</title>
@@ -72,7 +73,7 @@
 
 
 <p class="breadcrumb-mono">
-[Shipping It · Part 5 of 6] <a href="../../findings.html">Findings</a>
+[Shipping It · Part 5 of 6] <a href="../../findings.html">ReadMe</a>
 </p>
 <p><em>Part 5 of <strong>Shipping It: the production ML stack</strong>. Shipping the model is the start of its problems, not the end of them.</em></p>
 <p>A model’s accuracy almost never falls off a cliff. It erodes, slowly and silently, as the world drifts away from the data it once learned on.</p>
@@ -106,6 +107,7 @@
   <category>observability</category>
   <guid>https://tyagiprerna0808.github.io/posts/14-monitoring-drift/</guid>
   <pubDate>Sat, 13 Jun 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/14-monitoring-drift/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>13 · Serving the model</title>
@@ -118,7 +120,7 @@
 
 
 <p class="breadcrumb-mono">
-[Shipping It · Part 4 of 6] <a href="../../findings.html">Findings</a>
+[Shipping It · Part 4 of 6] <a href="../../findings.html">ReadMe</a>
 </p>
 <p><em>Part 4 of <strong>Shipping It: the production ML stack</strong>. The model is done. Now it has to meet the world, and the world has a latency budget.</em></p>
 <p>In fraud, a model that answers in 200 ms is a useless model. By then the transaction has already cleared; you’re scoring history.</p>
@@ -152,6 +154,7 @@
   <category>streaming</category>
   <guid>https://tyagiprerna0808.github.io/posts/13-serving-models/</guid>
   <pubDate>Fri, 12 Jun 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/13-serving-models/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>12 · It runs on my machine</title>
@@ -164,7 +167,7 @@
 
 
 <p class="breadcrumb-mono">
-[Shipping It · Part 3 of 6] <a href="../../findings.html">Findings</a>
+[Shipping It · Part 3 of 6] <a href="../../findings.html">ReadMe</a>
 </p>
 <p><em>Part 3 of <strong>Shipping It: the production ML stack</strong>. Full-stack ML engineers don’t just write the code; they own where it runs.</em></p>
 <p>“It runs on my machine” is the most expensive sentence in machine learning. It’s where a week disappears.</p>
@@ -197,6 +200,7 @@
   <category>terraform</category>
   <guid>https://tyagiprerna0808.github.io/posts/12-containers-cloud-iac/</guid>
   <pubDate>Thu, 11 Jun 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/12-containers-cloud-iac/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>11 · Versioning the unversionable</title>
@@ -209,7 +213,7 @@
 
 
 <p class="breadcrumb-mono">
-[Shipping It · Part 2 of 6] <a href="../../findings.html">Findings</a>
+[Shipping It · Part 2 of 6] <a href="../../findings.html">ReadMe</a>
 </p>
 <p><em>Part 2 of <strong>Shipping It: the production ML stack</strong>. If you can’t reproduce it, you can’t roll it back, and one day you’ll need to.</em></p>
 <p>A bad deploy goes out. You roll back, and Git faithfully restores the code.</p>
@@ -242,6 +246,7 @@
   <category>reproducibility</category>
   <guid>https://tyagiprerna0808.github.io/posts/11-versioning-registry/</guid>
   <pubDate>Wed, 10 Jun 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/11-versioning-registry/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>10 · CI/CD &amp; orchestration for ML</title>
@@ -254,7 +259,7 @@
 
 
 <p class="breadcrumb-mono">
-[Shipping It · Part 1 of 6] <a href="../../findings.html">Findings</a>
+[Shipping It · Part 1 of 6] <a href="../../findings.html">ReadMe</a>
 </p>
 <p><em>Part 1 of <strong>Shipping It: the production ML stack</strong>. The foundation: stop building a model once, start building a system that builds models.</em></p>
 <p>You trained a great model. Then the data quietly shifted, and nobody noticed for three weeks.</p>
@@ -288,6 +293,7 @@
   <category>orchestration</category>
   <guid>https://tyagiprerna0808.github.io/posts/10-cicd-orchestration/</guid>
   <pubDate>Tue, 09 Jun 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/10-cicd-orchestration/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>04 · Attention from scratch</title>
@@ -446,6 +452,7 @@ font-style: inherit;">return</span> np.matmul(weights, v), weights</span></code>
   <category>math</category>
   <guid>https://tyagiprerna0808.github.io/posts/04-attention-from-scratch/</guid>
   <pubDate>Sat, 30 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/04-attention-from-scratch/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>03 · Tokenization: how text becomes numbers</title>
@@ -663,6 +670,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>algorithms</category>
   <guid>https://tyagiprerna0808.github.io/posts/03-tokenization/</guid>
   <pubDate>Fri, 29 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/03-tokenization/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>02 · Vector search: ANN from scratch</title>
@@ -759,6 +767,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>algorithms</category>
   <guid>https://tyagiprerna0808.github.io/posts/02-vector-search-ann/</guid>
   <pubDate>Thu, 28 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/02-vector-search-ann/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>01 · Embeddings &amp; vector search</title>
@@ -870,6 +879,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>math</category>
   <guid>https://tyagiprerna0808.github.io/posts/01-embeddings-vector-search/</guid>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/01-embeddings-vector-search/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>05 · Loss, optimization, backpropagation</title>
@@ -918,6 +928,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>optimization</category>
   <guid>https://tyagiprerna0808.github.io/posts/05-loss-optimization-backprop/</guid>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/05-loss-optimization-backprop/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>06 · Fine-tuning fundamentals: LoRA</title>
@@ -964,6 +975,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>lora</category>
   <guid>https://tyagiprerna0808.github.io/posts/06-fine-tuning-lora/</guid>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/06-fine-tuning-lora/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>07 · Retrieval &amp; RAG</title>
@@ -1012,6 +1024,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>bm25</category>
   <guid>https://tyagiprerna0808.github.io/posts/07-retrieval-rag/</guid>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/07-retrieval-rag/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>08 · Evals for generative systems</title>
@@ -1058,6 +1071,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>llm-as-judge</category>
   <guid>https://tyagiprerna0808.github.io/posts/08-evals/</guid>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/08-evals/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>09 · Agent loops &amp; tool use</title>
@@ -1106,6 +1120,7 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <category>tool-use</category>
   <guid>https://tyagiprerna0808.github.io/posts/09-agents/</guid>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/09-agents/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
 </channel>
 </rss>

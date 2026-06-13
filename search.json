@@ -1,24 +1,17 @@
 [
   {
-    "objectID": "projects.html#shipped-on-my-own",
-    "href": "projects.html#shipped-on-my-own",
+    "objectID": "projects.html",
+    "href": "projects.html",
     "title": "Builds",
-    "section": "Shipped on my own",
-    "text": "Shipped on my own\n\n\n\n\nraglanggraphlangchainhf spaces\nlive\n\nReadMe, an AI paper reading assistant\nA live app for staying current with AI research without reading every paper in full. Add an arXiv link or PDF, then Discover new work, get a weekly Digest, Summarize the dense parts, and Chat with the paper. Built from scratch with LangChain, LangGraph and RAG; deployed on Hugging Face Spaces. Open the live app →\n\n\n\n\ne-commercecapacitorpaytmvercel + render\nshipped\n\nPragya Nursery, a live ordering platform\nA real ordering platform for my father's plant nursery in Greater Noida. Vercel website, Render API, Capacitor Android app, Paytm payments, geofenced delivery within 15 km, persistent order storage, CI-deployed on every push to master. Live customers, real revenue.\n\n\n\n\nembeddingsretrievalquarto\nwip\n\nml-applied-depth, companion code for this blog\nFrom-scratch implementations of the building blocks of modern AI, paired with every post in Findings. Notebooks, experiments and assignment scaffolds so readers build each component themselves before reading the worked version."
-  },
-  {
-    "objectID": "projects.html#at-work-applied-case-studies",
-    "href": "projects.html#at-work-applied-case-studies",
-    "title": "Builds",
-    "section": "At work: applied case studies",
-    "text": "At work: applied case studies\nThe code for these stays inside the bank. The problems, the approach, and the numbers are the ones on my resume, and the ones I'm accountable for.\n\n\n\n\n\nlanggraphautogenraggovernance\nin production\n\nstandard chartered · 2025\nAgentic AI reporting platform\nAn end-to-end agentic reporting system across 10+ heterogeneous source systems, built on LangGraph and AutoGen with RAG over internal documentation. Every pipeline it produces is auditable, compliant and version-controlled, because in a bank an unexplainable report is worse than a slow one. Cut ad-hoc reporting turnaround from 7 days to under 4 hours.\n\n\n\n\nisolation forestgraph analyticsunsupervised\nin production\n\nstandard chartered · 2025\nUnsupervised mule detection engine\nMule accounts rarely come with labels, so this one had to find them without. A risk scoring engine combining Isolation Forest, graph analytics and 500+ behavioral features built on transaction velocity and anomaly signals. Improved suspicious cluster detection by 15% and contributed to roughly $5M in annual loss mitigation.\n\n\n\n\nfraud strategythreshold tuninganti-scam\nin production\n\nstandard chartered · 2025\nScam detection rules, Singapore digital portfolio\nDetection strategy for a digital scam portfolio where every false positive is a legitimate customer blocked mid-payment. Tuned to 82% true positive rate at 0.5% false positive rate, cutting fraud loss while keeping the checkout experience intact. The interesting work was entirely in the trade-off curve, not the rules themselves.\n\n\n\n\namlreal-timetransaction monitoring\ndeployed\n\nyes bank · 2023–2025\nReal-time transaction monitoring model\nEnd-to-end monitoring model trained on I4C and cyber-cell complaint data, reaching 60% precision at 90% recall. Recall mattered more than precision here: a missed mule moves money for weeks, while a flagged account gets reviewed in hours. Automated real-time risk mitigation and proactive mule identification.\n\n\n\n\ncredit riskpd / lgdifrs 9\nregulatory\n\nyes bank · 2023–2025\nExpected Credit Loss under Basel / IFRS 9\nDerived Probability of Default and Loss Given Default for retail assets and credit cards, then computed Expected Credit Loss for unrated assets in FY'23. Statistics with legal consequences: every assumption documented, every number defensible in front of a regulator. The work that made me go get FRM Level 1."
+    "section": "",
+    "text": "~/builds/\n\n\nBuilds\n\nThings I’ve designed and shipped end to end. Each one optimises for engineering discipline alongside the model work: APIs, deployment, evaluation, monitoring.\n\n\n\n\n\n\n\nraglanggraphlangchainhf spaces\nlive\n\nReadMe, an AI paper reading assistant\nA live app for staying current with AI research without reading every paper in full. Add an arXiv link or PDF, then Discover new work, get a weekly Digest, Summarize the dense parts, and Chat with the paper. Built from scratch with LangChain, LangGraph and RAG; deployed on Hugging Face Spaces. Open the live app →\n\n\n\n\ne-commercecapacitorpaytmvercel + render\nshipped\n\nPragya Nursery, a live ordering platform\nA real ordering platform for my father's plant nursery in Greater Noida. Vercel website, Render API, Capacitor Android app, Paytm payments, geofenced delivery within 15 km, persistent order storage, CI-deployed on every push to master. Live customers, real revenue.\n\n\n\n\nembeddingsretrievalquarto\nwip\n\nml-applied-depth, companion code for ReadMe\nFrom-scratch implementations of the building blocks of modern AI, paired with every post in ReadMe. Notebooks, experiments and assignment scaffolds so readers build each component themselves before reading the worked version."
   },
   {
     "objectID": "posts/14-monitoring-drift/index.html",
     "href": "posts/14-monitoring-drift/index.html",
     "title": "14 · When the world moves",
     "section": "",
-    "text": "[Shipping It · Part 5 of 6] Findings\nPart 5 of Shipping It: the production ML stack. Shipping the model is the start of its problems, not the end of them.\nA model’s accuracy almost never falls off a cliff. It erodes, slowly and silently, as the world drifts away from the data it once learned on.\nFraudsters change tactics. A feature pipeline goes stale. A vendor changes a default. None of it throws an error; the service stays green while the predictions quietly rot. This is the post where a statistics background stops being a nice-to-have and becomes the whole job: software engineers watch CPU and memory, but you watch distributions, and you build the alarm that goes off when reality stops looking like training data."
+    "text": "[Shipping It · Part 5 of 6] ReadMe\nPart 5 of Shipping It: the production ML stack. Shipping the model is the start of its problems, not the end of them.\nA model’s accuracy almost never falls off a cliff. It erodes, slowly and silently, as the world drifts away from the data it once learned on.\nFraudsters change tactics. A feature pipeline goes stale. A vendor changes a default. None of it throws an error; the service stays green while the predictions quietly rot. This is the post where a statistics background stops being a nice-to-have and becomes the whole job: software engineers watch CPU and memory, but you watch distributions, and you build the alarm that goes off when reality stops looking like training data."
   },
   {
     "objectID": "posts/14-monitoring-drift/index.html#whats-coming",
@@ -32,7 +25,7 @@
     "href": "posts/12-containers-cloud-iac/index.html",
     "title": "12 · It runs on my machine",
     "section": "",
-    "text": "[Shipping It · Part 3 of 6] Findings\nPart 3 of Shipping It: the production ML stack. Full-stack ML engineers don’t just write the code; they own where it runs.\n“It runs on my machine” is the most expensive sentence in machine learning. It’s where a week disappears.\nThis post is about making that sentence impossible to say: pack the model, its dependencies, and its entire environment into a box that runs exactly the same on your laptop and on a cloud GPU you brought up by running a file, not by clicking through a console for an hour. Containers, one cloud learned properly, and infrastructure you can describe in code and tear down without fear."
+    "text": "[Shipping It · Part 3 of 6] ReadMe\nPart 3 of Shipping It: the production ML stack. Full-stack ML engineers don’t just write the code; they own where it runs.\n“It runs on my machine” is the most expensive sentence in machine learning. It’s where a week disappears.\nThis post is about making that sentence impossible to say: pack the model, its dependencies, and its entire environment into a box that runs exactly the same on your laptop and on a cloud GPU you brought up by running a file, not by clicking through a console for an hour. Containers, one cloud learned properly, and infrastructure you can describe in code and tear down without fear."
   },
   {
     "objectID": "posts/12-containers-cloud-iac/index.html#whats-coming",
@@ -46,7 +39,7 @@
     "href": "posts/10-cicd-orchestration/index.html",
     "title": "10 · CI/CD & orchestration for ML",
     "section": "",
-    "text": "[Shipping It · Part 1 of 6] Findings\nPart 1 of Shipping It: the production ML stack. The foundation: stop building a model once, start building a system that builds models.\nYou trained a great model. Then the data quietly shifted, and nobody noticed for three weeks.\nThe fix isn’t a smarter model. It’s a system that retrains itself the moment the inputs move, one that treats “the data changed” as an event, not a thing someone eventually spots in a dashboard. This post is about the leap from a folder of notebooks you run by hand to a pipeline: a directed graph of steps that tests, retrains, and ships on its own, the same way good software already does."
+    "text": "[Shipping It · Part 1 of 6] ReadMe\nPart 1 of Shipping It: the production ML stack. The foundation: stop building a model once, start building a system that builds models.\nYou trained a great model. Then the data quietly shifted, and nobody noticed for three weeks.\nThe fix isn’t a smarter model. It’s a system that retrains itself the moment the inputs move, one that treats “the data changed” as an event, not a thing someone eventually spots in a dashboard. This post is about the leap from a folder of notebooks you run by hand to a pipeline: a directed graph of steps that tests, retrains, and ships on its own, the same way good software already does."
   },
   {
     "objectID": "posts/10-cicd-orchestration/index.html#whats-coming",
@@ -179,42 +172,28 @@
     "href": "index.html",
     "title": "From Statistics to Systems.",
     "section": "",
-    "text": "data scientist · genai & agentic ai · applied statistics\n  From Statistics to Systems.\n  Applied Statistics & Informatics at IIT Bombay, now building agentic AI and machine learning at Standard Chartered that fight financial crime: fraud, scams, money laundering. Three years of models that face real money, real customers, and real regulators.\n  just descending the gradient, with a small learning rate.\n\n\n\n  numbers i answer for\n  \n    7d → 4h\n    ad-hoc reporting turnaround after shipping an agentic reporting platform across 10+ source systems\n  \n  \n    82% @ 0.5%\n    true positive rate at 0.5% false positives, scam detection rules for a digital banking portfolio\n  \n  \n    ~$5M / yr\n    annual loss mitigation tied to an unsupervised mule detection engine built on 500+ behavioral features\n  \n  \n    AIR 81\n    IIT JAM Mathematical Statistics. the exam that started all of this\n  \n\n\n\n  the loop i'm running\n\n  \n    \n      \n    \n\n    \n\n    \n      \n        \n      \n    \n\n    \n    \n    \n    \n\n    Train\n    Ship\n    Observe\n    Improve\n\n    while\n    learning:\n  \n\n  Train the fundamentals from scratch, ship them into real systems, watch for drift and latency, write down what broke, retrain. Overfit to growth, on purpose.\n\n\n\n  \n    findings →\n    Rebuilding modern AI from scratch, then learning to ship it. Deep dives, measured experiments, and production notes.\n  \n  \n    builds →\n    Things I've shipped and the work I do inside banks. Real APIs, real deployments, and case studies with numbers attached.\n  \n  \n    about →\n    The path from a mathematics degree to fighting financial crime with agents, and why I'm doing all of this in public."
-  },
-  {
-    "objectID": "about.html#the-short-version",
-    "href": "about.html#the-short-version",
-    "title": "Prerna Tyagi",
-    "section": "The short version",
-    "text": "The short version\nI’m a statistician who ended up on the front line of financial crime.\nBy day I work in Standard Chartered’s financial crime analytics team, where my job is to make it expensive to steal money: agentic AI pipelines that automate regulatory-grade reporting, unsupervised models that surface mule accounts before the complaints arrive, and detection rules tuned to catch scammers without drowning real customers in friction. Before that I spent two years at Yes Bank doing credit risk and transaction monitoring, the kind of modeling where a wrong number ends up in a regulatory filing.\nThe common thread is that none of this work forgives hand-waving. When a model decides whose account gets frozen, “it seems to work” is not a standard. That’s why I keep coming back to the statistics underneath, and why everything I publish here has running code and a measured number attached."
-  },
-  {
-    "objectID": "about.html#the-path-so-far",
-    "href": "about.html#the-path-so-far",
-    "title": "Prerna Tyagi",
-    "section": "The path so far",
-    "text": "The path so far\n\n\n\n2016 – 2020\nMathematics (Honors), SGND Khalsa College, Delhi University\nWhere I learned to ask \"why does this work\" before \"how do I use it\". Real analysis and linear algebra felt useless at the time. They turned out to be the only part of the syllabus I use every single day.\n\n\n\n2021\nAIR 81, IIT JAM Mathematical Statistics\nOne exam, two ranks: All India Rank 81 in IIT JAM Mathematical Statistics and AIR 57 in Delhi University's MSc Mathematics entrance. I picked IIT Bombay, and statistics over pure math. Best trade I've made.\n\n\n\n2021 – 2023\nPost Graduation, Applied Statistics & Informatics, IIT Bombay\nInference, regression, multivariate analysis and stochastic processes, done properly. On the side: interview coordinator for the placement team (450+ recruiters, 1,900+ students), a gold in the PG swimming championship, and two internships that gave me my first taste of models meeting messy reality, fraud claim prediction at PNB MetLife and ensemble price prediction on 10,000+ scraped listings at Involead.\n\n\n\n2023 – 2025\nData Scientist, Advanced Analytics · Yes Bank\nCredit risk and AML, where statistics has legal consequences. Built a real-time transaction monitoring model that reached 60% precision at 90% recall on I4C and cyber-cell data, and derived PD and LGD to compute Expected Credit Loss under Basel / IFRS 9 for retail assets and credit cards. Cleared FRM Level 1 and picked up the Yes Rising Star award along the way (2024).\n\n\n\n2025 – now\nData Science Associate · SCMAC, Standard Chartered\nFinancial crime, now with agents. Architected an agentic AI reporting platform (LangGraph, AutoGen, RAG) across 10+ source systems that cut ad-hoc reporting from 7 days to under 4 hours. Built an unsupervised mule detection engine on 500+ behavioral features tied to ~$5M in annual loss mitigation. Tuned scam detection rules for a digital portfolio to 82% TPR at 0.5% FPR."
+    "text": "data scientist · genai & agentic ai · applied statistics\n  From Statistics to Systems.\n  Applied Statistics & Informatics at IIT Bombay. I build GenAI, agentic systems, and machine learning in high-stakes domains: fraud, scams, and money laundering. Three years of models that face real money, real customers, and real regulators.\n  just descending the gradient, with a small learning rate.\n\n\n\n  the loop i'm running\n\n  \n    \n      \n    \n\n    \n\n    \n      \n        \n      \n    \n\n    \n    \n    \n    \n\n    Train\n    Ship\n    Observe\n    Improve\n\n    while\n    learning:\n  \n\n  Train the fundamentals from scratch, ship them into real systems, watch for drift and latency, write down what broke, retrain. Overfit to growth, on purpose.\n\n\n\n  \n    readme →\n    Rebuilding modern AI from scratch, then learning to ship it. Deep dives, measured experiments, and production notes.\n  \n  \n    builds →\n    Things I've designed and shipped end to end. Real APIs, real deployments, at least one with real paying customers.\n  \n  \n    about →\n    The path from a mathematics degree to building AI in the open, and why I'm doing all of this in public."
   },
   {
     "objectID": "about.html#how-i-think-about-the-work",
     "href": "about.html#how-i-think-about-the-work",
     "title": "Prerna Tyagi",
     "section": "How I think about the work",
-    "text": "How I think about the work\nThree lanes, one discipline.\nStatistics is the core, not the garnish. Isolation forests, PD curves, embedding distances and attention weights are all the same subject wearing different clothes. When a detection rule needs a threshold, that’s a question about distributions. When an LLM eval disagrees with itself, that’s a question about variance. I trust people who can derive the thing they’re deploying, so I try to be one.\nML that faces real money has different rules. In fraud and AML you don’t get to pick a comfortable operating point. A false positive is a real customer locked out of their salary; a false negative is someone’s savings gone. Most of my production work is the unglamorous middle: feature engineering on transaction velocity, threshold tuning against asymmetric costs, and explaining to a compliance officer exactly why the model flagged account number forty-seven.\nGenAI and agents are systems, not demos. An agent that produces a beautiful report once is a demo. An agent that produces an auditable, version-controlled, regulator-ready report every week across ten source systems is a system, and the gap between the two is where I spend my time. Orchestration, retrieval quality, evals, guardrails, lineage. The model is maybe 20% of it."
+    "text": "How I think about the work\nThree lanes, one discipline.\nStatistics is the core, not the garnish. Isolation forests, PD curves, embedding distances and attention weights are all the same subject wearing different clothes. When a detection rule needs a threshold, that’s a question about distributions. When an LLM eval disagrees with itself, that’s a question about variance. I trust people who can derive the thing they’re deploying, so I try to be one.\nML that faces real stakes plays by different rules. When a model decides whose account gets frozen, you don’t get to pick a comfortable operating point. A false positive is a real person locked out of their own salary; a false negative is someone’s savings gone. The unglamorous middle is where the real work lives: feature engineering, threshold tuning against costs that aren’t symmetric, and being able to explain exactly why the model flagged the account it flagged.\nGenAI and agents are systems, not demos. An agent that produces a beautiful answer once is a demo. An agent that produces an auditable, version-controlled result on a schedule, reliably, is a system, and the gap between the two is where the interesting work lives. Orchestration, retrieval quality, evals, guardrails, lineage. The model itself is maybe 20% of it."
   },
   {
     "objectID": "about.html#what-im-building-in-public",
     "href": "about.html#what-im-building-in-public",
     "title": "Prerna Tyagi",
     "section": "What I’m building in public",
-    "text": "What I’m building in public\n\nFindings, a long-form series rebuilding the building blocks of modern AI from scratch: embeddings, attention, tokenization, retrieval, fine-tuning, agents, then the production stack around them. Every claim is paired with running code and a measured number in ml-applied-depth.\nReadMe, a live paper-reading assistant built with LangChain, LangGraph and RAG, deployed on Hugging Face Spaces.\nPragya Nursery, a real ordering platform for my father’s plant nursery in Greater Noida. Live customers, real revenue, and my crash course in everything that happens after the model works."
+    "text": "What I’m building in public\n\nReadMe, long-form notes rebuilding the building blocks of modern AI from scratch: embeddings, attention, tokenization, retrieval, fine-tuning, agents, then the production stack around them. Every claim is paired with running code and a measured number in ml-applied-depth.\nReadMe, the paper assistant, a live app for reading AI research without reading every word. Built with LangChain, LangGraph and RAG, deployed on Hugging Face Spaces.\nPragya Nursery, a real ordering platform for my father’s plant nursery in Greater Noida. Live customers, real revenue, and my crash course in everything that happens after the model works."
   },
   {
     "objectID": "about.html#outside-the-loss-function",
     "href": "about.html#outside-the-loss-function",
     "title": "Prerna Tyagi",
     "section": "Outside the loss function",
-    "text": "Outside the loss function\nI danced competitively long before I optimized anything: coordinator of IIT Bombay’s PG dance club, with 10+ competitions managed. I swim (one PG General Championship gold). And once upon a time I vice-presided over Model UN conferences, which turns out to be excellent training for stakeholder meetings about model governance."
+    "text": "Outside the loss function\nI danced competitively long before I optimized anything: coordinator of IIT Bombay’s PG dance club, with 10+ competitions managed. I swim (one PG General Championship gold). And once upon a time I vice-presided over Model UN conferences, which turns out to be excellent training for the meetings where you defend a decision to a room."
   },
   {
     "objectID": "about.html#reach-out",
@@ -226,21 +205,21 @@
   {
     "objectID": "findings.html#building-blocks-of-modern-ai",
     "href": "findings.html#building-blocks-of-modern-ai",
-    "title": "Findings",
+    "title": "ReadMe",
     "section": "Building Blocks of Modern AI",
     "text": "Building Blocks of Modern AI\nThe foundation. Every modern AI system is built from the same handful of parts: embeddings, tokenization, attention, backprop, fine-tuning, retrieval, agents. This series takes each one apart and rebuilds it from scratch, with code you can run and a number you can check."
   },
   {
     "objectID": "findings.html#shipping-it-the-production-ml-stack",
     "href": "findings.html#shipping-it-the-production-ml-stack",
-    "title": "Findings",
+    "title": "ReadMe",
     "section": "Shipping It: the production ML stack",
-    "text": "Shipping It: the production ML stack\nWhere the advanced findings begin. A model that works once in a notebook isn’t a system. This series is me learning to build the thing around the model, the CI/CD, pipelines, registries, containers, serving, monitoring and drift detection that keep it working long after it ships."
+    "text": "Shipping It: the production ML stack\nWhere the advanced notes begin. A model that works once in a notebook isn’t a system. This series is me learning to build the thing around the model, the CI/CD, pipelines, registries, containers, serving, monitoring and drift detection that keep it working long after it ships."
   },
   {
     "objectID": "findings.html#on-the-roadmap",
     "href": "findings.html#on-the-roadmap",
-    "title": "Findings",
+    "title": "ReadMe",
     "section": "On the roadmap",
     "text": "On the roadmap\nThe Inference Engine: the systems engineering of serving LLMs. KV-cache management, batching, quantization, speculative decoding. The Alignment Loop: from next-token prediction to reasoning agents. SFT, RLHF, DPO. Both come once the stack above is solid."
   },
@@ -389,7 +368,7 @@
     "href": "posts/11-versioning-registry/index.html",
     "title": "11 · Versioning the unversionable",
     "section": "",
-    "text": "[Shipping It · Part 2 of 6] Findings\nPart 2 of Shipping It: the production ML stack. If you can’t reproduce it, you can’t roll it back, and one day you’ll need to.\nA bad deploy goes out. You roll back, and Git faithfully restores the code.\nExcept the thing that just approved a fraudulent transaction wasn’t only code. It was code plus the exact data it trained on, plus the weights that fell out, plus a training run with a random seed and a library version you’ve already upgraded past. Restore the code and you’ve restored one-quarter of the model. This post is about versioning the other three, so that “roll back to last Tuesday’s model” is a command, not an archaeology project."
+    "text": "[Shipping It · Part 2 of 6] ReadMe\nPart 2 of Shipping It: the production ML stack. If you can’t reproduce it, you can’t roll it back, and one day you’ll need to.\nA bad deploy goes out. You roll back, and Git faithfully restores the code.\nExcept the thing that just approved a fraudulent transaction wasn’t only code. It was code plus the exact data it trained on, plus the weights that fell out, plus a training run with a random seed and a library version you’ve already upgraded past. Restore the code and you’ve restored one-quarter of the model. This post is about versioning the other three, so that “roll back to last Tuesday’s model” is a command, not an archaeology project."
   },
   {
     "objectID": "posts/11-versioning-registry/index.html#whats-coming",
@@ -403,7 +382,7 @@
     "href": "posts/13-serving-models/index.html",
     "title": "13 · Serving the model",
     "section": "",
-    "text": "[Shipping It · Part 4 of 6] Findings\nPart 4 of Shipping It: the production ML stack. The model is done. Now it has to meet the world, and the world has a latency budget.\nIn fraud, a model that answers in 200 ms is a useless model. By then the transaction has already cleared; you’re scoring history.\nThat’s the thing nobody tells you: how you serve a model is a business decision, not a deployment detail. The same model wants three completely different shapes depending on who’s calling it. This post builds all three (the low-latency API behind a live decision, the batch job that scores millions of rows overnight, and the stream that keeps up with a firehose) and shows when each one is the right answer."
+    "text": "[Shipping It · Part 4 of 6] ReadMe\nPart 4 of Shipping It: the production ML stack. The model is done. Now it has to meet the world, and the world has a latency budget.\nIn fraud, a model that answers in 200 ms is a useless model. By then the transaction has already cleared; you’re scoring history.\nThat’s the thing nobody tells you: how you serve a model is a business decision, not a deployment detail. The same model wants three completely different shapes depending on who’s calling it. This post builds all three (the low-latency API behind a live decision, the batch job that scores millions of rows overnight, and the stream that keeps up with a firehose) and shows when each one is the right answer."
   },
   {
     "objectID": "posts/13-serving-models/index.html#whats-coming",
@@ -417,7 +396,7 @@
     "href": "posts/15-ml-system-design/index.html",
     "title": "15 · The whole system",
     "section": "",
-    "text": "[Shipping It · Part 6 of 6] Findings\nPart 6 of Shipping It: the production ML stack, and the one that ties the rest together.\nEverything in this series so far has been a piece. This post is the blueprint that turns the pieces into a single system.\nIt’s where the subtle failures live. The feature you compute one way in training and another way in production, so the model silently sees two different worlds and you spend a week wondering why offline metrics lied. The model nobody can see because it never got a UI. The data jammed into Postgres because that’s what was there. Good ML system design is mostly about making those quiet disagreements impossible: decoupled, scalable, and boring in the best way."
+    "text": "[Shipping It · Part 6 of 6] ReadMe\nPart 6 of Shipping It: the production ML stack, and the one that ties the rest together.\nEverything in this series so far has been a piece. This post is the blueprint that turns the pieces into a single system.\nIt’s where the subtle failures live. The feature you compute one way in training and another way in production, so the model silently sees two different worlds and you spend a week wondering why offline metrics lied. The model nobody can see because it never got a UI. The data jammed into Postgres because that’s what was there. Good ML system design is mostly about making those quiet disagreements impossible: decoupled, scalable, and boring in the best way."
   },
   {
     "objectID": "posts/15-ml-system-design/index.html#whats-coming",
