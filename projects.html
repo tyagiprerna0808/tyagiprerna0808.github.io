@@ -221,6 +221,95 @@ Things I’ve designed and shipped end to end. Each one optimises for engineerin
 
 
 </main> <!-- /main -->
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function ready(fn) {
+    if (document.readyState !== "loading") fn();
+    else document.addEventListener("DOMContentLoaded", fn);
+  }
+
+  ready(function () {
+    /* ---------- 1. Scroll reveals ---------- */
+    var hasIO = "IntersectionObserver" in window;
+    var io = null;
+    if (hasIO && !reduce) {
+      io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in-view");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
+    }
+
+    function reveal(el, delay) {
+      if (!el) return;
+      if (reduce || !hasIO) { el.classList.add("reveal", "in-view"); return; }
+      el.classList.add("reveal");
+      el.style.setProperty("--d", (delay || 0) + "ms");
+      io.observe(el);
+    }
+
+    function revealGroup(selector, step, base) {
+      var els = document.querySelectorAll(selector);
+      els.forEach(function (el, i) { reveal(el, (base || 0) + i * (step || 0)); });
+    }
+
+    // Hero pieces, staggered
+    var heroBits = [".home-eyebrow", ".home-headline", ".home-sub", ".home-signature"];
+    heroBits.forEach(function (sel, i) { reveal(document.querySelector(sel), 120 + i * 110); });
+
+    // Standalone blocks
+    [".skills-marquee", ".loop-section", ".section-head", ".about-hero", ".quarto-title-block"]
+      .forEach(function (sel) { reveal(document.querySelector(sel), 0); });
+
+    // Grouped, staggered
+    revealGroup(".home-path", 90, 80);
+    revealGroup(".project-card", 90, 60);
+    revealGroup(".series-header", 60, 0);
+    document.querySelectorAll(".list .quarto-post").forEach(function (el, i) {
+      reveal(el, (i % 4) * 80);
+    });
+    // Content headings inside posts
+    document.querySelectorAll("main h2, main h3").forEach(function (el) { reveal(el, 0); });
+
+    /* ---------- 2. Cursor spotlight on cards ---------- */
+    if (!reduce) {
+      document.querySelectorAll(".home-path, .project-card").forEach(function (card) {
+        card.classList.add("spotlight");
+        card.addEventListener("pointermove", function (ev) {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", ((ev.clientX - r.left) / r.width * 100) + "%");
+          card.style.setProperty("--my", ((ev.clientY - r.top) / r.height * 100) + "%");
+        });
+      });
+    }
+
+    /* ---------- 3. Navbar condense on scroll ---------- */
+    var nav = document.querySelector(".navbar");
+    if (nav) {
+      var onScroll = function () { nav.classList.toggle("scrolled", window.scrollY > 36); };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+
+    /* ---------- 4. Safety net: never leave content hidden ----------
+       If the observer never fires (odd viewport, edge-case browser),
+       reveal everything after a short grace period. */
+    if (!reduce && hasIO) {
+      setTimeout(function () {
+        document.querySelectorAll(".reveal:not(.in-view)").forEach(function (el) {
+          el.classList.add("in-view");
+        });
+      }, 2600);
+    }
+  });
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

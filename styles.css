@@ -1060,3 +1060,174 @@ h4:hover .header-anchor { opacity: 0.7; }
 }
 #TOC a { color: var(--text-secondary); }
 #TOC a:hover, #TOC a.active { color: var(--primary); }
+
+/* ============================================================
+   MOTION & POLISH — pro-level vibrancy layer
+   ============================================================ */
+
+/* ---- Scroll reveals ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px) scale(0.992);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.65, 0.25, 1) var(--d, 0ms),
+    transform 0.8s cubic-bezier(0.22, 0.65, 0.25, 1) var(--d, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Animated gradient headline + name ---- */
+.home-headline {
+  background: linear-gradient(100deg, #cdd5ff 0%, #a5b4fc 24%, #c4b5fd 46%, #fcd34d 70%, #a5b4fc 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 9s ease-in-out infinite;
+}
+.about-name {
+  background: linear-gradient(100deg, #e6ebf4 0%, #a5b4fc 40%, #c4b5fd 60%, #e6ebf4 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 10s ease-in-out infinite;
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* Aurora glow behind the hero */
+.home-hero { position: relative; }
+.home-hero::before {
+  content: "";
+  position: absolute;
+  inset: -40% -20% auto -20%;
+  height: 360px;
+  background:
+    radial-gradient(40% 60% at 25% 40%, rgba(129, 140, 248, 0.20), transparent 70%),
+    radial-gradient(36% 56% at 78% 30%, rgba(167, 139, 250, 0.16), transparent 72%),
+    radial-gradient(40% 60% at 60% 70%, rgba(251, 191, 36, 0.10), transparent 72%);
+  filter: blur(46px);
+  z-index: -1;
+  pointer-events: none;
+  animation: auroraFloat 16s ease-in-out infinite alternate;
+}
+@keyframes auroraFloat {
+  from { transform: translate3d(-2%, 0, 0) scale(1); opacity: 0.85; }
+  to   { transform: translate3d(2%, 3%, 0) scale(1.08); opacity: 1; }
+}
+
+/* ---- Skills marquee ---- */
+.skills-marquee {
+  width: 100%;
+  max-width: 1080px;
+  margin: 1.75rem auto 0.5rem;
+  padding: 0 1rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: 0.7rem;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+.skills-marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-chip {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.marquee-chip:hover {
+  color: var(--text);
+  border-color: var(--primary);
+  background: var(--bg-elevated);
+  transform: translateY(-2px);
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ---- Cursor spotlight on cards ---- */
+.spotlight { position: relative; overflow: hidden; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(129, 140, 248, 0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.spotlight:hover::before { opacity: 1; }
+.spotlight > * { position: relative; z-index: 1; }
+
+/* ---- Richer card hover ---- */
+.home-path, .project-card {
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.home-path:hover, .project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 44px -14px rgba(129, 140, 248, 0.45);
+}
+.list > div.quarto-post:hover,
+.quarto-listing-default .list-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 44px -16px rgba(129, 140, 248, 0.40);
+}
+.home-path:hover .home-path-key { letter-spacing: 0.01em; }
+
+/* ---- Navbar condense on scroll + animated underline ---- */
+.navbar.scrolled {
+  background: rgba(8, 11, 22, 0.92) !important;
+  box-shadow: 0 1px 0 rgba(129, 140, 248, 0.16), 0 10px 34px rgba(0, 0, 0, 0.40);
+}
+.navbar .nav-link { position: relative; }
+.navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.3rem; right: 0.3rem; bottom: 1px;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.26s cubic-bezier(0.22, 0.65, 0.25, 1);
+}
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after { transform: scaleX(1); }
+
+/* ---- Social / about link buttons: sheen lift ---- */
+.about-links a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -10px rgba(129, 140, 248, 0.55);
+}
+
+/* ---- Vibrancy boost on the cosmos nebula ---- */
+.cosmos-nebula { opacity: 0.68 !important; filter: blur(42px) saturate(1.25); }
+
+/* ---- Respect reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .home-headline, .about-name { animation: none !important; }
+  .marquee-track { animation: none !important; }
+  .home-hero::before { animation: none !important; }
+}
