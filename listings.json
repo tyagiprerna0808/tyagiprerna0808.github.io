@@ -18,5 +18,15 @@
       "/posts/14-monitoring-drift/index.html",
       "/posts/15-ml-system-design/index.html"
     ]
+  },
+  {
+    "listing": "/findings.html",
+    "items": [
+      "/posts/16-vibe-coding-spectrum/index.html",
+      "/posts/17-agent-protocols-mcp-a2a/index.html",
+      "/posts/18-agent-skills/index.html",
+      "/posts/19-agent-security-evaluation/index.html",
+      "/posts/20-spec-driven-development/index.html"
+    ]
   }
 ]

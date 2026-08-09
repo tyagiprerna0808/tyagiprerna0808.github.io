@@ -1122,5 +1122,735 @@ font-style: inherit;">return</span> new_ids</span></code></pre></div></div>
   <pubDate>Wed, 27 May 2026 18:30:00 GMT</pubDate>
   <media:content url="https://tyagiprerna0808.github.io/posts/09-agents/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
+<item>
+  <title>16 · Vibe coding is a spectrum, not a verb</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/16-vibe-coding-spectrum/</link>
+  <description><![CDATA[ <p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Part 1 of 5] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>Part 1 of <strong>Vibe Coding &amp; Agents</strong> — my notes from Google's five-day intensive (May 2026). This one covers <em>The New SDLC With Vibe Coding</em> by Addy Osmani, Shubham Saboo and Sokratis Kartakis.</em></p>
+<p>I came into this expecting a sales pitch for coding agents. What I got instead was the clearest argument I've read for why <em>the model is not the interesting part</em>, and I've been rearranging how I work ever since.</p>
+<p>Here is the line that reframed it for me: an agent that does something wrong is usually not a model failure. It's a missing tool, a vague rule, an absent guardrail, or a context window stuffed with noise. Most agent failures, examined honestly, are configuration failures.</p>
+<p>That is a very familiar feeling. I spent three years on fraud and AML models where almost every "the model is wrong" escalation turned out to be a feature computed differently in two places. Same disease, new host.</p>
+<section id="vibe-coding-is-a-spectrum-not-a-verb" class="level2">
+<h2 class="anchored" data-anchor-id="vibe-coding-is-a-spectrum-not-a-verb">Vibe coding is a spectrum, not a verb</h2>
+<p>Karpathy's original February 2025 framing — give in to the vibes, forget the code exists — went viral because it named something people were already doing. Then it got applied to everything, and stopped meaning anything. By early 2026 he'd added a second term, <em>agentic engineering</em>, for the disciplined end.</p>
+<p>The paper's move is to stop treating these as a binary and lay them out as endpoints:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Vibe coding</th>
+<th>Structured AI-assisted</th>
+<th>Agentic engineering</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Intent</strong></td>
+<td>Casual prompts</td>
+<td>Detailed prompts with examples and constraints</td>
+<td>Formal specs, architecture docs, memory files</td>
+</tr>
+<tr class="even">
+<td><strong>Verification</strong></td>
+<td>"Does it seem to work?"</td>
+<td>Manual testing, spot-checks</td>
+<td>Automated suites, CI/CD gates, LM judges</td>
+</tr>
+<tr class="odd">
+<td><strong>Codebase understanding</strong></td>
+<td>May not read the output</td>
+<td>Selective review of critical paths</td>
+<td>Architecture reviewed; AI handles details</td>
+</tr>
+<tr class="even">
+<td><strong>Error handling</strong></td>
+<td>Paste the error back in</td>
+<td>Human diagnoses, AI implements the fix</td>
+<td>Agents self-diagnose within defined bounds</td>
+</tr>
+<tr class="odd">
+<td><strong>Scope</strong></td>
+<td>Prototypes, hackathons</td>
+<td>Features in established codebases</td>
+<td>Production systems, team scale</td>
+</tr>
+<tr class="even">
+<td><strong>Risk</strong></td>
+<td>High — fine for disposable code</td>
+<td>Moderate</td>
+<td>Low — systematic verification at every stage</td>
+</tr>
+</tbody>
+</table>
+<p>The differentiator isn't whether you use AI. It's how much structure, verification and human judgment surrounds the output. And the single sharpest axis is that verification row.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Tests and evals are not the same instrument.</strong> Tests verify the deterministic parts: this input produces that output, checked by code. Evals verify the parts that aren't deterministic: did the agent take a sensible trajectory, choose the right tools, clear the quality bar — checked by labelled datasets, rubrics and LM judges. Without <em>both</em>, it's vibe coding no matter how elaborate the prompts are.</p>
+</div>
+</div>
+</div>
+<p>I like this because it kills a rhetorical move I've watched people make. "We're not vibe coding, our prompts are really detailed." Detailed prompts are not verification. If nothing checks the output, the sophistication of the input is decoration.</p>
+</section>
+<section id="agent-model-harness" class="level2">
+<h2 class="anchored" data-anchor-id="agent-model-harness">Agent = model + harness</h2>
+<p>The central claim of the paper, and the one worth arguing about: a raw model is not an agent. It becomes one when a harness gives it state, tool execution, feedback loops and enforceable constraints. Everything you actually experience using Claude Code, Cursor, Codex, Antigravity, Aider or Cline is dominated by the harness, not by which model is underneath.</p>
+<p>What's in the harness:</p>
+<ul>
+<li><strong>Instructions and rule files</strong> — <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>GEMINI.md</code>, skill files, sub-agent prompts</li>
+<li><strong>Tools</strong> — functions, MCP servers, APIs, <em>and</em> the prose that tells the model when to reach for each one</li>
+<li><strong>Sandboxes</strong> — where the code runs, what it can touch, what it can't reach</li>
+<li><strong>Orchestration logic</strong> — sub-agent spawning, model routing, hand-offs</li>
+<li><strong>Guardrails and hooks</strong> — deterministic code at lifecycle points: before a tool call, after a file edit, before a commit. This is where you put the things the agent should never forget but reliably does.</li>
+<li><strong>Observability</strong> — logs, traces, evals, cost and latency metering</li>
+</ul>
+<p>Two benchmark results in the paper make this concrete rather than philosophical. On Terminal Bench 2.0, one team moved a coding agent from outside the Top 30 into the Top 5 <em>by changing only the harness</em>, with no model change. Separately, LangChain raised an agent's score on the same benchmark by 13.7 points by tweaking only the system prompt, tools and middleware around a fixed model.</p>
+<p>The uncomfortable corollary is in the paper too: that surface area is <em>the team's</em>, not the model provider's. Nobody ships you a good harness.</p>
+</section>
+<section id="context-engineering-is-the-actual-skill" class="level2">
+<h2 class="anchored" data-anchor-id="context-engineering-is-the-actual-skill">Context engineering is the actual skill</h2>
+<p>Six types of context every agent needs: <strong>instructions</strong> (role, goals, boundaries), <strong>knowledge</strong> (retrieved docs, diagrams, domain data), <strong>memory</strong> (session logs and persistent project state), <strong>examples</strong> (few-shot demos, reference patterns), <strong>tools</strong> (precise definitions), and <strong>guardrails</strong> (hard constraints, formats, safety validations).</p>
+<p>The engineering decision is which of those the agent carries upfront versus retrieves on demand:</p>
+<ul>
+<li><strong>Static context</strong> is always loaded — system instructions, rule files, global memory, persona. It defines who the agent is. It's expensive because every token is present in every interaction whether it's relevant or not.</li>
+<li><strong>Dynamic context</strong> is loaded on demand — skills triggered by task matching, tool results, RAG documents, windowed history. You pay the token cost only when you need the information.</li>
+</ul>
+<p>Too much static context wastes tokens and dilutes signal. Too little and the agent forgets the rules that matter. The paper's recommendation is to treat that boundary as a first-class architectural decision, reviewed and versioned like any other config — and the pattern for managing the dynamic half at scale is Agent Skills, which gets its own paper on Day 3.</p>
+<blockquote class="blockquote">
+<p>The question isn't "how do I trick the AI into writing good code?" It's "what would a new team member need to know to contribute effectively, and how do I encode that knowledge in a form the AI can use?"</p>
+</blockquote>
+<p>That reframe is the whole game. Everything I've since put in an <code>AGENTS.md</code> came from asking that question and writing down the answer.</p>
+</section>
+<section id="conductor-or-orchestrator" class="level2">
+<h2 class="anchored" data-anchor-id="conductor-or-orchestrator">Conductor or orchestrator</h2>
+<p>Two modes, and good developers move between them fluidly rather than picking one.</p>
+<p><strong>Conductor</strong> is hands-on and real-time. You're in the editor, watching code appear, correcting as you go. Right for complex logic, tricky debugging, unfamiliar codebases where you need to understand each change as it lands. The risk: if you're personally directing every keystroke, you are the throughput ceiling.</p>
+<p><strong>Orchestrator</strong> is async delegation. You define goals, hand them to agents that may be running in parallel in the background, and review results. Right for bug fixes, features against established patterns, migrations, test generation. It demands a different skill set — <em>specification</em> (precise enough to execute unambiguously), <em>decomposition</em> (right-sized units), <em>evaluation</em> (fast judgment on whether output clears the bar), and <em>system design</em> (the constraints and feedback loops that keep agents productive).</p>
+<p>The paper maps three places coding agents show up in a day: <strong>in the editor</strong> (inline completion, chat panels — Copilot, Cursor, Windsurf), <strong>in the terminal</strong> (multi-file work, running tools and tests, iterating on results — Claude Code, Codex CLI, Antigravity CLI, Cline), and <strong>in the background</strong> (cloud sandboxes, hours at a time, a pull request as output — Jules, Copilot agent mode, Cursor background agents). Most people use all three in one day, and the right starting point is the task, not whichever sits highest on some autonomy ladder.</p>
+</section>
+<section id="the-80-problem-and-the-metr-number" class="level2">
+<h2 class="anchored" data-anchor-id="the-80-problem-and-the-metr-number">The 80% problem, and the METR number</h2>
+<p>Agents generate roughly 80% of a feature fast. The remaining 20% — edge cases, error handling, integration points, subtle correctness — needs contextual knowledge current models often don't have.</p>
+<p>And the errors have changed character. They used to be syntax. Now they're conceptual: wrong assumptions about business logic, no request for clarification on ambiguous requirements, missed edge cases, architectural choices that quietly become maintenance debt. These are harder to catch <em>because the code looks right</em> and may pass basic tests.</p>
+<p>Industry surveys report 25–39% productivity gains. But a METR study found experienced developers using AI assistants took <strong>19% longer</strong> on certain tasks — largely time spent verifying, debugging and correcting output. AI doesn't remove implementation work so much as convert it from writing into reviewing, guiding and verifying.</p>
+<p>Both numbers can be true. That's the point. The gain depends entirely on how much of the verification you've automated, which takes you straight back to the harness.</p>
+</section>
+<section id="the-economics-nobody-puts-in-the-demo" class="level2">
+<h2 class="anchored" data-anchor-id="the-economics-nobody-puts-in-the-demo">The economics nobody puts in the demo</h2>
+<p>My favourite section, because it's the one that translates into a conversation with someone who controls a budget.</p>
+<p><strong>Vibe coding is low CapEx, high OpEx.</strong> Entry cost is a subscription. The compounding costs are the token burn rate (dumping unstructured files into context and repeatedly asking the model to fix its own unverified mistakes — an expensive prompting loop with a low first-pass success rate), the maintenance tax (six months later a human spends days reverse-engineering AI-generated spaghetti), and security remediation (fixing a flaw in production costs exponentially more than catching it at design).</p>
+<p><strong>Agentic engineering is high CapEx, low OpEx.</strong> You pay upfront — API schemas, deterministic test suites, structured context — and the marginal cost of shipping and maintaining each feature drops.</p>
+<p>Which makes context engineering a financial lever, not just a technical one. A dense, high-signal payload raises first-pass success and avoids the trial-and-error loops. And a well-designed factory routes deterministic, lower-complexity work — test generation, code review, CI monitoring — to smaller, cheaper models, instead of paying frontier prices to fix a typo.</p>
+</section>
+<section id="what-i-actually-changed" class="level2">
+<h2 class="anchored" data-anchor-id="what-i-actually-changed">What I actually changed</h2>
+<p>The paper's advice for individual developers is a short list, and I've been working through it rather than nodding at it:</p>
+<ol type="1">
+<li><strong>Set up an <code>AGENTS.md</code>.</strong> Ten lines to start: stack, conventions, hard rules, workflow. Add a rule every time the agent does something it shouldn't do again. Mine grew fastest from the second half of that sentence.</li>
+<li><strong>Write the tests and evals before generating the code.</strong> They are the contract. A good eval suite communicates intent more precisely than any prompt, and it's the thing that moves you along the spectrum.</li>
+<li><strong>Review every line that ships.</strong> Be suspicious of anything clever. Check imports resolve to real packages. Verify error handling covers realistic failures.</li>
+<li><strong>Keep your own skills sharp.</strong> AI handling the routine only works if debugging, system design and intuition for correctness stay strong. It's leverage on expertise, not a replacement for it.</li>
+</ol>
+<p>The framing I'm keeping: in the factory model, your primary output is no longer code. It's the system that produces code — specs, agents, quality gates, feedback loops, guardrails. A factory manager doesn't assemble every widget. They design the line and own the quality control.</p>
+<p>Next in the series: the protocols that let those factories talk to anything — MCP, A2A, and why an agent is not a tool.</p>
+</section>
+ ]]></description>
+  <category>agents</category>
+  <category>vibe-coding</category>
+  <category>sdlc</category>
+  <guid>https://tyagiprerna0808.github.io/posts/16-vibe-coding-spectrum/</guid>
+  <pubDate>Wed, 05 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/16-vibe-coding-spectrum/thumb.svg" medium="image" type="image/svg+xml"/>
+</item>
+<item>
+  <title>17 · The protocol stack: MCP, A2A, and why an agent is not a tool</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/17-agent-protocols-mcp-a2a/</link>
+  <description><![CDATA[ <p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Part 2 of 5] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>Part 2 of <strong>Vibe Coding &amp; Agents</strong>. Notes on <em>Agent Tools &amp; Interoperability</em> by Kanchana Patlolla, Lukasz Olejniczak and Pier Paolo Ippolito.</em></p>
+<p>Day 1 said your job is to build the factory. This paper is about the standards that let the factory connect to anything outside it — the nuts, bolts and screw sizes. Without them every agent you build is a custom machine in a garage, and you spend your hours writing fragile wrappers instead of directing intent.</p>
+<p>The cast, in one line each:</p>
+<ul>
+<li><strong>MCP</strong> — the USB-C inside your harness. Connects models to databases, filesystems, web APIs.</li>
+<li><strong>Skills</strong> — playbooks. Markdown instructions plus scripts, run in a sandbox.</li>
+<li><strong>A2A</strong> — the factory radio. Specialist agents negotiate and delegate to each other.</li>
+<li><strong>A2UI</strong> — the display window. Turns raw JSON into safe interactive components for humans.</li>
+<li><strong>AP2 / UCP</strong> — the supply chain and transaction network for autonomous commerce.</li>
+</ul>
+<section id="the-n-m-math" class="level2">
+<h2 class="anchored" data-anchor-id="the-n-m-math">The N×M math</h2>
+<p>This is the argument for MCP and it takes ten seconds. You're experimenting with N models and want them talking to M tools — Jira, BigQuery, GitHub, Drive. Bespoke integration means writing code for every model–tool intersection. Five models and ten tools is fifty integration points to maintain, and one upstream API change breaks several parsers at once.</p>
+<p>Standardise the tool definition and the effort collapses from <strong>O(N × M)</strong> to <strong>O(N + M)</strong>. That's it. That's the protocol.</p>
+<p>Two transports carry it:</p>
+<ul>
+<li><strong>stdio</strong> — the host launches the server as a local background subprocess and passes JSON-RPC 2.0 over stdin/stdout. No network setup. This is the prototyping default.</li>
+<li><strong>SSE over HTTP</strong> — the client connects to a remote endpoint and streams. Fewer local dependencies, always current, smaller footprint, simpler lifecycle — at the cost of a real hosted server to maintain.</li>
+</ul>
+</section>
+<section id="consume-dont-build" class="level2">
+<h2 class="anchored" data-anchor-id="consume-dont-build">Consume, don't build</h2>
+<p>The paper is explicit that for this audience the priority is <em>consumption over creation</em>. You are not meant to be writing custom server configs. Discovery comes from three places: public registries (hundreds of prebuilt servers, excellent for local prototyping, unvetted and used at your own risk), vetted third-party remote servers from official sources, and internal registries behind an API gateway.</p>
+<p>The do's and don'ts list is the most immediately useful page in the paper, and I've pinned it:</p>
+<div class="callout callout-style-simple callout-warning">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Don't</strong> hardcode credentials into prompts or scripts — pass them as environment variables. <strong>Don't</strong> point an agent at production; use a dev project with non-production or obfuscated data. <strong>Don't</strong> tie core business logic to unverified public endpoints. If you must touch real data, set the server <strong>read-only</strong>, and scope it to a single project rather than everything you own.</p>
+</div>
+</div>
+</div>
+<p>And the do's: audit public servers before you attach them to anything with filesystem or credential access. Use RAG <em>for tools</em> — load them from a registry only when needed and drop them from context when the task ends, so attention doesn't get diluted. Show tool inputs to the user before the call fires, so an accidental or malicious exfiltration has a human in front of it. Log tool usage for audit.</p>
+<p>One debugging habit worth stealing: when an agent hallucinates a tool call or mangles a payload, <em>stop editing the system prompt</em>. Open the MCP Inspector, query the server manually, look at the tool schemas and the raw JSON-RPC packets. Blindly tweaking prompts to fix a transport problem is how afternoons disappear.</p>
+</section>
+<section id="from-monolith-to-virtual-workforce" class="level2">
+<h2 class="anchored" data-anchor-id="from-monolith-to-virtual-workforce">From monolith to virtual workforce</h2>
+<p>The architectural arc here is one I recognise from ML platforms, and the paper draws the parallel deliberately: monolith → microservices, manual config → infrastructure as code, hand-built models → AutoML → decomposed, observable pipelines.</p>
+<p>Most first agent projects are a <strong>single-agent monolith</strong>: one sophisticated prompt wearing every hat, with a pile of tools attached. It gets you a weekend prototype and then hits the monolithic ceiling:</p>
+<ul>
+<li><strong>Scaling friction</strong> — you can't tune the database logic without confusing the UI logic in the same prompt. And the more tools a single agent holds, the worse its decisions get; the search space for the next action is simply too large.</li>
+<li><strong>Contextual overload</strong> — system instructions plus dozens of tool schemas plus conversation history maxes out working memory.</li>
+<li><strong>Single point of failure</strong> — one bad tool or instruction takes the whole agent down, and corrupted context gets carried forward into future reasoning.</li>
+</ul>
+<p>The first fix is <strong>internal specialisation</strong>: partition the monolith into purpose-built sub-agents, each with a focused prompt and a subset of tools, still sharing one runtime and memory. It's still a monolith — nothing crosses a network boundary — but it reduces the search space, mitigates attention dilution, and keeps each sub-agent's signal-to-noise high because the orchestrator routes rather than reasoning through the whole tree.</p>
+<p>The second is <strong>distributed multi-agent</strong>, and that's where the protocol matters. Google, Salesforce, ServiceNow and Workday are shipping domain-specific agents for their own ecosystems. You could build your own ServiceNow sub-agent — and then you own a maintenance tax on every upstream API and prompt change, forever. Or you hire the official specialist and spend your attention on the thing only you can build.</p>
+</section>
+<section id="why-an-agent-is-not-a-tool" class="level2">
+<h2 class="anchored" data-anchor-id="why-an-agent-is-not-a-tool">Why an agent is not a tool</h2>
+<p>This is the section I'd hand to anyone about to wrap a remote agent in a function signature.</p>
+<p>A tool is a passive instrument operating in a <strong>bounded</strong> domain: fire-and-forget, one perfectly formatted request, one response. An agent operates in an <strong>unbounded</strong> problem space full of ambiguous data, misleading requirements and conflicting preferences — the digital equivalent of crooked walls. You rarely can specify every detail of a complex workflow without multi-turn clarification.</p>
+<p>The paper's analogy: buying tools to renovate your own kitchen versus hiring someone who builds kitchens. The specialist will hit an oversight in your design, pause, consult you on trade-offs, and resume. That's not a failure mode. That's the job.</p>
+<blockquote class="blockquote">
+<p>Does the caller need a result, or does the caller need another participant to take responsibility?</p>
+</blockquote>
+<p>Force a collaborative agent into a tool wrapper and you've introduced the architectural equivalent of a <code>GOTO</code> into your orchestrator. Control flow leaves the structured context; the agent can enter an interrupted state, ask for more information, and potentially never return the expected output if the user changes their mind. A2A exists to isolate that messy multi-turn state — which keeps the tool layer (MCP) clean, predictable and strictly structured. The two protocols aren't competing; they're separating concerns.</p>
+</section>
+<section id="agent-cards-registries-and-getting-paid" class="level2">
+<h2 class="anchored" data-anchor-id="agent-cards-registries-and-getting-paid">Agent Cards, registries, and getting paid</h2>
+<p>Every A2A agent is described by an <strong>Agent Card</strong> — the machine-readable CV of the AI world. Capabilities (what it can do), security and compliance (data handling, permission requirements), and interaction schemas (how to talk to it). A2A was built at Google and donated to the Linux Foundation, which matters if you're betting a roadmap on it.</p>
+<p>Cards get published to registries: public marketplaces that work like a global talent agency, or private enterprise registries where an internal specialist gets shared across departments without leaving the security perimeter. Connecting is either direct instantiation against a known endpoint, or resolution through a registry that handles the auth validation for you.</p>
+<p>Then the part I didn't expect a protocol paper to cover: <strong>Agent-as-a-Service</strong>. List an A2A agent on a cloud marketplace and the billing infrastructure handles the hard part — flat fee with usage overages, procurement against existing cloud commitments. And for developers who want no user accounts at all, A2A extensions support the <code>x402</code> pattern: the server intercepts an unpaid request, returns <strong>HTTP 402 Payment Required</strong> with a machine-readable invoice, the calling agent pays autonomously and retries with a cryptographic proof-of-payment token. Stateless pay-per-call, machine to machine.</p>
+<p>402 was reserved in the HTTP spec in 1997 and sat unused for nearly thirty years. It's a little funny that agents are what finally cashed it.</p>
+</section>
+<section id="a2ui-and-commerce" class="level2">
+<h2 class="anchored" data-anchor-id="a2ui-and-commerce">A2UI and commerce, briefly</h2>
+<p>Both are A2A <em>extensions</em> — a standard pattern for agents to advertise, negotiate and execute optional higher-order capabilities on top of basic message passing.</p>
+<p><strong>A2UI</strong> closes the communication gap between an agent's structured output and a human's need to see something. Generative UI, but constrained: the agent emits components from a catalog rather than arbitrary markup, which is what makes it safe to render. <strong>UCP</strong> (Universal Commerce Protocol) handles the transaction surface; <strong>AP2</strong> (Agent Payments Protocol) handles verifiable payments — the paper's analogy is a parent's credit card with strict rules attached, which is exactly the right mental model for letting something autonomous spend money.</p>
+</section>
+<section id="what-i-took-away" class="level2">
+<h2 class="anchored" data-anchor-id="what-i-took-away">What I took away</h2>
+<p>Three things I'm carrying into my own builds:</p>
+<ol type="1">
+<li><strong>Search for an existing MCP server before writing a wrapper.</strong> The instinct to build is expensive and the maintenance is forever.</li>
+<li><strong>Decide bounded vs unbounded before choosing the integration.</strong> If the thing on the other end might need to ask me a question, it's a collaborator, not a function call — and wrapping it as a function call will hurt later, not now.</li>
+<li><strong>Scope and read-only by default.</strong> Dev project, non-production data, single project scope, credentials in the environment. None of this is new advice; what's new is that an autonomous thing is now holding the keys.</li>
+</ol>
+<p>Next: Agent Skills — how an agent carries a hundred specialisms and pays tokens for one.</p>
+</section>
+ ]]></description>
+  <category>agents</category>
+  <category>mcp</category>
+  <category>a2a</category>
+  <category>protocols</category>
+  <guid>https://tyagiprerna0808.github.io/posts/17-agent-protocols-mcp-a2a/</guid>
+  <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/17-agent-protocols-mcp-a2a/thumb.svg" medium="image" type="image/svg+xml"/>
+</item>
+<item>
+  <title>18 · Agent Skills: procedural memory in a folder</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/18-agent-skills/</link>
+  <description><![CDATA[ <p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Part 3 of 5] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>Part 3 of <strong>Vibe Coding &amp; Agents</strong>. Notes on <em>Agent Skills</em> by Tanvi Singhal, Gabriela Hernandez Larios, Debanshu Dus, Lavi Nigam and Smitha Kolan.</em></p>
+<p>A skill is a folder with a <code>SKILL.md</code> in it. That's the whole primitive. Which is either underwhelming or the most interesting thing in the five papers, depending on how much time you've lost to prompt files that grew to four hundred lines.</p>
+<p>The claim is that skills are the first credible <strong>procedural memory</strong> for LLM agents. Models already have workable analogues for remembering what happened (episodic) and remembering facts (semantic). What they've lacked is remembering <em>how to do a thing, step by step</em>. That's the gap.</p>
+<section id="anatomy-and-progressive-disclosure" class="level2">
+<h2 class="anchored" data-anchor-id="anatomy-and-progressive-disclosure">Anatomy, and the trick that makes it work</h2>
+<p>The canonical layout — only <code>SKILL.md</code> is mandatory, everything else is optional:</p>
+<pre><code>cafe-preparation/
+  SKILL.md              # metadata + instructions  (required)
+  scripts/              # executable code, any language
+    calc_quantities.py
+  references/           # supplementary context, loaded on demand
+    menu_and_recipes.md
+  assets/               # templates, configs, schemas
+    prep_sheet_template.md</code></pre>
+<p>The innovation isn't the folder. It's <strong>progressive disclosure</strong>, in three levels:</p>
+<ol type="1">
+<li><strong>Metadata</strong> — name and description — is always in context.</li>
+<li><strong>The <code>SKILL.md</code> body</strong> loads only when the skill triggers.</li>
+<li><strong>Bundled resources</strong> load strictly as needed, and scripts execute without ever entering the token window.</li>
+</ol>
+<p>So a hundred installed skills costs roughly 100 × 50 ≈ <strong>5,000 tokens</strong> of always-loaded metadata, and you pay the real cost only for the one that fired. That is the entire economic argument, and it's a good one.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Rule of thumb from the paper:</strong> if the <code>SKILL.md</code> is getting long, the next paragraph probably belongs in <code>references/</code>, not in the body.</p>
+</div>
+</div>
+</div>
+<p>Two paths produce these. <strong>Path A</strong> is a subject-matter expert translating what they already have — a compliance officer with a thirty-page runbook, an HR manager with onboarding guides. No coding required; the content exists, it just needs a format the agent can route on. <strong>Path B</strong> is crystallising what the agent just did: it completed a non-trivial repeatable task, so you have it draft the skill and you <em>review</em> instead of authoring. Both produce the same artifact.</p>
+</section>
+<section id="the-description-is-the-routing-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="the-description-is-the-routing-algorithm">The description field is the routing algorithm</h2>
+<p>This is the part I got wrong first and the paper is blunt about. The description in the YAML frontmatter is <em>the only thing the model sees</em> when deciding whether to load the skill. State what it does, front-load trigger keywords, be pushy if the model under-triggers, and explicitly say what it is <strong>not</strong> for:</p>
+<pre><code>---
+name: cafe-preparation
+description: |
+  Calculates daily ingredient needs and generates prep sheets for cafe operations.
+  Use when the user asks to estimate daily quantities, convert drinks to
+  ingredients, or generate shopping lists.
+  Do NOT use for employee shift scheduling or financial accounting.
+---</code></pre>
+<p>Naming convention: boring and obvious. <code>snake_case</code> for directories, <code>kebab-case</code> for skill names, gerund form where it reads naturally (<code>managing-databases</code>). Never <code>utils</code> or <code>tools</code>, and no internal jargon.</p>
+<p>To hit the industry-standard ~90% trigger accuracy, the description has to pass four checks: <strong>testable specificity</strong> (write three positive and three negative triggers), <strong>clarity</strong> (ambiguous queries don't overlap adjacent skills), <strong>execution fidelity</strong> (describes actual behaviour, not aspirational), and <strong>rephrasing stability</strong> (routes the same however the user phrases it).</p>
+</section>
+<section id="the-number-that-should-worry-you" class="level2">
+<h2 class="anchored" data-anchor-id="the-number-that-should-worry-you">The number that should worry you</h2>
+<blockquote class="blockquote">
+<p>An Agent Skill without a test is a hope, not a capability.</p>
+</blockquote>
+<p>SkillsBench (2025) benchmarked 84 real-world agent tasks and found <strong>19% performed worse with a skill than without one</strong>. Not neutral. Actively degrading.</p>
+<p>Vercel's production analysis is more specific and more uncomfortable: a <strong>56% non-invocation rate</strong> for skills expected to fire consistently, and a skill stripped of its instructions scored 58% while the agent with no skill at all scored 63%. A five-point deficit from adding something.</p>
+<p>The same study found a passive <code>AGENTS.md</code> index of project conventions hit a 100% pass rate against a 53% baseline — which is the cleanest statement of the boundary I've seen. <strong>Global context belongs in always-loaded documentation. Skills are for narrow, action-specific workflows.</strong> Reaching for a skill when you needed a line in <code>AGENTS.md</code> is a real and costly mistake.</p>
+<p>Four failure modes, and they surface in different places:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Failure</th>
+<th>What happens</th>
+<th>Where you see it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Trigger</strong></td>
+<td>Wrong skill fires, or the right one doesn't</td>
+<td>Routing logs</td>
+</tr>
+<tr class="even">
+<td><strong>Execution</strong></td>
+<td>Triggers correctly, produces wrong output or errant tool calls</td>
+<td>Output quality</td>
+</tr>
+<tr class="odd">
+<td><strong>Token budget</strong></td>
+<td>A large body crowds context, degrading <em>unrelated</em> turns</td>
+<td>Only under realistic context load</td>
+</tr>
+<tr class="even">
+<td><strong>Regression</strong></td>
+<td>A new skill overlaps an existing one and breaks routing</td>
+<td>Only with the full library exercised together</td>
+</tr>
+</tbody>
+</table>
+<p>The bottom two only appear when multiple skills interact under production load. Which leads to the sentence I've written on a sticky note:</p>
+</section>
+<section id="isolation-is-a-trap" class="level2">
+<h2 class="anchored" data-anchor-id="isolation-is-a-trap">Isolation is a trap</h2>
+<p>Never evaluate a skill purely on its own. Production agents co-load 5 to 15 skills simultaneously. A body over ~5,000 tokens can work perfectly alone and cause context rot the moment it has company. MCPVerse measured an <strong>18.2% accuracy drop</strong> from tool proliferation and attention competition; Chroma Research found all frontier models degrade as input grows, especially with co-loaded noise.</p>
+<p>Passing an isolated test is a <em>false positive</em> for production readiness. That's the trap.</p>
+<p>The related trap is what the paper calls the evaluation illusion: trajectory testing scores the composite system — host agent <em>plus</em> skill — so when a multi-skill trajectory fails you often can't decouple routing from instruction quality from execution. The fix is a two-tiered assert: validate the tool code independently, and audit the <code>SKILL.md</code> triggers across multiple model families so you catch descriptions that are quietly locked to one architecture.</p>
+</section>
+<section id="evaluation-driven-development" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-driven-development">Evaluation-driven development</h2>
+<p>Invert the workflow: write three JSON eval cases — input, expected tools, expected output — <em>before</em> drafting the <code>SKILL.md</code>. Drafting them upfront surfaces description ambiguities and trajectory errors before they compound into the body.</p>
+<pre><code>{
+  "case_id": "refund_dup_charge_001",
+  "input": "I was charged twice for order #4521 last Tuesday",
+  "expected_skill": "refund_processor",
+  "expected_tool_calls": [
+    {"tool": "lookup_order", "args": {"order_id": "4521"}},
+    {"tool": "check_duplicate_charge", "args": {"order_id": "4521"}}
+  ],
+  "expected_output_format": "confirmation_with_refund_id",
+  "rubric": ["acknowledges duplicate", "cites order id", "provides next step"]
+}</code></pre>
+<p>Then score the output and the trajectory <em>separately</em>. Latitude's March 2026 analysis found final-output-only scoring passes <strong>20–40% more cases</strong> than trajectory-aware scoring. That gap is entirely instances where the agent reached the right answer via the wrong sequence of tool calls. Tolerable read-only. Not tolerable when the tools have side effects.</p>
+<p>Two non-negotiables when using LLM-as-judge at scale: swap the positions of reference and actual output to kill ordering bias, and calibrate against human ratings until you reach 90% agreement.</p>
+</section>
+<section id="graduation-tiers-and-pass-k" class="level2">
+<h2 class="anchored" data-anchor-id="graduation-tiers-and-pass-k">Graduation tiers, and pass^k</h2>
+<p>Skills earn authority in tiers rather than shipping at full permission:</p>
+<ul>
+<li><strong>Read-only</strong> — LLM-as-judge eval, 90% trigger accuracy.</li>
+<li><strong>Draft-only (human review)</strong> — golden dataset of 20+ cases, human approval.</li>
+<li><strong>Action-allowed</strong> — full adversarial red-teaming, no rollback events, and sustained <code>pass^k</code>.</li>
+</ul>
+<p><code>pass^k</code> runs the eval <em>k</em> times and requires success on every run. The illustration is brutal: on τ-bench, GPT-4o scored 61% at <code>pass^1</code> and dropped below <strong>25% at pass^8</strong>. Single-run success is a poor predictor of production reliability, which is something I already believed about models and had not thought to apply to a markdown file.</p>
+<p>Two calibration adjustments the paper insists on: production performance typically drops <strong>20–30%</strong> against offline pass@1 benchmarks (ReliabilityBench), and simulation-based evaluation carries an optimistic bias of up to <strong>9%</strong>. So human review of representative outputs stays the ultimate signal for action-allowed graduation.</p>
+</section>
+<section id="skills-vs-mcp-vs-agents-md" class="level2">
+<h2 class="anchored" data-anchor-id="skills-vs-mcp-vs-agents-md">Skills vs MCP vs AGENTS.md</h2>
+<p>They compose; they don't compete.</p>
+<ul>
+<li><strong>MCP is reach.</strong> It connects the agent to an external system — Drive, Salesforce, BigQuery, an internal API.</li>
+<li><strong>A skill is know-how.</strong> It teaches the agent how to <em>think</em> about a kind of work. When it needs data, it tells the agent to call a tool — usually one an MCP server provides.</li>
+<li><strong><code>AGENTS.md</code> is always loaded.</strong> Skills load on demand. Keep <code>AGENTS.md</code> tight — conventions, stack, build commands — and optionally use it as a router, with a short catalog at the bottom telling the agent what's in the library.</li>
+</ul>
+<p>And the honest caveat the paper puts in bold: <strong>skills do not kill multi-agent architectures.</strong> Multi-agent is still right for genuine parallelism, real capability boundaries (different access, different security postures), hierarchical decomposition where the abstraction layers actually differ, adversarial check-and-balance setups, and heterogeneous models. What skills did was add a missing primitive, so systems that were multi-agent <em>by default</em> can now be single-agent-with-skills <em>by design</em>.</p>
+<p>The worked example that sold me: a logistics company with 100 process variants. One giant context window rots. RAG over the runbooks means running a vector DB, an embedding model and a chunking strategy whose quality has nothing to do with the procedures. A hundred sub-agents is a hundred deployments and a hundred eval surfaces. One agent with a hundred skills costs ~5,000 tokens of metadata, keeps procedures in version control, and makes the 101st variant a new folder rather than a new deployment.</p>
+</section>
+<section id="the-98-4-number" class="level2">
+<h2 class="anchored" data-anchor-id="the-98-4-number">The 98.4% number</h2>
+<p>One finding I keep coming back to. A reverse-engineering of Claude Code v2.1.88 (Liu, Zhao, Shang and Shen, 2026) found <strong>98.4% of the codebase is operational infrastructure</strong> — permission classifiers, context compaction pipelines, subagent delegation, session storage — and 1.6% is the agent loop itself. The model sits behind a remote API.</p>
+<p>That is Day 1's <em>agent = model + harness</em> claim with a measurement attached. As baseline reasoning converges across foundation models, the differentiator for reliability is the deterministic engineering around the model. And inside that engineering, the unit you compose and reuse is the skill.</p>
+<p>Which is why the paper's table on improvement styles is the one I'd show a manager: a model swap takes days to weeks and only the platform team can do it. A fine-tune takes weeks to months and only the ML team can do it. A new skill takes <strong>hours to days, any domain team can do it, and the context cost is dynamic</strong> — paid only on matching turns.</p>
+<p>Next: what it takes to trust any of this — the security envelope, and the seven dimensions of evaluating a vibe-coded agent.</p>
+</section>
+ ]]></description>
+  <category>agents</category>
+  <category>skills</category>
+  <category>evals</category>
+  <guid>https://tyagiprerna0808.github.io/posts/18-agent-skills/</guid>
+  <pubDate>Fri, 07 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/18-agent-skills/thumb.svg" medium="image" type="image/svg+xml"/>
+</item>
+<item>
+  <title>19 · Security is the boundary, evals are the verdict</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/19-agent-security-evaluation/</link>
+  <description><![CDATA[ <p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Part 4 of 5] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>Part 4 of <strong>Vibe Coding &amp; Agents</strong>. Notes on <em>Vibe Coding Agent Security and Evaluation</em>.</em></p>
+<p>The organising sentence of this paper is worth memorising, because it separates two things that constantly get collapsed into one:</p>
+<blockquote class="blockquote">
+<p>Security tells you if the agent stayed inside the boundary. Evaluation tells you whether what happened inside that boundary is actually worth shipping.</p>
+</blockquote>
+<p>An agent can pass every security check and still misread the intent, ignore the project's conventions, and quietly break an unrelated feature. Both halves are required. Most teams I've seen build one and assume it covers the other.</p>
+<section id="why-the-old-model-doesnt-fit" class="level2">
+<h2 class="anchored" data-anchor-id="why-the-old-model-doesnt-fit">Why the old trust model doesn't fit</h2>
+<p>In deterministic software, trust is binary: the code compiles, the tests pass, the credentials are valid. In an agentic system you have a non-human workforce with <em>ambient agency</em> — it can execute generated code, hit sensitive internal APIs, and modify production environments.</p>
+<p>Static identity is a poor perimeter for that. An agent can hold a perfectly valid access token and operate with misaligned intent. So the paper replaces the pass-once gate with <strong>Effective Trust</strong>: a continuous metric evaluated across supply chain, identity, runtime behaviour and contextual associations. Trust is earned continuously, not granted at deploy time. The model shifts from <em>identity-as-perimeter</em> to <strong>context-as-perimeter</strong>.</p>
+<p>The baseline is a seven-pillar architecture, each with an owner:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pillar</th>
+<th>The threat</th>
+<th>The control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1 · Infrastructure</strong></td>
+<td>Container escape, upstream poisoning</td>
+<td>Ephemeral kernel-level sandboxes (gVisor), strict egress governance</td>
+</tr>
+<tr class="even">
+<td><strong>2 · Data</strong></td>
+<td>Context leakage, poisoned RAG, cross-tenant vector poisoning</td>
+<td>CMEK at rest, mTLS in transit, scoped access, strict tenant partitioning in vector stores</td>
+</tr>
+<tr class="odd">
+<td><strong>3 · Model</strong></td>
+<td>Semantic attacks subverting instructions</td>
+<td>Treat system instructions and prompt templates as cryptographically attested artifacts</td>
+</tr>
+<tr class="even">
+<td><strong>4 · Application &amp; runtime</strong></td>
+<td>Autonomy misused during tool calls</td>
+<td>LLM firewalls, deterministic hooks at lifecycle points, a centralised agent gateway</td>
+</tr>
+<tr class="odd">
+<td><strong>5 · IAM</strong></td>
+<td>The confused deputy</td>
+<td>Unique cryptographic identities (SPIFFE), ABAC, JIT token downscoping</td>
+</tr>
+<tr class="even">
+<td><strong>6 · Observability &amp; SecOps</strong></td>
+<td>Invisible failures, silent drift</td>
+<td>OpenTelemetry, agent behavioural analytics, Red/Blue/Green triad</td>
+</tr>
+<tr class="odd">
+<td><strong>7 · Governance</strong></td>
+<td>Unattributable autonomous decisions</td>
+<td>EU AI Act impact assessments, immutable audit trail, risk-stratified attestation</td>
+</tr>
+</tbody>
+</table>
+<p>The line that stuck: <em>if generated code compiles without errors, developers assume it is safe.</em> The governance answer is to replace approval buttons with mandatory <strong>logic reviews</strong> that translate the syntax back into plain language.</p>
+</section>
+<section id="slopsquatting" class="level2">
+<h2 class="anchored" data-anchor-id="slopsquatting">Slopsquatting</h2>
+<p>My favourite new threat name and a genuinely elegant attack. Language models hallucinate package names that don't exist. Attackers monitor developer forums and AI outputs for those hallucinations, then publish malware under the exact fake names. Because autonomous agents alter dependency graphs without human confirmation, one hallucination pulls malware straight into the build.</p>
+<p>Wiz calls it slopsquatting. The defence is unglamorous: source dependencies exclusively from vetted providers or internal registries, enforce cryptographic version pinning, and have CI verify SBOM entries and signatures via binary authorisation before anything reaches production.</p>
+<p>The adjacent one is repository poisoning — zero-width Unicode characters and homoglyphs sitting in a codebase, invisible to human review. Because agents replicate code far faster than humans, one hidden payload can spread across hundreds of files in minutes.</p>
+</section>
+<section id="what-vibe-coded-apps-get-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="what-vibe-coded-apps-get-wrong">What vibe-coded apps get wrong, predictably</h2>
+<p>Two failure shapes, and the paper says them plainly: generated code <strong>trusts the browser too much</strong> and <strong>leaves the backend wide open</strong>.</p>
+<p>AI generation takes the path of least resistance and handles sensitive operations on the frontend — API keys, password validation, session flags dumped into the client. Anyone with devtools open can read the credentials or edit their own access level. And the speed of building outpaces the invisible security layers: the tools happily connect a database or spin up an admin dashboard, but rarely enable default-deny access controls, so row-level security gets skipped and staging environments sit on the public internet.</p>
+<p>The enforcement design is the part I think is genuinely well judged. Hard-blocking insecure prompts <em>inside the IDE</em> is easily bypassed and creates friction for people doing legitimate work. So: <strong>advisory linters in the IDE</strong> for real-time guidance, <strong>unyielding deterministic enforcement in CI/CD</strong> — SAST and SCA scanning everything before it reaches production. Advice where it's cheap, gates where they're binding.</p>
+</section>
+<section id="zero-ambient-authority-and-the-vibe-diff" class="level2">
+<h2 class="anchored" data-anchor-id="zero-ambient-authority-and-the-vibe-diff">Zero ambient authority, and the Vibe Diff</h2>
+<p>The confused deputy problem: a prompt injection — say, a malicious instruction hidden in an open-source repo someone pasted into their context window — tricks an over-privileged agent into executing a command on the attacker's behalf.</p>
+<p>Three controls stack against it:</p>
+<ol type="1">
+<li><strong>A distinct agentic identity.</strong> The agent must never operate under the human's delegated credentials, which grant it dangerous ambient access. It authenticates as something explicitly tagged agentic, so permissions stay bound and auditable.</li>
+<li><strong>JIT downscoping.</strong> When the agent writes a new script, the sandbox gets fresh, hyper-restricted credentials scoped to exactly the data sources that script needs — not the parent's broad permissions — and they expire the moment the task ends. Plus file-tree allowlists with deny-by-default on secrets, build scripts and production manifests.</li>
+<li><strong>Elicitation with a real gate.</strong> For high-stakes actions — production database changes, financial transfers, IAM edits — an approve/deny button is worthless, because confirmation fatigue means people click through code they don't understand. So: hardware MFA (physically touch a security key to authorise execution), plus the <strong>Vibe Diff</strong>.</li>
+</ol>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>The Vibe Diff.</strong> Before a critical tool runs, an evaluator quorum intercepts the request and translates the generated code back into a plain-English summary — showing the human exactly how their fuzzy original intent maps onto the proposed execution steps. You're not approving a diff. You're approving a <em>translation of your own intent</em>, which is the thing you're actually qualified to judge.</p>
+</div>
+</div>
+</div>
+<p>This is the single best idea in the paper and I want it in every tool I use.</p>
+</section>
+<section id="red-blue-green" class="level2">
+<h2 class="anchored" data-anchor-id="red-blue-green">Red, Blue, Green — SecOps that runs at agent speed</h2>
+<p>Application logic is now generated, executed and discarded fast enough that manual security operations can't keep pace. So the operations themselves become agentic, running in parallel with the developer:</p>
+<ul>
+<li><strong>Red (Agent Attacker)</strong> injects <em>adversarial vibes</em> — roleplay jailbreaks, and malicious instructions buried inside large blocks of RAG context or dummy forum posts of the kind developers routinely paste into an IDE. It tests whether the target agent gets distracted by poisoned context and hallucinates an insecure solution.</li>
+<li><strong>Blue (Agent Defender)</strong> replaces traditional UEBA, which doesn't work on non-deterministic systems, with <strong>Agent Behavioural Analytics</strong>. It baselines expected execution paths and monitors the <strong>Runtime Agent Bill of Materials (AgBOM)</strong> — a live inventory of tools, models and data sources in use at any given millisecond. Static SBOMs go stale instantly when the agent is generating its own tools.</li>
+<li><strong>Green (Agent Fixer)</strong> handles response. Killing the container is disruptive and can leave connected APIs corrupted, so instead it runs a <strong>stateful quarantine</strong>: revoke the agent's tool access, freeze its ability to act on the world, preserve short-term memory intact for forensics. Then auto-refactor — rewrite the insecure script and present the patched version back in the IDE.</li>
+</ul>
+<p>One operational constraint underpins all of it: <strong>restrict agent output to small batch sizes</strong>, ideally with a test-driven loop that blocks the agent from modifying tests and implementation simultaneously, so the test stays an objective baseline. Big unreviewable diffs defeat every control above them.</p>
+</section>
+<section id="auditing-the-agents-mind" class="level2">
+<h2 class="anchored" data-anchor-id="auditing-the-agents-mind">Auditing the agent's mind</h2>
+<p>You cannot secure what you cannot see. In microservices an HTTP 200 means success; in an agentic system it can mask a hallucination loop cascading quietly in the background. Which introduces <strong>Denial of Wallet</strong> — adversaries triggering infinite, computationally expensive loops specifically to bankrupt your LLM and cloud billing.</p>
+<p>The unit of observability here is the <strong>vibe trajectory</strong>: API calls, tool inputs and outputs, RAG retrievals, token latency, aggregated through OpenTelemetry into one chronological view of the cognitive steps — logging the leap from the user's prompt all the way to the compiled AST.</p>
+<p>Two concepts I'll keep:</p>
+<ul>
+<li><strong>Intent drift.</strong> Trust is a degradable asset. Trust decays when the agent's chain of thought pursues sub-goals diverging from the original request. The example is perfect: "optimise the database query" drifting into downloading a new unauthorised indexing library.</li>
+<li><strong>Stateful circuit breakers.</strong> Generate a version-control checkpoint <em>before</em> any codebase modification. Behavioural analytics score the trajectory against the AgBOM and penalise a dynamic agent trust score; below threshold, the breaker trips, rolls back to the checkpoint, revokes tool access and freezes execution without corrupting connected APIs.</li>
+</ul>
+</section>
+<section id="evaluation-the-other-half" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-the-other-half">Evaluation: the other half</h2>
+<p>Why evaluating a vibe coding agent isn't like evaluating other software — three constraints that shape everything:</p>
+<ol type="1">
+<li><strong>The underspecification gap.</strong> Traditional testing assumes a complete spec exists before evaluation. Here the prompt is inherently underspecified. "Make the dashboard load faster" is not a test case. The first job of evaluation is determining whether the agent reconstructed the right <em>unstated</em> spec.</li>
+<li><strong>The user often cannot validate the output.</strong> Non-technical users can't review 600 lines. Experienced engineers can't either, in real time. The gap between "the agent thinks it succeeded" and "the code is correct" is wider here than in any other agent category.</li>
+<li><strong>The session is iterative and the codebase is state.</strong> Every turn modifies real files; bad early decisions compound. Evaluation has to cover the arc of a multi-turn conversation on a living codebase, not just turn-level decisions.</li>
+</ol>
+<p>Seven dimensions, split into what the developer feels and what happens invisibly:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Dimension</th>
+<th>The question</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Intent satisfaction</strong></td>
+<td>Did it build what the user <em>meant</em>, not what they said? Hardest to measure, and what the user actually judges on.</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Functional correctness</strong></td>
+<td>Does it build, run, pass tests? The floor — and easy to game by deleting or mocking tests.</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Visual &amp; behavioural</strong></td>
+<td>For UI work the artifact is the rendered output, not the code. Code metrics miss the point.</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>Cost &amp; efficiency</strong></td>
+<td>Tokens, latency, tool calls, and how many corrections before convergence. One turn vs eight is a different product.</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>Code quality &amp; conventions</strong></td>
+<td>A diff that passes tests but violates house style is a failure even when locally correct.</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td><strong>Trajectory quality</strong></td>
+<td>Did it read related files first, sequence edits coherently, pick the right tool? Correct output from bad reasoning is a fragile success.</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td><strong>Self-repair</strong></td>
+<td>When the build fails or the user says "no, not like that" — does it recover or compound?</td>
+</tr>
+</tbody>
+</table>
+<p>Safety and responsible AI is <em>transversal</em>: vulnerabilities, refusal behaviour, content safety, IP exposure, scored alongside every dimension rather than bolted on as a separate gate.</p>
+<p>The methods map onto the dimensions rather than replacing each other. Automated functional testing (pytest, jest, eslint, mypy in CI) is the cheapest signal and covers dimension 2 and the rule-checkable parts of 5. Static security analysis (Snyk, Semgrep, git-secrets) plus scripted red-team suites cover the transversal safety layer. LLM-as-judge and agent-as-judge cover the ones rules can't reach — intent satisfaction, style, trajectory. Browser-based testing covers visual and behavioural correctness, because for a rendered page the code is not the artifact.</p>
+<p>My one-line summary of the whole paper: <em>security is a boundary, evaluation is a verdict, and shipping without both is how a demo becomes an incident.</em></p>
+<p>Next, and last: spec-driven development, and what happens to a team when the pull requests stop being the bottleneck.</p>
+</section>
+ ]]></description>
+  <category>agents</category>
+  <category>security</category>
+  <category>evals</category>
+  <guid>https://tyagiprerna0808.github.io/posts/19-agent-security-evaluation/</guid>
+  <pubDate>Sat, 08 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/19-agent-security-evaluation/thumb.svg" medium="image" type="image/svg+xml"/>
+</item>
+<item>
+  <title>20 · Spec-driven development, or the PR pile wins</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/20-spec-driven-development/</link>
+  <description><![CDATA[ <p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Part 5 of 5] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>Part 5 of <strong>Vibe Coding &amp; Agents</strong>. Notes on <em>Spec-Driven Production Grade Development in the Age of Vibe Coding</em> by Lee Boonstra — and the one with the best horror story.</em></p>
+<p>Start with the horror story, because it earns the rest of the paper.</p>
+<p>A developer asked an agent to create a button, with the built-in browser running in YOLO (auto-approve) mode. The browser agent autonomously clicked the new button. The button was meant for an email agent. No URL was specified, so the agent filled the gap with whatever strings were in its context and connected to a deprecated legacy agent with no email safeguards.</p>
+<p><strong>Fifty colleagues received emails full of hallucinated content.</strong></p>
+<p>The lesson isn't "email is dangerous". It's that the agent was doing exactly its job — fulfilling a directive with the data available, with no check on whether it <em>should</em>. Without a human in the loop or a policy engine, an autonomous system optimises for its goal using whatever it can find. Context hallucination isn't the model being stupid; it's the model being obedient with insufficient information.</p>
+<section id="vibe-coding-is-not-vibe-in-production" class="level2">
+<h2 class="anchored" data-anchor-id="vibe-coding-is-not-vibe-in-production">"Vibe coding" is not "vibe in production"</h2>
+<p>The framing distinction this paper opens with. You can use agents to their full potential and still have everything fully intended and controlled. What that requires is inverting where your time goes.</p>
+<p>The claim that took me a minute: <strong>code is now disposable.</strong> With a rock-solid spec you can regenerate the codebase repeatedly — flip a project from Python to JavaScript in an afternoon. And because it's disposable there's no emotional attachment. You haven't spent twelve hours debugging a semicolon, so you don't fear throwing it away when requirements change.</p>
+<p>Which relocates the developer from coder to technical architect, and makes the spec the artifact you actually maintain. Give an LLM a vibe instead of a blueprint and it will guess — and in enterprise software, guessing is how rogue-agent incidents happen.</p>
+<p>A production-grade spec is an <em>architectural north star</em>. It lives in the repo — typically Markdown or YAML in a <code>specs/</code> folder — and it's the source of truth for humans and agents alike. It contains the full technical design (not "make a login page" but requirements, database schemas, API contracts), visual aids and pinned library versions, the <em>why</em> behind the what, and scenarios: what good looks like, what wrong looks like, and the edge cases.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The author's own workflow: write the technical design in a doc, get it reviewed by humans, <em>then</em> export to Markdown into <code>specs/</code>. You would much rather a human catch a logic flaw in the design than discover it after the agent has generated thousands of lines around it.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-format-tax" class="level2">
+<h2 class="anchored" data-anchor-id="the-format-tax">The format tax</h2>
+<p>This was the most surprising, most immediately actionable finding in all five papers.</p>
+<p>A 2026 study by Ouyang et al. (<em>SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents</em>) found LLM agents are extremely sensitive to <em>how</em> instructions are formatted — up to a <strong>40% performance drop</strong> from generic, unoptimised Markdown.</p>
+<p>The recommended strategy for Gemini is hybrid: clean <strong>Markdown headers</strong> to anchor attention, switching to <strong>YAML</strong> for structured configuration or data schemas nested more than three deep. The measured parsing accuracy on deeply nested configuration:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Format</th>
+<th>Parsing accuracy on deeply nested config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>YAML</strong></td>
+<td>51.9%</td>
+</tr>
+<tr class="even">
+<td>JSON</td>
+<td>43.1%</td>
+</tr>
+<tr class="odd">
+<td>XML</td>
+<td>33.8%</td>
+</tr>
+</tbody>
+</table>
+<p>So: narrative instructions in Markdown, deeply nested specifications in YAML, and you skip the reasoning tax that heavy JSON inputs impose. Note that even the winner is barely above a coin flip — the real lesson may be to stop nesting four levels deep in a file you hand to a model.</p>
+<p>The underlying discipline is treating tokenization as a hard physical constraint. Every character, newline and indentation space translates into budget and latency, multiplied across every turn of a multi-step reasoning loop. Your <code>specs/</code> folder isn't documentation. It's a compiled instruction set.</p>
+</section>
+<section id="where-instructions-live" class="level2">
+<h2 class="anchored" data-anchor-id="where-instructions-live">Where instructions live</h2>
+<p>Dumping a hundred-page design doc into a chat window exhausts the context budget, raises latency and fragments the context. Four homes, four lifetimes:</p>
+<ul>
+<li><strong>Chat interface</strong> — ephemeral, session-specific. Use it purely for orchestration and fast feedback: <em>"Review the design in <code>specs/payment_retry.md</code> and generate the failing unit tests defined in Scenario 3."</em></li>
+<li><strong>The <code>specs/</code> folder</strong> — task-specific, checked into version control. Technical design, BDD scenarios, API contracts, YAML schemas. The agent indexes it instead of you prompt-stuffing.</li>
+<li><strong>Agent skills</strong> — reusable, behaviour-focused, trigger-based. Repeatable engineering habits, like maintaining a <code>CHANGELOG.md</code> whenever code changes.</li>
+<li><strong>System prompts</strong> — global, identity-focused, layered hierarchically: a global profile in the home config for personal defaults, a shared cross-tool <code>AGENTS.md</code> so a team using multiple clients doesn't fragment its instructions, and a project-root file that takes highest priority.</li>
+</ul>
+<p>For the spec content itself, BDD in <strong>Gherkin</strong> — Scenario / Given / When / Then — forces the model to think in <em>state → action → outcome</em>, which is precisely the structure that stops it improvising.</p>
+</section>
+<section id="four-modes-four-mindsets" class="level2">
+<h2 class="anchored" data-anchor-id="four-modes-four-mindsets">Four modes, four mindsets</h2>
+<p><strong>The Architect</strong> (project generation). No YOLO mode. Explicitly prompt the agent <em>not</em> to code immediately — propose folder structure and tech stack first, for confirmation. Include tests, documentation and logging in the generation. Pin version numbers for every library.</p>
+<p><strong>The Builder</strong> (feature generation). Match the existing style — naming patterns, error handling. Confirm multi-file changes manually. Read the diff.</p>
+<p><strong>The Forensic Specialist</strong> (bug fixing). The most transferable advice in the paper: shift from <em>symptom prompting</em> ("the button doesn't work") to <strong>evidence prompting</strong> ("logs pulled with <code>gcloud logging read 'textPayload:ERROR' --limit 5</code> showed a 403"). Then explain the flow: request hits load balancer → auth strips header → pod fails. Always ask for a failing test or a <code>curl</code> that reproduces the bug <em>first</em>, and keep it in the codebase so the bug can't come back. Constrain the agent to the root cause only — no opportunistic cleanup, because it wrecks the review.</p>
+<p><strong>The Author</strong> (documentation). In spec-driven development the docs <em>are</em> the source of truth; when docs and code drift apart the AI starts hallucinating. Encode "keep the README and CHANGELOG current" as a skill.</p>
+<div class="callout callout-style-simple callout-warning">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Watch for downgraded versions.</strong> Agents suggest older library and model versions because nothing newer existed at their training cutoff. Counter it with docs in the spec folder, RAG on current documentation, or a line in the profile prompt — and double-check every version number an agent proposes. Also: let it rename variables, but as a separate task, never inside a bug fix.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="what-happens-to-the-team" class="level2">
+<h2 class="anchored" data-anchor-id="what-happens-to-the-team">What happens to the team</h2>
+<p>Bolting agents onto a twenty-year-old workflow is a jet engine on a horse-drawn carriage. Three failure categories show up fast:</p>
+<ul>
+<li><strong>Merge conflicts</strong> — multiple developers landing in the same file within the hour.</li>
+<li><strong>Review gridlock</strong> — a huge PR becomes a Russian doll of sub-PRs; #1 can't merge without #2, which needs #3, which is blocked by a reviewer in another timezone.</li>
+<li><strong>Context fragmentation</strong> — a teammate renames a variable in a shared file; an agent working from an outdated snapshot generates code calling a function that no longer exists.</li>
+</ul>
+<p>The proposed adaptations, which read as genuinely new process rather than warmed-over Agile:</p>
+<ul>
+<li><strong>Bundled summaries and risk assessments.</strong> Every PR carries an AI-generated snapshot of what changed, potential breakage points, and a risk assessment — so humans spend attention on architectural impact instead of getting lost in lines.</li>
+<li><strong>Reimagined ownership.</strong> Human review shifts from nitpicking style on disposable agent-written code to guarding the integrity of the architectural blueprint. Style goes to linters and a shared stylebook.</li>
+<li><strong>Conditional LGTM.</strong> A reviewer approves contingent on tests passing; green means it merges automatically. This alone kills the twelve-hour cross-timezone stall.</li>
+<li><strong>No-blame culture.</strong> In high-velocity environments the person producing the most code becomes the scapegoat for every bug and conflict. Attribute these to broken integration processes, not to the individual using the agent.</li>
+<li><strong>Split work so people rarely touch the same files</strong> — clear ownership over APIs versus UX, with a designated part-owner handling synchronisation when overlap is unavoidable.</li>
+</ul>
+</section>
+<section id="reviewers-that-run-themselves" class="level2">
+<h2 class="anchored" data-anchor-id="reviewers-that-run-themselves">Reviewers that run themselves</h2>
+<p>You can write an excellent review prompt. The question is who runs it on every PR without a human pushing a button. Three tiers, differing in who owns the runtime and who writes the criteria:</p>
+<ul>
+<li><strong>Tier 1 — Managed.</strong> Enable a SaaS PR reviewer on the org and every PR gets commented on. No prompts, no infrastructure. The trade: you get the vendor's opinions, which will miss what matters to a house style or a domain risk profile.</li>
+<li><strong>Tier 2 — Hybrid.</strong> Write your own review skill, commit it, trigger it from a CI action running a coding-agent CLI in non-interactive mode, post the result as a PR comment. Runtime belongs to CI; prompts, model choice, sandboxing and criteria belong to you. The paper calls this the right starting point for most teams and I agree.</li>
+<li><strong>Tier 3 — Custom.</strong> A fully owned agent with durable sessions and memory, wired to webhooks. Right when the reviewer must hold context across a multi-PR refactor or decompose "audit this service for compliance drift" into a hundred sub-tasks. You also own evaluation, observability, cost, and the on-call rotation.</li>
+</ul>
+<p>Three questions pick the tier: how specific are your criteria, does the agent need memory across runs, and what's the worst case if it's wrong (a noisy comment — any tier; a merged regression or a leaked secret — Tier 3 with a policy server in front of every tool call).</p>
+<p>The example that makes it concrete: a fintech platform team started on Tier 1 and found their compliance reviewer flagging boilerplate auditors had already signed off, while missing the one thing that mattered — unmasked PII in log statements. A <strong>40-line <code>compliance-check.md</code></strong> wired to a CI action dropped the false positives sharply within a week. They've never needed Tier 3.</p>
+<p>That's the shape of the whole paper's advice: <em>pick the lowest tier that catches what matters.</em></p>
+<p>At the far end, Tier 3 at full scale stops being a PR watcher and becomes something that understands the system the PRs live in — code, docs, tickets and design documents ingested into a knowledge graph, with agents combining graph traversal for structural queries ("every function that transitively calls <code>payment.process()</code>"), vector search for semantic ones, and full-text for exact identifiers. Flatten a codebase into a vector store and you lose the structure that makes code legible. On million-line codebases, pilots have moved equivalent refactor work from two weeks to a few hours.</p>
+</section>
+<section id="approval-fatigue" class="level2">
+<h2 class="anchored" data-anchor-id="approval-fatigue">Approval fatigue is a real number</h2>
+<p>Quantum Workplace research reported by CNBC: frequent AI users are <strong>45% more likely to experience high burnout</strong> than non-users.</p>
+<p>The mechanism is a constant stream of micro-approvals — improve a line, adjust a tool call, confirm a diff — until people start clicking Approve reflexively. It's low-grade exhaustion where the team stops checking the machine's work in order to keep up with its pace. Which is exactly the condition every control in the Day 4 paper depends on <em>not</em> happening.</p>
+<p>The suggested countermeasures are structural rather than motivational: <strong>digital quiet hours</strong> so approval requests don't bleed into evenings and weekends, and weekly <strong>agent insight sessions</strong> where developers share patterns their agents surfaced, turning isolated discoveries into shared knowledge.</p>
+</section>
+<section id="where-this-leaves-me" class="level2">
+<h2 class="anchored" data-anchor-id="where-this-leaves-me">Where this leaves me</h2>
+<p>Five papers, and the argument holds together better than I expected it to. The thread:</p>
+<ol type="1">
+<li>The model is the commodity; <strong>the harness is the product</strong> (Day 1).</li>
+<li>The harness reaches the world through <strong>open protocols</strong>, or it drowns in bespoke wrappers (Day 2).</li>
+<li>Inside the harness, the reusable unit of capability is a <strong>skill</strong> — and an untested one can make things worse (Day 3).</li>
+<li><strong>Security bounds</strong> what the agent may do; <strong>evaluation judges</strong> whether it's worth shipping. Both (Day 4).</li>
+<li>None of it survives team scale without a <strong>spec</strong>, and a review process rebuilt for the new volume (Day 5).</li>
+</ol>
+<p>What I'm actually doing about it: an <code>AGENTS.md</code> that grows a rule every time an agent does something I don't want repeated. A <code>specs/</code> folder before a <code>src/</code> folder. Evals written before the thing they evaluate. And a standing suspicion of any output that looks right and hasn't been checked by anything but me.</p>
+<p>Which is, uncomfortably, the same discipline that production ML always needed. The tooling got dramatically better. The failure mode did not change at all.</p>
+</section>
+ ]]></description>
+  <category>agents</category>
+  <category>spec-driven</category>
+  <category>code-review</category>
+  <guid>https://tyagiprerna0808.github.io/posts/20-spec-driven-development/</guid>
+  <pubDate>Sun, 09 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/20-spec-driven-development/thumb.svg" medium="image" type="image/svg+xml"/>
+</item>
 </channel>
 </rss>

@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Prerna Tyagi">
+<meta name="dcterms.date" content="2026-08-07">
+<meta name="description" content="A hundred skills cost about five thousand tokens of always-loaded metadata. But SkillsBench found 19% of them made the agent worse. Notes on progressive disclosure, why isolation is a trap, and pass^k.">
+
+<title>18 · Agent Skills: procedural memory in a folder – Prerna Tyagi</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-1dccbeb59330fe2078eb7e94e5353f6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<meta name="author" content="Prerna Tyagi">
+<link rel="me" href="https://github.com/tyagiprerna0808">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Prerna Tyagi",
+  "alternateName": ["prernaaa0808", "tyagiprerna0808"],
+  "url": "https://tyagiprerna0808.github.io/",
+  "image": "https://avatars.githubusercontent.com/u/180576667?v=4",
+  "jobTitle": "Applied statistician shipping production ML in public",
+  "description": "Applied statistician learning to ship machine-learning systems into production — rebuilding the building blocks of modern AI from scratch, then the MLOps stack around them. Shipped a live e-commerce platform for her father's plant nursery in Greater Noida.",
+  "knowsAbout": [
+    "Machine Learning", "Deep Learning", "Statistics", "Data Science",
+    "Embeddings", "Vector Search", "Transformers", "Attention Mechanism",
+    "Tokenization", "Fine-Tuning", "LoRA", "RAG", "LLM Applications",
+    "MLOps", "CI/CD for ML", "Pipeline Orchestration", "Airflow", "MLflow",
+    "Model Monitoring", "Data Drift", "Feature Stores", "Vector Databases",
+    "Production Deployment", "FastAPI", "Docker", "Kubernetes", "Terraform",
+    "Python", "PyTorch", "scikit-learn", "pandas"
+  ],
+  "sameAs": [
+    "https://github.com/tyagiprerna0808",
+    "https://www.linkedin.com/in/prerna-tyagi-/",
+    "https://x.com/prernaaa0808",
+    "https://www.kaggle.com/prena0808",
+    "https://www.instagram.com/prerna_tyagi_/"
+  ]
+}
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="18 · Agent Skills: procedural memory in a folder – Prerna Tyagi">
+<meta property="og:description" content="A hundred skills cost about five thousand tokens of always-loaded metadata. But SkillsBench found 19% of them made the agent worse. Notes on progressive disclosure, why isolation is a trap, and pass^k.">
+<meta property="og:image" content="https://tyagiprerna0808.github.io/posts/18-agent-skills/thumb.svg">
+<meta property="og:site_name" content="Prerna Tyagi">
+<meta name="twitter:title" content="18 · Agent Skills: procedural memory in a folder – Prerna Tyagi">
+<meta name="twitter:description" content="A hundred skills cost about five thousand tokens of always-loaded metadata. But SkillsBench found 19% of them made the agent worse. Notes on progressive disclosure, why isolation is a trap, and pass^k.">
+<meta name="twitter:image" content="https://tyagiprerna0808.github.io/posts/18-agent-skills/thumb.svg">
+<meta name="twitter:creator" content="@prernaaa0808">
+<meta name="twitter:site" content="@prernaaa0808">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Prerna Tyagi</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../findings.html"> 
+<span class="menu-text">ReadMe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/tyagiprerna0808/ml-applied-depth/tree/main/notes"> 
+<span class="menu-text">Notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Builds</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tyagiprerna0808"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<div class="cosmos" aria-hidden="true">
+  <div class="cosmos-nebula"></div>
+  <div class="cosmos-stars cosmos-stars--far"></div>
+  <div class="cosmos-stars cosmos-stars--near"></div>
+  <div class="cosmos-grid"></div>
+  <div class="cosmos-nodes"></div>
+</div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">18 · Agent Skills: procedural memory in a folder</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">agents</div>
+    <div class="quarto-category">skills</div>
+    <div class="quarto-category">evals</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    A hundred skills cost about five thousand tokens of always-loaded metadata. But SkillsBench found 19% of them made the agent worse. Notes on progressive disclosure, why isolation is a trap, and pass^k.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Prerna Tyagi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 7, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Part 3 of 5] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>Part 3 of <strong>Vibe Coding &amp; Agents</strong>. Notes on <em>Agent Skills</em> by Tanvi Singhal, Gabriela Hernandez Larios, Debanshu Dus, Lavi Nigam and Smitha Kolan.</em></p>
+<p>A skill is a folder with a <code>SKILL.md</code> in it. That's the whole primitive. Which is either underwhelming or the most interesting thing in the five papers, depending on how much time you've lost to prompt files that grew to four hundred lines.</p>
+<p>The claim is that skills are the first credible <strong>procedural memory</strong> for LLM agents. Models already have workable analogues for remembering what happened (episodic) and remembering facts (semantic). What they've lacked is remembering <em>how to do a thing, step by step</em>. That's the gap.</p>
+<section id="anatomy-and-progressive-disclosure" class="level2">
+<h2 class="anchored" data-anchor-id="anatomy-and-progressive-disclosure">Anatomy, and the trick that makes it work</h2>
+<p>The canonical layout — only <code>SKILL.md</code> is mandatory, everything else is optional:</p>
+<pre><code>cafe-preparation/
+  SKILL.md              # metadata + instructions  (required)
+  scripts/              # executable code, any language
+    calc_quantities.py
+  references/           # supplementary context, loaded on demand
+    menu_and_recipes.md
+  assets/               # templates, configs, schemas
+    prep_sheet_template.md</code></pre>
+<p>The innovation isn't the folder. It's <strong>progressive disclosure</strong>, in three levels:</p>
+<ol type="1">
+<li><strong>Metadata</strong> — name and description — is always in context.</li>
+<li><strong>The <code>SKILL.md</code> body</strong> loads only when the skill triggers.</li>
+<li><strong>Bundled resources</strong> load strictly as needed, and scripts execute without ever entering the token window.</li>
+</ol>
+<p>So a hundred installed skills costs roughly 100 × 50 ≈ <strong>5,000 tokens</strong> of always-loaded metadata, and you pay the real cost only for the one that fired. That is the entire economic argument, and it's a good one.</p>
+<div class="callout callout-style-simple callout-tip">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Rule of thumb from the paper:</strong> if the <code>SKILL.md</code> is getting long, the next paragraph probably belongs in <code>references/</code>, not in the body.</p>
+</div>
+</div>
+</div>
+<p>Two paths produce these. <strong>Path A</strong> is a subject-matter expert translating what they already have — a compliance officer with a thirty-page runbook, an HR manager with onboarding guides. No coding required; the content exists, it just needs a format the agent can route on. <strong>Path B</strong> is crystallising what the agent just did: it completed a non-trivial repeatable task, so you have it draft the skill and you <em>review</em> instead of authoring. Both produce the same artifact.</p>
+</section>
+<section id="the-description-is-the-routing-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="the-description-is-the-routing-algorithm">The description field is the routing algorithm</h2>
+<p>This is the part I got wrong first and the paper is blunt about. The description in the YAML frontmatter is <em>the only thing the model sees</em> when deciding whether to load the skill. State what it does, front-load trigger keywords, be pushy if the model under-triggers, and explicitly say what it is <strong>not</strong> for:</p>
+<pre><code>---
+name: cafe-preparation
+description: |
+  Calculates daily ingredient needs and generates prep sheets for cafe operations.
+  Use when the user asks to estimate daily quantities, convert drinks to
+  ingredients, or generate shopping lists.
+  Do NOT use for employee shift scheduling or financial accounting.
+---</code></pre>
+<p>Naming convention: boring and obvious. <code>snake_case</code> for directories, <code>kebab-case</code> for skill names, gerund form where it reads naturally (<code>managing-databases</code>). Never <code>utils</code> or <code>tools</code>, and no internal jargon.</p>
+<p>To hit the industry-standard ~90% trigger accuracy, the description has to pass four checks: <strong>testable specificity</strong> (write three positive and three negative triggers), <strong>clarity</strong> (ambiguous queries don't overlap adjacent skills), <strong>execution fidelity</strong> (describes actual behaviour, not aspirational), and <strong>rephrasing stability</strong> (routes the same however the user phrases it).</p>
+</section>
+<section id="the-number-that-should-worry-you" class="level2">
+<h2 class="anchored" data-anchor-id="the-number-that-should-worry-you">The number that should worry you</h2>
+<blockquote class="blockquote">
+<p>An Agent Skill without a test is a hope, not a capability.</p>
+</blockquote>
+<p>SkillsBench (2025) benchmarked 84 real-world agent tasks and found <strong>19% performed worse with a skill than without one</strong>. Not neutral. Actively degrading.</p>
+<p>Vercel's production analysis is more specific and more uncomfortable: a <strong>56% non-invocation rate</strong> for skills expected to fire consistently, and a skill stripped of its instructions scored 58% while the agent with no skill at all scored 63%. A five-point deficit from adding something.</p>
+<p>The same study found a passive <code>AGENTS.md</code> index of project conventions hit a 100% pass rate against a 53% baseline — which is the cleanest statement of the boundary I've seen. <strong>Global context belongs in always-loaded documentation. Skills are for narrow, action-specific workflows.</strong> Reaching for a skill when you needed a line in <code>AGENTS.md</code> is a real and costly mistake.</p>
+<p>Four failure modes, and they surface in different places:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Failure</th>
+<th>What happens</th>
+<th>Where you see it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Trigger</strong></td>
+<td>Wrong skill fires, or the right one doesn't</td>
+<td>Routing logs</td>
+</tr>
+<tr class="even">
+<td><strong>Execution</strong></td>
+<td>Triggers correctly, produces wrong output or errant tool calls</td>
+<td>Output quality</td>
+</tr>
+<tr class="odd">
+<td><strong>Token budget</strong></td>
+<td>A large body crowds context, degrading <em>unrelated</em> turns</td>
+<td>Only under realistic context load</td>
+</tr>
+<tr class="even">
+<td><strong>Regression</strong></td>
+<td>A new skill overlaps an existing one and breaks routing</td>
+<td>Only with the full library exercised together</td>
+</tr>
+</tbody>
+</table>
+<p>The bottom two only appear when multiple skills interact under production load. Which leads to the sentence I've written on a sticky note:</p>
+</section>
+<section id="isolation-is-a-trap" class="level2">
+<h2 class="anchored" data-anchor-id="isolation-is-a-trap">Isolation is a trap</h2>
+<p>Never evaluate a skill purely on its own. Production agents co-load 5 to 15 skills simultaneously. A body over ~5,000 tokens can work perfectly alone and cause context rot the moment it has company. MCPVerse measured an <strong>18.2% accuracy drop</strong> from tool proliferation and attention competition; Chroma Research found all frontier models degrade as input grows, especially with co-loaded noise.</p>
+<p>Passing an isolated test is a <em>false positive</em> for production readiness. That's the trap.</p>
+<p>The related trap is what the paper calls the evaluation illusion: trajectory testing scores the composite system — host agent <em>plus</em> skill — so when a multi-skill trajectory fails you often can't decouple routing from instruction quality from execution. The fix is a two-tiered assert: validate the tool code independently, and audit the <code>SKILL.md</code> triggers across multiple model families so you catch descriptions that are quietly locked to one architecture.</p>
+</section>
+<section id="evaluation-driven-development" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-driven-development">Evaluation-driven development</h2>
+<p>Invert the workflow: write three JSON eval cases — input, expected tools, expected output — <em>before</em> drafting the <code>SKILL.md</code>. Drafting them upfront surfaces description ambiguities and trajectory errors before they compound into the body.</p>
+<pre><code>{
+  "case_id": "refund_dup_charge_001",
+  "input": "I was charged twice for order #4521 last Tuesday",
+  "expected_skill": "refund_processor",
+  "expected_tool_calls": [
+    {"tool": "lookup_order", "args": {"order_id": "4521"}},
+    {"tool": "check_duplicate_charge", "args": {"order_id": "4521"}}
+  ],
+  "expected_output_format": "confirmation_with_refund_id",
+  "rubric": ["acknowledges duplicate", "cites order id", "provides next step"]
+}</code></pre>
+<p>Then score the output and the trajectory <em>separately</em>. Latitude's March 2026 analysis found final-output-only scoring passes <strong>20–40% more cases</strong> than trajectory-aware scoring. That gap is entirely instances where the agent reached the right answer via the wrong sequence of tool calls. Tolerable read-only. Not tolerable when the tools have side effects.</p>
+<p>Two non-negotiables when using LLM-as-judge at scale: swap the positions of reference and actual output to kill ordering bias, and calibrate against human ratings until you reach 90% agreement.</p>
+</section>
+<section id="graduation-tiers-and-pass-k" class="level2">
+<h2 class="anchored" data-anchor-id="graduation-tiers-and-pass-k">Graduation tiers, and pass^k</h2>
+<p>Skills earn authority in tiers rather than shipping at full permission:</p>
+<ul>
+<li><strong>Read-only</strong> — LLM-as-judge eval, 90% trigger accuracy.</li>
+<li><strong>Draft-only (human review)</strong> — golden dataset of 20+ cases, human approval.</li>
+<li><strong>Action-allowed</strong> — full adversarial red-teaming, no rollback events, and sustained <code>pass^k</code>.</li>
+</ul>
+<p><code>pass^k</code> runs the eval <em>k</em> times and requires success on every run. The illustration is brutal: on τ-bench, GPT-4o scored 61% at <code>pass^1</code> and dropped below <strong>25% at pass^8</strong>. Single-run success is a poor predictor of production reliability, which is something I already believed about models and had not thought to apply to a markdown file.</p>
+<p>Two calibration adjustments the paper insists on: production performance typically drops <strong>20–30%</strong> against offline pass@1 benchmarks (ReliabilityBench), and simulation-based evaluation carries an optimistic bias of up to <strong>9%</strong>. So human review of representative outputs stays the ultimate signal for action-allowed graduation.</p>
+</section>
+<section id="skills-vs-mcp-vs-agents-md" class="level2">
+<h2 class="anchored" data-anchor-id="skills-vs-mcp-vs-agents-md">Skills vs MCP vs AGENTS.md</h2>
+<p>They compose; they don't compete.</p>
+<ul>
+<li><strong>MCP is reach.</strong> It connects the agent to an external system — Drive, Salesforce, BigQuery, an internal API.</li>
+<li><strong>A skill is know-how.</strong> It teaches the agent how to <em>think</em> about a kind of work. When it needs data, it tells the agent to call a tool — usually one an MCP server provides.</li>
+<li><strong><code>AGENTS.md</code> is always loaded.</strong> Skills load on demand. Keep <code>AGENTS.md</code> tight — conventions, stack, build commands — and optionally use it as a router, with a short catalog at the bottom telling the agent what's in the library.</li>
+</ul>
+<p>And the honest caveat the paper puts in bold: <strong>skills do not kill multi-agent architectures.</strong> Multi-agent is still right for genuine parallelism, real capability boundaries (different access, different security postures), hierarchical decomposition where the abstraction layers actually differ, adversarial check-and-balance setups, and heterogeneous models. What skills did was add a missing primitive, so systems that were multi-agent <em>by default</em> can now be single-agent-with-skills <em>by design</em>.</p>
+<p>The worked example that sold me: a logistics company with 100 process variants. One giant context window rots. RAG over the runbooks means running a vector DB, an embedding model and a chunking strategy whose quality has nothing to do with the procedures. A hundred sub-agents is a hundred deployments and a hundred eval surfaces. One agent with a hundred skills costs ~5,000 tokens of metadata, keeps procedures in version control, and makes the 101st variant a new folder rather than a new deployment.</p>
+</section>
+<section id="the-98-4-number" class="level2">
+<h2 class="anchored" data-anchor-id="the-98-4-number">The 98.4% number</h2>
+<p>One finding I keep coming back to. A reverse-engineering of Claude Code v2.1.88 (Liu, Zhao, Shang and Shen, 2026) found <strong>98.4% of the codebase is operational infrastructure</strong> — permission classifiers, context compaction pipelines, subagent delegation, session storage — and 1.6% is the agent loop itself. The model sits behind a remote API.</p>
+<p>That is Day 1's <em>agent = model + harness</em> claim with a measurement attached. As baseline reasoning converges across foundation models, the differentiator for reliability is the deterministic engineering around the model. And inside that engineering, the unit you compose and reuse is the skill.</p>
+<p>Which is why the paper's table on improvement styles is the one I'd show a manager: a model swap takes days to weeks and only the platform team can do it. A fine-tune takes weeks to months and only the ML team can do it. A new skill takes <strong>hours to days, any domain team can do it, and the context cost is dynamic</strong> — paid only on matching turns.</p>
+<p>Next: what it takes to trust any of this — the security envelope, and the seven dimensions of evaluating a vibe-coded agent.</p>
+</section>
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tyagiprerna0808\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Prerna Tyagi. Built in public.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tyagiprerna0808">
+      <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/prerna-tyagi-/">
+      <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/prernaaa0808">
+      <i class="bi bi-twitter-x" role="img" aria-label="X">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

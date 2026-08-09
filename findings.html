@@ -127,6 +127,33 @@ ul.task-list li input[type="checkbox"] {
       window['quarto-listing-loaded']();
     }
   })
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-vibe-agents .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return;
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description','listing-reading-time','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-vibe-agents'] = new List('listing-vibe-agents', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
   </script>
 <style>html{ scroll-behavior: smooth; }</style>
 <meta name="author" content="Prerna Tyagi">
@@ -734,6 +761,161 @@ window.Quarto = {
 <div class="metadata">
 <a href="./posts/15-ml-system-design/index.html" class="no-external">
 <div class="listing-reading-time">2 min</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<section id="vibe-coding-agents" class="level2 series-header">
+<h2 class="anchored" data-anchor-id="vibe-coding-agents">Vibe Coding &amp; Agents</h2>
+<p>Reading notes from Google&#8217;s five-day intensive on vibe coding and agents (May 2026). Five whitepapers, one argument: the model is the commodity and the harness is the product. What I kept, what I argued with, and the numbers worth remembering.</p>
+</section>
+<div id="listing-vibe-agents" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default"><div class="quarto-post image-right" data-index="0" data-categories="YWdlbnRzJTJDdmliZS1jb2RpbmclMkNzZGxj" data-listing-date-sort="1785888000000" data-listing-file-modified-sort="1785888000000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1725">
+<div class="thumbnail"><a href="./posts/16-vibe-coding-spectrum/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/16-vibe-coding-spectrum/thumb.svg" class="thumbnail-image" style="height: 150px;">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/16-vibe-coding-spectrum/index.html" class="no-external">16 · Vibe coding is a spectrum, not a verb</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRz'); return false;">agents</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dmliZS1jb2Rpbmc='); return false;">vibe-coding</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2RsYw=='); return false;">sdlc</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/16-vibe-coding-spectrum/index.html" class="no-external">
+<p>Notes on the new SDLC paper: why agent = model + harness, why most agent failures are configuration failures, and why the only axis that separates vibe coding from agentic engineering is how the output gets verified.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/16-vibe-coding-spectrum/index.html" class="no-external">
+<div class="listing-reading-time">9 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="YWdlbnRzJTJDbWNwJTJDYTJhJTJDcHJvdG9jb2xz" data-listing-date-sort="1785974400000" data-listing-file-modified-sort="1785974400000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1495">
+<div class="thumbnail"><a href="./posts/17-agent-protocols-mcp-a2a/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/17-agent-protocols-mcp-a2a/thumb.svg" class="thumbnail-image" style="height: 150px;">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/17-agent-protocols-mcp-a2a/index.html" class="no-external">17 · The protocol stack: MCP, A2A, and why an agent is not a tool</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRz'); return false;">agents</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWNw'); return false;">mcp</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YTJh'); return false;">a2a</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHJvdG9jb2xz'); return false;">protocols</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/17-agent-protocols-mcp-a2a/index.html" class="no-external">
+<p>Fifty bespoke integrations collapse to fifteen when the tool definition is standardised. Notes on MCP consumption, the monolithic ceiling, bounded vs unbounded domains, and the GOTO problem hiding in your orchestrator.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/17-agent-protocols-mcp-a2a/index.html" class="no-external">
+<div class="listing-reading-time">8 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="YWdlbnRzJTJDc2tpbGxzJTJDZXZhbHM=" data-listing-date-sort="1786060800000" data-listing-file-modified-sort="1786060800000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1624">
+<div class="thumbnail"><a href="./posts/18-agent-skills/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/18-agent-skills/thumb.svg" class="thumbnail-image" style="height: 150px;">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/18-agent-skills/index.html" class="no-external">18 · Agent Skills: procedural memory in a folder</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRz'); return false;">agents</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2tpbGxz'); return false;">skills</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZXZhbHM='); return false;">evals</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/18-agent-skills/index.html" class="no-external">
+<p>A hundred skills cost about five thousand tokens of always-loaded metadata. But SkillsBench found 19% of them made the agent worse. Notes on progressive disclosure, why isolation is a trap, and pass^k.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/18-agent-skills/index.html" class="no-external">
+<div class="listing-reading-time">9 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="YWdlbnRzJTJDc2VjdXJpdHklMkNldmFscw==" data-listing-date-sort="1786147200000" data-listing-file-modified-sort="1786147200000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1813">
+<div class="thumbnail"><a href="./posts/19-agent-security-evaluation/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/19-agent-security-evaluation/thumb.svg" class="thumbnail-image" style="height: 150px;">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/19-agent-security-evaluation/index.html" class="no-external">19 · Security is the boundary, evals are the verdict</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRz'); return false;">agents</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2VjdXJpdHk='); return false;">security</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZXZhbHM='); return false;">evals</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/19-agent-security-evaluation/index.html" class="no-external">
+<p>Slopsquatting, the confused deputy, and the Vibe Diff. Notes on the seven-pillar security architecture for autonomous agents, and the seven dimensions of evaluating one, starting with intent nobody wrote down.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/19-agent-security-evaluation/index.html" class="no-external">
+<div class="listing-reading-time">10 min</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="YWdlbnRzJTJDc3BlYy1kcml2ZW4lMkNjb2RlLXJldmlldw==" data-listing-date-sort="1786233600000" data-listing-file-modified-sort="1786233600000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1997">
+<div class="thumbnail"><a href="./posts/20-spec-driven-development/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/20-spec-driven-development/thumb.svg" class="thumbnail-image" style="height: 150px;">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/20-spec-driven-development/index.html" class="no-external">20 · Spec-driven development, or the PR pile wins</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWdlbnRz'); return false;">agents</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c3BlYy1kcml2ZW4='); return false;">spec-driven</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZS1yZXZpZXc='); return false;">code-review</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/20-spec-driven-development/index.html" class="no-external">
+<p>Fifty colleagues got hallucinated emails from one auto-approved button click. Notes on treating code as disposable and the spec as the artifact, the measured format tax, and rebuilding code review for agent-scale volume.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/20-spec-driven-development/index.html" class="no-external">
+<div class="listing-reading-time">10 min</div>
 </a>
 </div>
 </div>
