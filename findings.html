@@ -293,7 +293,7 @@ window.Quarto = {
 
 
 
-<div class="section-head">
+<div class="section-head reveal">
 <p class="section-crumb">
 ~/readme/
 </p>
@@ -302,7 +302,15 @@ window.Quarto = {
 <p>Written notes from rebuilding modern AI from scratch, then learning to ship it. The deep dives, the measured experiments, and the things that broke. Every claim comes with code you can run and a number you can check.</p>
 </section>
 </div>
-<section id="building-blocks-of-modern-ai" class="level2 series-header">
+
+<div class="readme-index reveal">
+  <a class="readme-index-item" href="#building-blocks-of-modern-ai"><span class="n">01–09</span><span class="s">Building Blocks of Modern AI</span></a>
+  <a class="readme-index-item" href="#shipping-it-the-production-ml-stack"><span class="n">10–15</span><span class="s">Shipping It: the production stack</span></a>
+  <a class="readme-index-item" href="#vibe-coding-agents"><span class="n">16–20</span><span class="s">Vibe Coding &amp; Agents</span></a>
+  <a class="readme-index-item" href="#on-the-roadmap"><span class="n">next</span><span class="s">On the roadmap</span></a>
+</div>
+
+<section id="building-blocks-of-modern-ai" class="level2 series-header reveal">
 <h2 class="anchored" data-anchor-id="building-blocks-of-modern-ai">Building Blocks of Modern AI</h2>
 <p>The foundation. Every modern AI system is built from the same handful of parts: embeddings, tokenization, attention, backprop, fine-tuning, retrieval, agents. This series takes each one apart and rebuilds it from scratch, with code you can run and a number you can check.</p>
 </section>
@@ -578,7 +586,7 @@ window.Quarto = {
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
-<section id="shipping-it-the-production-ml-stack" class="level2 series-header">
+<section id="shipping-it-the-production-ml-stack" class="level2 series-header reveal">
 <h2 class="anchored" data-anchor-id="shipping-it-the-production-ml-stack">Shipping It: the production ML stack</h2>
 <p>Where the advanced notes begin. A model that works once in a notebook isn’t a system. This series is me learning to build the thing <em>around</em> the model, the CI/CD, pipelines, registries, containers, serving, monitoring and drift detection that keep it working long after it ships.</p>
 </section>
@@ -767,7 +775,7 @@ window.Quarto = {
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
-<section id="vibe-coding-agents" class="level2 series-header">
+<section id="vibe-coding-agents" class="level2 series-header reveal">
 <h2 class="anchored" data-anchor-id="vibe-coding-agents">Vibe Coding &amp; Agents</h2>
 <p>Reading notes from Google&#8217;s five-day intensive on vibe coding and agents (May 2026). Five whitepapers, one argument: the model is the commodity and the harness is the product. What I kept, what I argued with, and the numbers worth remembering.</p>
 </section>
@@ -922,7 +930,7 @@ window.Quarto = {
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
-<section id="on-the-roadmap" class="level2 series-header">
+<section id="on-the-roadmap" class="level2 series-header roadmap reveal">
 <h2 class="anchored" data-anchor-id="on-the-roadmap">On the roadmap</h2>
 <p><em>The Inference Engine</em>: the systems engineering of serving LLMs. KV-cache management, batching, quantization, speculative decoding. <em>The Alignment Loop</em>: from next-token prediction to reasoning agents. SFT, RLHF, DPO. Both come once the stack above is solid.</p>
 </section>
@@ -1374,4 +1382,5 @@ window.Quarto = {
 
 
 <script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="site.js" defer></script>
 </body></html>

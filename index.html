@@ -178,14 +178,23 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section class="home-hero">
-  <p class="home-eyebrow">data scientist · genai &amp; agentic ai · applied statistics</p>
-  <h1 class="home-headline">From Statistics to Systems.</h1>
-  <p class="home-sub"><span class="hl">Applied Statistics &amp; Informatics at IIT Bombay.</span> I build GenAI, agentic systems, and machine learning in high-stakes domains: fraud, scams, and money laundering. Three years of models that face real money, real customers, and real regulators.</p>
-  <p class="home-signature">just descending the gradient, with a small learning rate.</p>
+<section class="home-hero reveal">
+  <p class="hero-prompt"><span class="u">prerna</span>@<span class="h">ml-lab</span>:<span class="p">~</span>$ whoami<span class="caret"></span></p>
+  <h1 class="home-headline">From Statistics to <span class="grad">Systems</span>.</h1>
+  <p class="home-sub"><span class="hl">Applied Statistics &amp; Informatics at IIT Bombay.</span> I build GenAI, agentic systems, and machine learning in high-stakes domains: fraud, scams, and money laundering. Models that face real money, real customers, and real regulators.</p>
+
+  <p class="status-strip"><span class="dot"></span><span class="label">currently</span> Machine Learning Associate, Fraud Risk — shipping multi-agent workflows into production, and writing every step of it down.</p>
+
+  <div class="btn-row">
+    <a class="btn-term" href="findings.html">read the ReadMe <span aria-hidden="true">→</span></a>
+    <a class="btn-term alt" href="projects.html">see the builds</a>
+    <a class="btn-term ghost" href="about.html">about me</a>
+  </div>
+
+  <p class="home-signature">// just descending the gradient, with a small learning rate.</p>
 </section>
 
-<section class="loop-section">
+<section class="loop-section reveal">
   <p class="loop-eyebrow">the loop i'm running</p>
 
   <svg class="loop-svg" viewbox="0 0 400 360" role="img" aria-label="A repeating loop: train, ship, observe, improve.">
@@ -218,19 +227,129 @@ ul.task-list li input[type="checkbox"] {
   <p class="loop-caption">Train the fundamentals from scratch, ship them into real systems, watch for drift and latency, write down what broke, retrain. Overfit to growth, on purpose.</p>
 </section>
 
-<section class="home-paths">
-  <a class="home-path" href="findings.html">
-    <span class="home-path-key">readme →</span>
-    <span class="home-path-val">Rebuilding modern AI from scratch, then learning to ship it. Deep dives, measured experiments, and production notes.</span>
-  </a>
-  <a class="home-path" href="projects.html">
-    <span class="home-path-key">builds →</span>
-    <span class="home-path-val">Things I've designed and shipped end to end. Real APIs, real deployments, at least one with real paying customers.</span>
-  </a>
-  <a class="home-path" href="about.html">
-    <span class="home-path-key">about →</span>
-    <span class="home-path-val">The path from a mathematics degree to building AI in the open, and why I'm doing all of this in public.</span>
-  </a>
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-prompt">$</span>
+    <h2>ls ./builds</h2>
+    <a class="sec-link" href="projects.html">all builds →</a>
+  </div>
+  <p class="sec-note">Designed and shipped end to end.</p>
+
+  <div class="project-list">
+    <a class="project-card" href="https://tyagiprerna0808-readme-paper-assistant.hf.space" target="_blank" rel="noopener">
+      <div class="project-card-head"><span class="status-badge status-shipped">live</span></div>
+      <h3 class="project-title">ReadMe, an AI paper reading assistant</h3>
+      <p class="project-description">Add an arXiv link or a PDF, then discover new work, get a weekly digest, summarise the dense parts, and chat with the paper. Built from scratch with LangChain, LangGraph and RAG. <strong>Open the live app →</strong></p>
+      <div class="project-tags"><span class="project-tag">rag</span><span class="project-tag">langgraph</span><span class="project-tag">langchain</span><span class="project-tag">hf spaces</span></div>
+    </a>
+
+    <a class="project-card" href="https://github.com/tyagiprerna0808/pragya-nursery" target="_blank" rel="noopener">
+      <div class="project-card-head"><span class="status-badge status-shipped">shipped</span></div>
+      <h3 class="project-title">Pragya Nursery, a live ordering platform</h3>
+      <p class="project-description">A real ordering platform for my father's plant nursery in Greater Noida. Vercel site, Render API, Capacitor Android app, Paytm payments, geofenced delivery, CI on every push. Live customers, real revenue.</p>
+      <div class="project-tags"><span class="project-tag">e-commerce</span><span class="project-tag">capacitor</span><span class="project-tag">paytm</span><span class="project-tag">ci/cd</span></div>
+    </a>
+
+    <a class="project-card" href="https://github.com/tyagiprerna0808/ml-applied-depth" target="_blank" rel="noopener">
+      <div class="project-card-head"><span class="status-badge status-wip">wip</span></div>
+      <h3 class="project-title">ml-applied-depth, the companion code</h3>
+      <p class="project-description">From-scratch implementations of the building blocks of modern AI, paired with every post in the ReadMe. Notebooks, experiments and assignment scaffolds, so you build each component before reading mine.</p>
+      <div class="project-tags"><span class="project-tag">embeddings</span><span class="project-tag">retrieval</span><span class="project-tag">from scratch</span></div>
+    </a>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-prompt">$</span>
+    <h2>./readme</h2>
+    <a class="sec-link" href="findings.html">all 20 posts →</a>
+  </div>
+  <p class="sec-note">Rebuilding modern AI from scratch, then learning to ship it. Every claim comes with code you can run and a number you can check.</p>
+
+  <div class="post-rows">
+    <a class="post-row" href="posts/20-spec-driven-development/index.html">
+      <span class="idx">20</span>
+      <span class="t">Spec-driven development, or the PR pile wins</span>
+      <span class="m">10 min</span>
+      <span class="d">Fifty colleagues got hallucinated emails from one auto-approved button click. On treating code as disposable and the spec as the artifact.</span>
+    </a>
+    <a class="post-row" href="posts/19-agent-security-evaluation/index.html">
+      <span class="idx">19</span>
+      <span class="t">Security is the boundary, evals are the verdict</span>
+      <span class="m">10 min</span>
+      <span class="d">Slopsquatting, the confused deputy, and the Vibe Diff. The seven-pillar security architecture for autonomous agents, and the seven dimensions of evaluating one.</span>
+    </a>
+    <a class="post-row" href="posts/18-agent-skills/index.html">
+      <span class="idx">18</span>
+      <span class="t">Agent Skills: procedural memory in a folder</span>
+      <span class="m">9 min</span>
+      <span class="d">A hundred skills cost about five thousand tokens of always-loaded metadata, and SkillsBench found 19% of them made the agent worse.</span>
+    </a>
+    <a class="post-row" href="posts/17-agent-protocols-mcp-a2a/index.html">
+      <span class="idx">17</span>
+      <span class="t">The protocol stack: MCP, A2A, and why an agent is not a tool</span>
+      <span class="m">8 min</span>
+      <span class="d">Fifty bespoke integrations collapse to fifteen when the tool definition is standardised. On bounded domains and the GOTO problem in your orchestrator.</span>
+    </a>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-prompt">$</span>
+    <h2>./stack</h2>
+  </div>
+
+  <div class="stack">
+    <div class="stack-group">
+      <span class="stack-key">agentic &amp; llm</span>
+      <div class="tag-row">
+        <span class="tag">langgraph</span><span class="tag">langchain</span><span class="tag">autogen</span><span class="tag">gemini</span><span class="tag">vertex ai</span><span class="tag">tool calling</span><span class="tag">hybrid rag</span><span class="tag">lora / qlora</span><span class="tag">guardrails</span><span class="tag">agent evals</span>
+      </div>
+    </div>
+    <div class="stack-group">
+      <span class="stack-key">ml &amp; statistics</span>
+      <div class="tag-row">
+        <span class="tag">xgboost</span><span class="tag">random forest</span><span class="tag">isolation forest</span><span class="tag">lstm / gru</span><span class="tag">arima</span><span class="tag">anomaly detection</span><span class="tag">graph analytics</span><span class="tag">pd / lgd / ecl</span><span class="tag">shap</span><span class="tag">a/b testing</span>
+      </div>
+    </div>
+    <div class="stack-group">
+      <span class="stack-key">mlops &amp; observability</span>
+      <div class="tag-row">
+        <span class="tag">fastapi</span><span class="tag">docker</span><span class="tag">ci/cd</span><span class="tag">mlflow</span><span class="tag">drift (psi)</span><span class="tag">latency &amp; cost tracing</span><span class="tag">audit logging</span><span class="tag">model governance</span>
+      </div>
+    </div>
+    <div class="stack-group">
+      <span class="stack-key">cloud &amp; data</span>
+      <div class="tag-row">
+        <span class="tag">gcp</span><span class="tag">bigquery</span><span class="tag">cloud run</span><span class="tag">gke</span><span class="tag">databricks</span><span class="tag">spark</span><span class="tag">delta lake</span><span class="tag">vector dbs</span>
+      </div>
+    </div>
+    <div class="stack-group">
+      <span class="stack-key">languages</span>
+      <div class="tag-row">
+        <span class="tag">python</span><span class="tag">sql</span><span class="tag">pyspark</span><span class="tag">r</span><span class="tag">pytorch</span><span class="tag">scikit-learn</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="sec-head">
+    <span class="sec-prompt">$</span>
+    <h2>./reach-out</h2>
+  </div>
+
+  <div class="contact-panel">
+    <h2>Building something that has to survive contact with reality?</h2>
+    <ul class="contact-list">
+      <li><span class="label">email</span><a href="mailto:tyagiprernaaa0808@gmail.com" data-copy="tyagiprernaaa0808@gmail.com">tyagiprernaaa0808@gmail.com</a></li>
+      <li><span class="label">github</span><a href="https://github.com/tyagiprerna0808">@tyagiprerna0808</a></li>
+      <li><span class="label">linkedin</span><a href="https://www.linkedin.com/in/prerna-tyagi-/">prerna-tyagi-</a></li>
+      <li><span class="label">x</span><a href="https://x.com/prernaaa0808">@prernaaa0808</a></li>
+    </ul>
+  </div>
 </section>
 
 
@@ -679,4 +798,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="site.js" defer></script>
 </body></html>
