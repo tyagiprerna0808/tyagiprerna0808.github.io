@@ -1852,5 +1852,267 @@ description: |
   <pubDate>Sun, 09 Aug 2026 00:00:00 GMT</pubDate>
   <media:content url="https://tyagiprerna0808.github.io/posts/20-spec-driven-development/thumb.svg" medium="image" type="image/svg+xml"/>
 </item>
+<item>
+  <title>21 &#183; They rewrote the intensive</title>
+  <dc:creator>Prerna Tyagi</dc:creator>
+  <link>https://tyagiprerna0808.github.io/posts/21-agents-rewrite-field-notes/</link>
+  <description><![CDATA[
+<p class="breadcrumb-mono">
+[Vibe Coding &amp; Agents · Coda] <a href="../../findings.html">ReadMe</a>
+</p>
+<p><em>A coda to <strong>Vibe Coding &amp; Agents</strong>. Posts 16–20 were notes on the first cut of Google’s five-day intensive. Then they published a rewrite — same five days, five different papers — and this is what the second edition adds.</em></p>
+<section id="five-new-pdfs-same-five-days" class="level2">
+<h2 class="anchored" data-anchor-id="five-new-pdfs-same-five-days">Five new PDFs, same five days</h2>
+<p>I’d already read the intensive once. Then five more files landed in my downloads folder in a single afternoon, all stamped <em>Rewrite v1</em>, all updated May 2026:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Day</th>
+<th>First cut (posts 16–20)</th>
+<th>The rewrite</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>The SDLC paper — vibe coding as a spectrum</td>
+<td><strong>Introduction to Agents</strong></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Agent Tools &amp; Interoperability — protocols, A2A</td>
+<td><strong>Agent Tools</strong> — tool design and MCP internals</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Agent Skills</td>
+<td><strong>Context Engineering</strong> — sessions and memory</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Vibe coding security &amp; evaluation</td>
+<td><strong>Agent Quality</strong> — observability, tracing, evals</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Spec-driven development</td>
+<td><strong>Prototype to Production</strong> — CI/CD and AgentOps</td>
+</tr>
+</tbody>
+</table>
+<p>Only Day 2 kept its subject, and even there the paper is new — none of the material I wrote up in <a href="../17-agent-protocols-mcp-a2a/">Post 17</a> (the N×M collapse, the monolithic ceiling, the GOTO problem) survives into the rewrite. This isn’t a revision. It’s a second edition with a different argument.</p>
+<p>Two hundred and seventy-six pages. I read them with the same suspicion I brought to the first cut: <strong>a whitepaper written by a cloud vendor is also a product brochure</strong>. Roughly every third paragraph ends in a capitalised noun you can put on an invoice — Agent Gateway, Agent Registry, Model Armor, Memory Bank, Agent Runtime.</p>
+<p>So: keep the mechanism, discard the SKU. What follows is what was left.</p>
+</section>
+<section id="the-definition-that-actually-holds" class="level2">
+<h2 class="anchored" data-anchor-id="the-definition-that-actually-holds">The definition that actually holds</h2>
+<p>The first edition’s big line was <em>the model is the commodity and the harness is the product</em>. The rewrite goes at the same idea from a different angle, and I think lands it harder:</p>
+<blockquote class="blockquote">
+<p>An agent is the combination of models, tools, an orchestration layer, and runtime services which uses the LM <strong>in a loop</strong> to accomplish a goal.</p>
+</blockquote>
+<p>Four parts: the <strong>model</strong> is the brain, <strong>tools</strong> are the hands, the <strong>orchestration layer</strong> is the nervous system, <strong>deployment</strong> is the body and legs. I’d normally roll my eyes at the anatomy metaphor, except it earns its keep across the other four papers — every failure mode they describe slots into exactly one of those boxes.</p>
+<p>But the sentence I actually wrote down was this:</p>
+<blockquote class="blockquote">
+<p>An agent is a system dedicated to the art of <strong>context window curation</strong>. It is a relentless loop of assembling context, prompting the model, observing the result, and then re-assembling a context for the next step.</p>
+</blockquote>
+<p>That reframe does real work. The agent isn’t the model and it isn’t the prompt — it’s the <em>software that decides what the model gets to see on the next call</em>. Memory, RAG, tool results, session history, sub-agent outputs: all of it is just a supplier feeding that one decision.</p>
+<p>Which is why the thing I’d have called prompt engineering two years ago now takes up an entire 73-page paper under a different name.</p>
+</section>
+<section id="the-ladder-that-ends-an-argument" class="level2">
+<h2 class="anchored" data-anchor-id="the-ladder-that-ends-an-argument">The ladder that ends an argument</h2>
+<p>Day 1 is new to this edition and its taxonomy is the most immediately useful thing in the stack, because it settles the argument every team has in week one: <em>do we need a multi-agent system?</em></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>What it is</th>
+<th>What it can’t do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0</strong> · Core reasoning</td>
+<td>An LM alone — no tools, no memory</td>
+<td>Blind to anything after its training cutoff</td>
+</tr>
+<tr class="even">
+<td><strong>1</strong> · Connected problem-solver</td>
+<td>Adds tools — search, RAG, an API</td>
+<td>Handles one hop, not a plan</td>
+</tr>
+<tr class="odd">
+<td><strong>2</strong> · Strategic problem-solver</td>
+<td>Plans multi-step, engineers its own context between steps</td>
+<td>Still one agent, one head</td>
+</tr>
+<tr class="even">
+<td><strong>3</strong> · Collaborative multi-agent</td>
+<td>A team of specialists; agents treat agents as tools</td>
+<td>Bounded by today’s reasoning quality</td>
+</tr>
+<tr class="odd">
+<td><strong>4</strong> · Self-evolving</td>
+<td>Notices a capability gap and builds the missing tool or agent</td>
+<td>Mostly still a research frontier</td>
+</tr>
+</tbody>
+</table>
+<p>Their Level 2 example is small and I liked it: <em>“find a good coffee shop halfway between my office and my client’s office.”</em> The agent calls maps, gets back “Millbrae,” and then — this is the bit — <em>constructs a new, narrower query</em> for the next tool: <code>query="coffee shop in Millbrae, CA", min_rating=4.0</code>.</p>
+<p>Nothing about that is impressive as software. But that small act of rewriting its own next input is exactly the line between “calls a tool” and “has a plan.” It’s the smallest observable unit of context engineering, and you can point at it in a trace.</p>
+<p>Level 3 carries the honest note, and to their credit they say it out loud: collaborative multi-agent systems are <em>“currently constrained by the reasoning limitations of today’s LMs.”</em> A vendor telling you the exciting tier isn’t ready is worth slightly more trust than the rest of the document.</p>
+</section>
+<section id="the-eighty-percent-nobody-demos" class="level2">
+<h2 class="anchored" data-anchor-id="the-eighty-percent-nobody-demos">The eighty percent nobody demos</h2>
+<p>Day 5 opens with the number this whole series keeps circling:</p>
+<blockquote class="blockquote">
+<p>Roughly <strong>80% of the effort</strong> is spent not on the agent’s core intelligence, but on the infrastructure, security, and validation needed to make it reliable and safe.</p>
+</blockquote>
+<p>They call it the <strong>last-mile production gap</strong>, and then do something most writing on this refuses to do: list the failures concretely instead of gesturing at “challenges.”</p>
+<ul>
+<li>A support agent is talked into giving products away free, because nobody wired the guardrails.</li>
+<li>A user reaches a confidential internal database <em>through</em> the agent, because auth was misconfigured.</li>
+<li>An agent runs up a large bill over a weekend and no one can say why, because there was no monitoring.</li>
+<li>An agent that worked yesterday silently stops working, because there was no continuous evaluation.</li>
+</ul>
+<p>Read those again and notice what they share: <strong>not one is a model quality problem</strong>. Every one is an ops problem wearing an AI costume — which is the same conclusion <a href="../../findings.html#shipping-it-the-production-ml-stack">Shipping It</a> arrives at from the ML side, and the reason that half of my notes takes longer than the modelling half.</p>
+<p>The operating discipline they propose is a loop: <strong>Observe → Act → Evolve</strong>. Observe is the three pillars — logs are the diary, traces are the narrative, metrics are the report card. Act is the reflexes: circuit-breaker a misbehaving tool with a feature flag, route suspicious traffic to a human review queue. Evolve is the part I’d underrate: <em>turn every production failure into a permanent test case</em>, then ship the fix through the same pipeline.</p>
+<p>The gate that makes it work is <strong>evaluation-gated deployment</strong> — no version reaches users without passing an eval suite, either as a report linked in the PR or as a pipeline stage that blocks the merge. And the rollout patterns are the boring, correct ones: canary at 1%, blue-green, A/B on real business metrics, feature flags. All of which rest on versioning <em>everything</em> — prompts, tool schemas, model endpoints, memory structures, and the eval datasets themselves.</p>
+</section>
+<section id="the-trajectory-is-the-truth" class="level2">
+<h2 class="anchored" data-anchor-id="the-trajectory-is-the-truth">The trajectory is the truth</h2>
+<p>Day 4 replaces the first edition’s security-and-evaluation paper, and where <a href="../19-agent-security-evaluation/">Post 19</a> came at evaluation through the security door, this one comes at it through QA. Its thesis fits in a line — <em>agent quality is an architectural pillar, not a final testing phase</em> — and its sharpest observation is this:</p>
+<blockquote class="blockquote">
+<p>An agent can pass 100 unit tests and still fail catastrophically in production, because its failure isn’t a bug in the code; it’s a flaw in its <strong>judgment</strong>.</p>
+</blockquote>
+<p>That’s the part traditional QA has no vocabulary for. A crash is loud. An agent failure is quiet: the service stays up, the API returns <code>200 OK</code>, the output <em>looks</em> plausible, and the answer is wrong. You cannot set a breakpoint on a hallucination.</p>
+<p>So the unit of evaluation moves. Not the output — the <strong>trajectory</strong>: thought → action → observation → thought. And they’re specific about why a single output score can’t catch it: a small stochastic word choice at step 1 can send the agent down an unrecoverable path by step 4.</p>
+<p>The framework they hang on that is four pillars, and it’s genuinely good:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pillar</th>
+<th>The question it asks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Effectiveness</strong></td>
+<td>Did it achieve the user’s <em>actual</em> intent? Not “did it write code” but “did the code produce the right insight”</td>
+</tr>
+<tr class="even">
+<td><strong>Efficiency</strong></td>
+<td>Did it solve it <em>well</em>? 25 steps, five failed tool calls and three self-corrections to book one flight is a low-quality success</td>
+</tr>
+<tr class="odd">
+<td><strong>Robustness</strong></td>
+<td>When the API times out and the data is missing, does it degrade gracefully and report what it couldn’t do?</td>
+</tr>
+<tr class="even">
+<td><strong>Safety</strong></td>
+<td>Does it stay inside its boundaries under prompt injection and refuse what it should refuse?</td>
+</tr>
+</tbody>
+</table>
+<p>And then the sentence that stops the pillars from being a poster:</p>
+<blockquote class="blockquote">
+<p>You cannot measure Efficiency if you don’t count the steps. You cannot diagnose a Robustness failure if you don’t know which API call failed. You cannot verify Safety if you cannot inspect the agent’s internal reasoning.</p>
+</blockquote>
+<p>Observability isn’t downstream of evaluation. It’s the precondition for it. Without the trace you are grading a process you never saw.</p>
+<p>The failure taxonomy for reading that trace is worth stealing wholesale, because it turns “the answer is wrong” into “the answer is wrong <em>because</em>”: bad plan, wrong tool, right tool with malformed arguments, or — the nasty one — a correct tool call whose result the agent then <strong>misread</strong>, including sailing straight past a <code>404</code> as though it had succeeded.</p>
+</section>
+<section id="tools-are-a-writing-problem" class="level2">
+<h2 class="anchored" data-anchor-id="tools-are-a-writing-problem">Tools are a writing problem</h2>
+<p>Day 2 surprised me most, because the best advice in it is editorial, not architectural. Tool definitions enter the model’s context as prose, which makes <strong>tool design technical writing with a runtime</strong>.</p>
+<p>Four rules I’m keeping:</p>
+<p><strong>Publish tasks, not API calls.</strong> A thin wrapper over an enterprise API with forty optional parameters is written for a human developer who already knows the domain. A tool is called at runtime by something that has to guess. Wrap the <em>task</em> the agent needs to perform, not the endpoint you happen to have.</p>
+<p><strong>Describe what, not how.</strong> System instructions should say <em>“create a bug to describe the issue,”</em> never <em>“use the <code>create_bug</code> tool.”</em> Naming tools in the prompt couples your instructions to your implementation — and under MCP the available tools can change beneath you at runtime.</p>
+<p><strong>Name things like you’ll read them in an audit log.</strong> <code>create_critical_bug_in_jira_with_priority</code> beats <code>update_jira</code> — for model accuracy first, and for the incident review second.</p>
+<p><strong>Error messages are prompts.</strong> This is the one I’d never thought about properly. A tool’s error goes straight back into the model’s context, so a bare status code wastes a turn. Compare:</p>
+<pre><code>"Failed to fetch weather data: API rate limit exceeded.
+ Wait 15 seconds before calling this tool again."</code></pre>
+<p>…against a plain <code>429</code>. The first is a recovery instruction the model can act on. Your error strings are part of your prompt surface whether you designed them that way or not.</p>
+</section>
+<section id="mcp-with-the-marketing-removed" class="level2">
+<h2 class="anchored" data-anchor-id="mcp-with-the-marketing-removed">MCP, with the marketing removed</h2>
+<p><a href="../17-agent-protocols-mcp-a2a/">Post 17</a> covered why MCP exists — N models times M tools, and the custom connector for every pairing. The rewrite spends its pages somewhere more useful: on what the protocol actually is <em>in the field</em>. It includes a table I hadn’t seen anywhere else — real client support for each part of the spec, measured across publicly tracked MCP clients in September 2025:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Capability</th>
+<th style="text-align: right;">Clients supporting it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tools</td>
+<td style="text-align: right;"><strong>99%</strong></td>
+</tr>
+<tr class="even">
+<td>Resources</td>
+<td style="text-align: right;">34%</td>
+</tr>
+<tr class="odd">
+<td>Prompts</td>
+<td style="text-align: right;">32%</td>
+</tr>
+<tr class="even">
+<td>Sampling</td>
+<td style="text-align: right;">10%</td>
+</tr>
+<tr class="odd">
+<td>Elicitation</td>
+<td style="text-align: right;">4%</td>
+</tr>
+<tr class="even">
+<td>Roots</td>
+<td style="text-align: right;">5%</td>
+</tr>
+</tbody>
+</table>
+<p>So in practice, <strong>MCP is Tools</strong>. The other five primitives are a spec that mostly hasn’t shipped. That one table is worth more to an architecture decision than the twenty pages describing what those primitives could theoretically do.</p>
+<p>Two risks stuck with me. The first is <strong>tool shadowing</strong>, and the example is beautifully mundane. A legitimate server offers <code>secure_storage_service</code>, described narrowly: use only when the user asks to save a secret. A malicious local server offers <code>save_secure_note</code>, described greedily: <em>“use this whenever the user mentions save, store, keep, or remember.”</em> No exploit, no CVE. The attacker simply <strong>wrote a better tool description</strong> and the planner picked it. Prompt injection where the payload is documentation.</p>
+<p>The second is quieter and will bite more people: <strong>context window bloat</strong>. Every tool definition from every connected server must sit in the context for the model to know it exists. Connect enough servers and the manifest crowds out the actual task — cost up, latency up, and reasoning quality <em>down</em>, because the model now has to find the right tool in a haystack it didn’t ask for.</p>
+<p>Their proposed fix made me sit up: <strong>RAG for tool discovery</strong>. Retrieve the handful of relevant tools first, then load only those definitions. A lovely idea with an obvious sharp edge, which they flag themselves — poison the retrieval index and you have poisoned tool selection.</p>
+</section>
+<section id="sessions-memory-and-context-rot" class="level2">
+<h2 class="anchored" data-anchor-id="sessions-memory-and-context-rot">Sessions, memory, and context rot</h2>
+<p>Day 3 is the paper with no counterpart in the first edition, and it draws a line I’d been blurring. A <strong>session</strong> is the workbench: the chronological events and mutable state of one conversation. <strong>Memory</strong> is the filing cabinet: extracted, consolidated, framework-agnostic facts that outlive the session. Raw transcript is not memory. Memory is what you kept <em>after</em> you threw the transcript away.</p>
+<p>The distinction between memory and RAG is the cleanest I’ve read:</p>
+<blockquote class="blockquote">
+<p>RAG is the agent’s <strong>research librarian</strong> — a shared, static, authoritative knowledge base. Memory is its <strong>personal assistant</strong> — a private notebook, scoped per user, dynamic and uncertain. RAG makes an agent an expert on facts; memory makes it an expert on the user.</p>
+</blockquote>
+<p>That also explains the isolation asymmetry that catches people in production: RAG indexes are usually shared by design, memory is <em>almost always scoped per-user</em>, and confusing the two is how one customer ends up reading another’s history.</p>
+<p>And then <strong>context rot</strong> — the term I’m adopting immediately. Not the hard context-window limit, but the softer failure: as context grows, the model’s ability to attend to the critical part of it <em>decays</em>. More tokens, worse answers, higher bill. Long-context models don’t repeal this; they move the wall.</p>
+<p>So you compact — sliding window, token-based truncation, or recursive summarisation — and the operational note that comes with it is the part I’d have got wrong: run the expensive summarisation <strong>asynchronously and persist the result</strong>, and keep a record of which events each summary already covers, so you never pay to send them twice.</p>
+</section>
+<section id="what-id-push-back-on" class="level2">
+<h2 class="anchored" data-anchor-id="what-id-push-back-on">What I’d push back on</h2>
+<p>Three things, in fairness to the reader.</p>
+<p><strong>The 80% number has no citation.</strong> It’s offered as “what we consistently observe in practice with customers.” I believe the shape of it — it matches every ML system I’ve shipped — but it’s an anecdote in a lab coat, and it does a lot of rhetorical work in that paper.</p>
+<p><strong>Every problem resolves to a product.</strong> Sprawl → Agent Registry. Injection → Model Armor. Identity → Agent Identity. The <em>problems</em> are real and well described; the implicit claim that the answer is a managed service is the part you should price yourself.</p>
+<p><strong>Level 4 is a story, not a spec.</strong> The self-evolving agent that notices a capability gap and builds its own tool is described with the same confidence as the parts that ship with code samples. It doesn’t have code samples. Read that chapter as a roadmap, not a report.</p>
+</section>
+<section id="what-im-taking-into-the-build" class="level2">
+<h2 class="anchored" data-anchor-id="what-im-taking-into-the-build">What I’m taking into the build</h2>
+<p>Four sentences survived both editions, and they’re the ones I’ll be building against:</p>
+<ol type="1">
+<li><strong>The agent is the context curator</strong>, not the model. Design what the model sees on turn <em>n+1</em>.</li>
+<li><strong>Evaluate the trajectory, not the answer.</strong> If you can’t count the steps, you can’t claim efficiency.</li>
+<li><strong>Tool descriptions and error strings are prompt surface.</strong> Write them like it.</li>
+<li><strong>Assume 80% of the work starts after it demos well</strong>, and structure the project so that 80% isn’t a surprise.</li>
+</ol>
+<p>None of that needs a framework, a platform, or a purchase order. Which is the point — and the reason the next thing I write is forty lines of Python instead of a diagram.</p>
+<p>→ <a href="../09-agents/">Post 09: Agent loops &amp; tool use — ReAct from scratch, no LangChain</a></p>
+</section>
+ ]]></description>
+  <category>agents</category>
+  <category>context-engineering</category>
+  <category>evals</category>
+  <category>mcp</category>
+  <category>field-notes</category>
+  <guid>https://tyagiprerna0808.github.io/posts/21-agents-rewrite-field-notes/</guid>
+  <pubDate>Thu, 13 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://tyagiprerna0808.github.io/posts/21-agents-rewrite-field-notes/thumb.svg" medium="image" type="image/svg+xml"/>
+</item>
 </channel>
 </rss>
