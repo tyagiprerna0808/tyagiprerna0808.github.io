@@ -189,13 +189,6 @@
         "text":  "What I’m building in public\n\nReadMe, long-form notes rebuilding the building blocks of modern AI from scratch: embeddings, attention, tokenization, retrieval, fine-tuning, agents, then the production stack around them. Every claim is paired with running code and a measured number in ml-applied-depth.\nReadMe, the paper assistant, a live app for reading AI research without reading every word. Built with LangChain, LangGraph and RAG, deployed on Hugging Face Spaces.\nPragya Nursery, a real ordering platform for my father’s plant nursery in Greater Noida. Live customers, real revenue, and my crash course in everything that happens after the model works."
     },
     {
-        "objectID":  "about.html#outside-the-loss-function",
-        "href":  "about.html#outside-the-loss-function",
-        "title":  "Prerna Tyagi",
-        "section":  "Outside the loss function",
-        "text":  "Outside the loss function\nI danced competitively long before I optimized anything: coordinator of IIT Bombay’s PG dance club, with 10+ competitions managed. I swim (one PG General Championship gold). And once upon a time I vice-presided over Model UN conferences, which turns out to be excellent training for the meetings where you defend a decision to a room."
-    },
-    {
         "objectID":  "about.html#reach-out",
         "href":  "about.html#reach-out",
         "title":  "Prerna Tyagi",

@@ -1,0 +1,5 @@
+# Local-only scratch. Never committed, never published to GitHub Pages.
+.local/
+
+# Editing backups
+*.bak
