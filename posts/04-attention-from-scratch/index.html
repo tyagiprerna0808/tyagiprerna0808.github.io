@@ -347,7 +347,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="why-your-gpu-was-sitting-idle-flash-attention">Why your GPU was sitting idle: Flash Attention</h2>
 <p>The second expensive habit is the <span class="math inline">\(QK^T\)</span> matrix itself. For a sequence of length <span class="math inline">\(L\)</span> it’s <span class="math inline">\(L \times L\)</span>, quadratic, and the surprise is <em>where</em> the cost actually lives. It’s not the multiplications. It’s shuttling that giant matrix back and forth between the GPU’s big-but-slow memory and its tiny-but-fast on-chip memory.</p>
 <p><strong>Flash Attention</strong> fixes it without changing a single number in the result. It tiles the computation: it breaks the huge matrix into blocks small enough to live in fast memory, finishes each block there, and never writes the full thing out. Same math, up to ~3× faster, purely by respecting where the data physically sits. (We’ll meet this memory-versus-compute story again and again.)</p>
-<p>We now have a model that can read context. Next: how it actually <em>learns</em>. Loss, gradients, and backpropagation, derived from scratch → <a href="../05-loss-optimization-backprop/">Post 05</a>.</p>
+<p>We now have a model that can read context. Next: how it actually <em>learns</em>. Loss, gradients, and backpropagation, derived from scratch — <em>Post 05, in progress.</em></p>
 
 
 </section>
