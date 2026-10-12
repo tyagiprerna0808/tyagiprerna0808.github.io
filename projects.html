@@ -260,52 +260,6 @@ Things I’ve designed and shipped end to end. Each one optimises for engineerin
 
 </div>
 
-<div class="sec-head reveal">
-  <span class="sec-prompt">$</span>
-  <h2>ls ./at-work</h2>
-  <span class="sec-link">code not public</span>
-</div>
-<p class="sec-note reveal">Systems I designed and shipped inside a bank. The repositories stay behind the firewall, so what follows is the architecture and the numbers.</p>
-
-<div class="build-list">
-
-<article class="build reveal">
-  <div class="build-head">
-    <span class="status-badge status-shipped">production</span>
-    <span class="build-meta">langgraph · gemini · gpt-4o · cloud run / gke</span>
-  </div>
-  <h3 class="build-title">Multi-agent reporting platform</h3>
-  <p class="build-lede">Led the technical design and production rollout of a multi-agent workflow spanning 10+ heterogeneous source systems, replacing a week of manual reporting.</p>
-  <ul class="build-points">
-    <li>LangGraph agents over Gemini and GPT-4o with retrieval, producing auditable, version-controlled pipelines. Turnaround fell from <strong>7 days to under 2 hours</strong>.</li>
-    <li>Self-correcting loops: output validation, automatic re-runs, deterministic fallbacks, and human-in-the-loop approval gates for finance reviewers.</li>
-    <li>An evaluation harness and guardrail layer: groundedness scoring, hallucination and logical-error checks, PII redaction, prompt-injection defences.</li>
-    <li>Containerised high-availability endpoints with health checks, retry/back-off and graceful fallback; observability for latency, token cost and drift (PSI).</li>
-  </ul>
-  <div class="tag-row">
-    <span class="tag">multi-agent</span><span class="tag">human-in-the-loop</span><span class="tag">guardrails</span><span class="tag">audit logging</span><span class="tag">fastapi</span><span class="tag">docker</span>
-  </div>
-</article>
-
-<article class="build reveal">
-  <div class="build-head">
-    <span class="status-badge status-shipped">production</span>
-    <span class="build-meta">databricks · isolation forest · graph analytics</span>
-  </div>
-  <h3 class="build-title">Real-time transaction monitoring &amp; mule detection</h3>
-  <p class="build-lede">End-to-end detection across live transaction flows, plus an unsupervised risk-scoring engine for mule accounts that no label set covered.</p>
-  <ul class="build-points">
-    <li>Real-time monitoring running at <strong>90% recall and 60% precision</strong>, automating fraud mitigation and proactive mule identification.</li>
-    <li>Mule risk scoring on Databricks combining Isolation Forest, graph analytics and <strong>500+ behavioural velocity and anomaly features</strong>.</li>
-    <li>Suspicious-cluster detection up <strong>15%</strong>, contributing <strong>$1.2M</strong> in annual loss mitigation.</li>
-  </ul>
-  <div class="tag-row">
-    <span class="tag">anomaly detection</span><span class="tag">graph analytics</span><span class="tag">databricks</span><span class="tag">feature engineering</span><span class="tag">real-time</span>
-  </div>
-</article>
-
-</div>
-
 <div class="contact-panel reveal">
   <h2>Want the long version?</h2>
   <p>The <a href="./findings.html">ReadMe</a> has the working notes behind most of this, and <a href="./about.html">about</a> has the path that got me here.</p>
